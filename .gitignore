@@ -1,0 +1,15 @@
+.idea/
+.vscode/
+/node_modules
+.DS_Store
+**/node_modules
+/SDK
+/packages
+# test/**/*
+**/.nyc_output/
+**/coverage/
+**/mochawesome-report
+**/.env
+**/.token
+**/out.txt
+# dist/*

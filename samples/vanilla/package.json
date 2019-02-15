@@ -1,0 +1,26 @@
+{
+  "name": "login",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lachlan Ashcroft <lachlan.ashcroft@ibm.com>",
+  "contributors": [
+      {
+          "name": "Lachlan Ashcroft",
+          "email": "lachlan.ashcroft@ibm.com"
+      },
+      {
+          "name": "Truman Butterworth",
+          "email": "trbutter@au1.ibm.com"
+      }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "ibm-verify-sdk": "^1.0.0"
+  }
+}

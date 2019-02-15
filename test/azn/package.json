@@ -1,0 +1,23 @@
+{
+  "name": "azn-testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --timeout 5000 --reporter mochawesome",
+    "coverage": "nyc --reporter=lcov ./node_modules/.bin/mocha --timeout 5000 --reporter spec",
+    "login": "node login.js"
+  },
+  "keywords": [],
+  "author": "Lachlan Ashcroft <lachlan.ashcroft@ibm.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/polyfill": "^7.2.5",
+    "chai": "^4.2.0",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "mocha": "^5.2.0",
+    "mochawesome": "^3.1.1",
+    "nyc": "^13.1.0"
+  }
+}
