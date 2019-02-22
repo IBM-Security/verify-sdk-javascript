@@ -1,9 +1,11 @@
 # IBM Verify SDK
 ![Type](https://img.shields.io/badge/Type-JavaScript-blue.svg)
+![npm](https://img.shields.io/npm/v/ibm-verify-sdk.svg?style=plastic)
+![NPM](https://img.shields.io/npm/l/ibm-verify-sdk.svg?colorB=blue&style=plastic)
 
 * [Getting Started](#getting-started)
 * [Configuration Settings](#configuration-settings)
-* [OauthContext](#oauthcontext)
+* [OAuthContext](#oauthcontext)
 * [OAuth API Samples](#oauth-samples)
 * [AuthenticatorContext](#authenticatorcontext)
 * [AuthenticatorContext API Samples](#authenticatorcontext-api-aamples)
@@ -25,7 +27,6 @@ IBM Verify SDK currently supports the following grant types:
 # Getting Started
 After configuring your Tenant and your application on Cloud Identity, you can install the IBM Verify SDK:
 ```bash
-# npm
 npm install ibm-verify-sdk
 ```
 
@@ -40,12 +41,12 @@ var authClient = new OAuthContext(/*config*/);
 Configuring your application for authentication / authorization transactions using Single Sign On.
 Initial configuration to kick off your authentication flow with Cloud Identity Authorization server.
 
-| Parameters   | Description                                                                                                                                                                                        | Type   | Requirements                          |
-|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|---------------------------------------|
-| tenantUrl    | The base URL which will direct users to Cloud Identity for authentication                                                                                                                          | String | **Required**                          |
-| clientId     | The client ID string generated on your applications Sign-on page within Cloud Identity                                                                                                             | String | **Required**                          |
+| Parameters   | Description                                                                                                                                                                                        | Type   | Requirements                               |
+|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|--------------------------------------------|
+| tenantUrl    | The base URL which will direct users to Cloud Identity for authentication                                                                                                                          | String | **Required**                               |
+| clientId     | The client ID string generated on your applications Sign-on page within Cloud Identity                                                                                                             | String | **Required**                               |
 | clientSecret | The client secret string assigned to you by Cloud Identity. This data is used together with the client ID to authenticate the relying party and to exchange an authorization code for an ID token. | String | **Required for `authorization` flow only** |
-| redirectUrl  | The address where Cloud Identity sends its authentication response to the relying party.                                                                                                           | String | **Required**                          |
+| redirectUrl  | The address where Cloud Identity sends its authentication response to the relying party.                                                                                                           | String | **Required**                               |
 | responseType | Authorization Flow value: `code`. Implicit Flow value: `id_token` or `token` or `id_token` with `token`  | String | **Required**
 | storage |Set client side storage type. Default is `sessionStorage` options: `sessionStorage`, `localStorage`, `cookies` | Object | **Required for `implicit` flow only** |
 | registrationProfileId | A pre-configured registration profile with a unique ID used to bind an authenticator instance to a user. Read more about [Managing registration profiles](https://www.ibm.com/support/knowledgecenter/SSCT62/com.ibm.iamservice.doc/tasks/verify_profile_manage.html). | String | **Required** |

@@ -58,7 +58,7 @@
     "webpack-dev-server": "^3.1.14",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.2",
-    "ibm-verify-sdk": "^1.0.0"
+    "ibm-verify-sdk": "^1.1.0"
   },
   "scripts": {
     "start": "node scripts/start.js",

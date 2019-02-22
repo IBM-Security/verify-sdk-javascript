@@ -1,6 +1,6 @@
 {
   "name": "ibm-verify-sdk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "IBM Verify javascript SDK",
   "main": "dist/index.js",
   "directories": {
@@ -23,7 +23,8 @@
     "url": "https://github.com/IBM-Security/verify-sdk-javascript"
   },
   "author": "Truman Butterworth <trbutter@au1.ibm.com>",
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Truman Butterworth",
       "email": "trbutter@au1.ibm.com"
     },
