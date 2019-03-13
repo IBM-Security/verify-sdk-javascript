@@ -1,8 +1,8 @@
 let OAuthContext         = require('../../../dist').OAuthContext;
 let AuthenticatorContext = require('../../../dist').AuthenticatorContext;
 let expect               = require('chai').expect;
-let config               = require("./helper").config;
-let token                = require("./helper").token;
+let config               = require('./helper').config;
+let token                = require('./helper').token;
 
 let authClient;
 let authCtx;
@@ -14,7 +14,7 @@ describe("AuthenticatorContext - initiateAuthenticator()", () => {
     })
 
     it("owner and account name specified", () => {
-        let data = {accountName: "test"};
+        let data = {accountName: "test", qrcodeInResponse: true};
 
         return authCtx.initiateAuthenticator(data, token).then(response => {
             expect(response.response).to.have.property('qrcode');
@@ -24,7 +24,7 @@ describe("AuthenticatorContext - initiateAuthenticator()", () => {
     })
 
     it("empty data object", () => {
-        let data = {};
+        let data = {qrcodeInResponse: true};
 
         return authCtx.initiateAuthenticator(data, token).then(response => {
             expect(response.response).to.have.property('qrcode');

@@ -1,8 +1,8 @@
 let OAuthContext         = require('../../../dist').OAuthContext;
 let AuthenticatorContext = require('../../../dist').AuthenticatorContext;
 let expect               = require('chai').expect;
-let config               = require("./helper").config;
-let token                = require("./helper").token;
+let config               = require('./helper').config;
+let token                = require('./helper').token;
 
 let authClient;
 let authCtx;

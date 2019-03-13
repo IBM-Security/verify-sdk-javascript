@@ -1,7 +1,7 @@
 let OAuthContext = require('../../../dist').OAuthContext;
 let expect       = require('chai').expect;
-let config       = require("./helper").config;
-let callback     = require("./helper").callback;
+let config       = require('./helper').config;
+let callback     = require('./helper').callback;
 
 let authClient;
 

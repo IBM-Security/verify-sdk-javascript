@@ -1,9 +1,7 @@
 let OAuthContext = require('../../../dist').OAuthContext;
 let expect       = require('chai').expect;
-let config       = require("./helper").config;
-let VerifyError  = require("../../../dist").VerifyError;
-let AppConfig    = require("./helper").AppConfig;
-let token        = require("./helper").token;
+let config       = require('./helper').config;
+let token        = require('./helper').token;
 
 let authClient;
 
@@ -12,7 +10,7 @@ describe("OAuthContext - introspectToken()", () => {
         authClient = new OAuthContext(config);
     })
 
-    it("with token - chceks that response.uniqueSecurityName exists", () => {
+    it("with token - checks that response.uniqueSecurityName exists", () => {
         return authClient.introspectToken(token).then(response => {
             expect(response.response.uniqueSecurityName).to.exist;
         }).catch(error => {
