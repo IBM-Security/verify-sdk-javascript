@@ -1,6 +1,6 @@
 let OAuthContext = require('../../../dist').OAuthContext;
 let expect       = require('chai').expect;
-let config       = require("./helper").config;
+let config       = require('./helper').config;
 
 describe("OAuthContext - Instantiation", () => {
 
@@ -30,7 +30,10 @@ describe("OAuthContext - Instantiation", () => {
     it("No redirectUri - should throw 'A redirect URL is required'", () => {
         let data = {
             clientId : '123',
-            tenantUrl: '123'
+            tenantUrl: '123',
+            scope: '123',
+            flowType: 'AZN',
+            clientSecret: '123'
         }
 
         expect(() => new OAuthContext(data)).to.throw('A redirect URL is required');
@@ -41,6 +44,9 @@ describe("OAuthContext - Instantiation", () => {
             clientId   : '123',
             tenantUrl  : '123',
             redirectUri: '123',
+            scope: '123',
+            flowType: 'AZN',
+            clientSecret: '123'
         }
 
         expect(() => new OAuthContext(data)).to.throw('Response Type required');
@@ -51,7 +57,9 @@ describe("OAuthContext - Instantiation", () => {
             clientId    : '123',
             tenantUrl   : '123',
             redirectUri : '123',
-            responseType: '123'
+            responseType: '123',
+            flowType: 'AZN',
+            clientSecret: '123'
         }
 
         expect(() => new OAuthContext(data)).to.throw('scope Property not set in Config settings');
@@ -81,7 +89,7 @@ describe("OAuthContext - Instantiation", () => {
             scope       : '123'
         }
 
-        expect(() => new OAuthContext(data)).to.throw('Check the flowType property in your configuration object is correct. Should be: "Implicit" or "AZN"');
+        expect(() => new OAuthContext(data)).to.throw('Check the flowType property in your configuration object is correct. Supported Values: "Implicit", "AZN", "client_credentials"');
     })
 
     it("implicit flowType and storageType - should throw 'Implicit flow not supported in Node'", () => {

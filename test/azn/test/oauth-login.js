@@ -1,6 +1,6 @@
 let OAuthContext = require('../../../dist').OAuthContext;
 let expect       = require('chai').expect;
-let config       = require("./helper").config;
+let config       = require('./helper').config;
 
 let authClient;
 
