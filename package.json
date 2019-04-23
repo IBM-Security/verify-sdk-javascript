@@ -1,6 +1,6 @@
 {
   "name": "ibm-verify-sdk",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "IBM Verify javascript SDK",
   "main": "dist/index.js",
   "directories": {
