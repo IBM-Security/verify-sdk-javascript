@@ -35,6 +35,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@babel/polyfill": "^7.4.3",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.9.0",
     "query-string": "^6.2.0",
@@ -43,7 +44,6 @@
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
-    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "eslint-plugin-import": "^2.14.0",
