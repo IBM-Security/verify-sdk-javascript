@@ -3,17 +3,7 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Dashboard from './Components/Dashboard';
 import Navigation from './Components/Navigation';
 import { OAuthContext} from 'ibm-verify-sdk';
-
-let config = {
-  tenantUrl: '',
-	clientId: '',
-  registrationProfileId: '',
-  redirectUri: 'http://localhost:3000/authorize/callback',
-  responseType:'token id_token',
-  flowType:'Implicit',
-  scope:'openid',
-  storageType: sessionStorage
-};
+import { config } from '../config.js';
 
 const PrivateRoute = ({component: Component, isAuthenticated, ...rest}) => (
 
@@ -68,7 +58,7 @@ class App extends Component {
         <div className="container">
           <Route path="/" exact component={ Home } />
           <Route
-            path="/authorize/callback"
+            path={ config.REDIRECT_URI }
             component={ () => (
               <AuthenticationCallback
                OAuthClient={this.OAuthClient}

@@ -1,21 +1,10 @@
 let OAuthContext         = require('ibm-verify-sdk').OAuthContext;
 let AuthenticatorContext = require('ibm-verify-sdk').AuthenticatorContext;
 
-let config = {
-    tenantUrl:'',
-    clientId:'',
-    redirectUri:'http://localhost:3000/authorize/callback',
-    responseType:'token id_token',
-    flowType:'Implicit',
-    scope:'openid',
-    registrationProfileId:'',
-    storageType: sessionStorage
-};
-
 let authClient = new OAuthContext(config);
 let authCtx    = new AuthenticatorContext(authClient);
 
-if (window.location.pathname === '/authorize/callback') {
+if (window.location.pathname === config.REDIRECT_URI) {
     authClient.handleCallback();
     window.location.replace('/dashboard.html');
 }

@@ -83,9 +83,13 @@ const getAuthenticators = () => {
             }
 
             authenticators = result.authenticators;
+            
+            if (authenticators[0])
+            {
+                $('#authenticator-info').html(JSON.stringify(result.authenticators[0], null, 4));
+                getMethods(authenticators[0].id);
+            }
 
-            $('#authenticator-info').html(JSON.stringify(result.authenticators[0], null, 4));
-            getMethods(authenticators[0].id);
         },
         error: function(error) {
             $('#authenticator-info').html(JSON.stringify(error));
