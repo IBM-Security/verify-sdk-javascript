@@ -74,6 +74,10 @@ const updateToken = (id, token) => {
     usersToToken[i].token = token;
 };
 
+app.get('/', (req, res) => {
+    res.redirect('/login');
+});
+
 app.get('/home', (req, res) => {
     res.send('Home');
 });
@@ -88,7 +92,7 @@ app.get('/login', (req, res) => {
 });
 
 // user has authenticated through CI, now get the token
-app.get('/authorize/callback', (req, res) => {
+app.get(process.env.REDIRECT_URI_ROUTE, (req, res) => {
     authClient.getToken(req.url).then(token => {
         // generate id
         let id = uuidv1();
@@ -133,7 +137,7 @@ app.get('/logout', (req, res) => {
 });
 
 // returns an array of the users registered authenticators
-app.get('/api/authenticators', (req, res) => {
+app.get('/api/authenticators/', (req, res) => {
     // get id from cookie
     let id = req.signedCookies.uuid;
 
@@ -171,7 +175,7 @@ app.get('/api/registration', (req, res) => {
         // set correct header
         res.setHeader('Content-Type', 'application/json');
 
-        authCtx.initiateAuthenticator({accountName: 'sample'}, token).then(response => {
+        authCtx.initiateAuthenticator({qrcodeInResponse: true, accountName: 'sample'}, token).then(response => {
             res.send(JSON.stringify(response.response));
 
             // refresh occurred
@@ -220,7 +224,7 @@ app.patch('/api/method/enabled', (req, res) => {
     let id = req.signedCookies.uuid;
 
     let token    = retrieveToken(id);
-    let enabled  = req.body.enabled == 'true';
+    let enabled  = req.body.enabled === 'true';
     let methodId = req.body.methodId;
 
     // if token was found in storage
