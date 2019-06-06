@@ -37,7 +37,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.9.0",
+    "eslint": "^5.16.0",
     "query-string": "^6.2.0",
     "xmlhttprequest": "^1.8.0"
   },
