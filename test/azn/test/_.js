@@ -10,11 +10,11 @@ describe(message, () => {
 
             it(test + ": " + optionalTests[test], () => {
 
-            })
+            });
         }
 
         it("REAL_TENANT: " + process.env.REAL_TENANT, () => {
 
-        })
-    })
-})
+        });
+    });
+});

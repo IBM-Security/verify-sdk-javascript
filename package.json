@@ -1,58 +1,54 @@
 {
-	"name": "ibm-verify-sdk",
-	"version": "1.2.1",
-	"description": "IBM Verify javascript SDK",
-	"main": "dist/index.js",
-	"directories": {
-		"lib": "lib",
-		"dist": "dist"
-	},
-	"scripts": {
-		"start": "npm run clean && npm run lint && babel lib --watch --out-dir dist --source-maps inline",
-		"lint": "eslint ./lib",
-		"clean": "rm -rf dist && mkdir dist && npm run build",
-		"build": "babel lib --out-dir dist --source-maps inline"
-	},
-	"browserslist": [
-		"last 2 version",
-		"> 1%",
-		"not dead"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/IBM-Security/verify-sdk-javascript"
-	},
-	"author": "Truman Butterworth <trbutter@au1.ibm.com>",
-	"contributors": [
-		{
-			"name": "Truman Butterworth",
-			"email": "trbutter@au1.ibm.com"
-		},
-		{
-			"name": "Lachlan Ashcroft",
-			"email": "lachlan.ashcroft@ibm.com"
-		}
-	],
-	"license": "MIT",
-	"dependencies": {
-		"@babel/polyfill": "^7.4.4",
-		"query-string": "^6.2.0",
-		"xmlhttprequest": "^1.8.0"
-	},
-	"devDependencies": {
-		"@babel/cli": "^7.5.5",
-		"@babel/core": "^7.5.5",
-		"@babel/preset-env": "^7.1.0",
-		"@babel/preset-react": "^7.0.0",
-		"babel-eslint": "^10.0.3",
-		"eslint": "^5.16.0",
-		"eslint-plugin-import": "^2.14.0",
-		"eslint-plugin-node": "^8.0.0"
-	},
-	"babel": {
-		"presets": [
-			"@babel/preset-env",
-			"@babel/preset-react"
-		]
-	}
+  "name": "ibm-verify-sdk",
+  "version": "1.2.3",
+  "description": "IBM Verify javascript SDK",
+  "main": "dist/index.js",
+  "directories": {
+    "lib": "lib",
+    "dist": "dist"
+  },
+  "scripts": {
+    "start": "npm run clean && npm run lint && babel lib --watch --out-dir dist --source-maps inline",
+    "lint": "eslint ./lib",
+    "clean": "rm -rf dist && mkdir dist && npm run build",
+    "build": "babel lib --out-dir dist --source-maps inline"
+  },
+  "browserslist": [
+    "last 2 version",
+    "> 1%",
+    "not dead"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IBM-Security/verify-sdk-javascript"
+  },
+  "author": "Truman Butterworth <trbutter@au1.ibm.com>",
+  "contributors": [
+    {
+      "name": "Truman Butterworth",
+      "email": "trbutter@au1.ibm.com"
+    },
+    {
+      "name": "Lachlan Ashcroft",
+      "email": "lachlan.ashcroft@ibm.com"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "query-string": "^6.2.0",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.3",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "babel-preset-minify": "^0.5.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0"
+  }
 }

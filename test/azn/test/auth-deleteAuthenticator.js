@@ -15,7 +15,7 @@ describe("AuthenticatorContext - deleteAuthenticator()", () => {
     before( () => {
         authClient = new OAuthContext(config);
         authCtx    = new AuthenticatorContext(authClient);
-    })
+    });
 
     if (process.env.DELETE_AUTHENTICATOR === 'true') {
         it("valid params - response.status should be 204", () => {
@@ -24,8 +24,8 @@ describe("AuthenticatorContext - deleteAuthenticator()", () => {
             }).catch(error => {
                 console.log(JSON.stringify(error));
                 expect(error).to.not.exist;
-            })
-        })
+            });
+        });
     }
 
 
@@ -34,14 +34,14 @@ describe("AuthenticatorContext - deleteAuthenticator()", () => {
             expect(response).to.not.exist;
         }).catch(error => {
             expect(error.message).to.equal('deleteAuthenticator(authenticatorId, token), 2 parameters are required 1 were given');
-        })
-    })
+        });
+    });
 
     it("invalid token (empty object) - should thrown error 'not a valid token'", () => {
         return authCtx.deleteAuthenticator(authenticatorId, {}).then(response => {
             expect(response).to.not.exist;
         }).catch(error => {
             expect(error.message).to.equal('not a valid token');
-        })
-    })
+        });
+    });
 })

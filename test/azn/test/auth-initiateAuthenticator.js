@@ -11,7 +11,7 @@ describe("AuthenticatorContext - initiateAuthenticator()", () => {
     before( () => {
         authClient = new OAuthContext(config);
         authCtx    = new AuthenticatorContext(authClient);
-    })
+    });
 
     it("owner and account name specified", () => {
         let data = {accountName: "test", qrcodeInResponse: true};
@@ -20,8 +20,8 @@ describe("AuthenticatorContext - initiateAuthenticator()", () => {
             expect(response.response).to.have.property('qrcode');
         }).catch(error => {
             expect(error).to.not.exist;
-        })
-    })
+        });
+    });
 
     it("empty data object", () => {
         let data = {qrcodeInResponse: true};
@@ -31,8 +31,8 @@ describe("AuthenticatorContext - initiateAuthenticator()", () => {
         }).catch(error => {
             console.log(JSON.stringify(error));
             expect(error).to.not.exist;
-        })
-    })
+        });
+    });
 
     // these two will fail
     it("null data param - should throw 'dataObj cannot be null'", () => {
@@ -40,16 +40,16 @@ describe("AuthenticatorContext - initiateAuthenticator()", () => {
             expect(response).to.not.exist;
         }).catch(error => {
             expect(error.message).to.equal('dataObj cannot be null');
-        })
-    })
+        });
+    });
 
     it("no data param - should throw ' initiateAuthenticator(dataObj, token), 2 parameters are required 1 were given'", () => {
         return authCtx.initiateAuthenticator(token).then(response => {
             expect(response).to.not.exist;
         }).catch(error => {
             expect(error.message).to.equal('initiateAuthenticator(dataObj, token), 2 parameters are required 1 were given')
-        })
-    })
+        });
+    });
 
     it("no token provided - should throw 'initiateAuthenticator(dataObj, token), 2 parameters are required 1 were given'", () => {
         let data = {};
@@ -58,8 +58,8 @@ describe("AuthenticatorContext - initiateAuthenticator()", () => {
             expect(response).to.not.exist;
         }).catch(error => {
             expect(error.message).to.equal('initiateAuthenticator(dataObj, token), 2 parameters are required 1 were given')
-        })
-    })
+        });
+    });
 
     it("null token provided - should throw 'not a valid token'", () => {
         let data = {};
@@ -68,8 +68,8 @@ describe("AuthenticatorContext - initiateAuthenticator()", () => {
             expect(response).to.not.exist;
         }).catch(error => {
             expect(error.message).to.equal('not a valid token');
-        })
-    })
+        });
+    });
 
     it("invalid token (empty object) provided - should throw 'not a valid token'", () => {
         let data = {};
@@ -78,6 +78,6 @@ describe("AuthenticatorContext - initiateAuthenticator()", () => {
             expect(response).to.not.exist;
         }).catch(error => {
             expect(error.message).to.equal('not a valid token');
-        })
-    })
-})
+        });
+    });
+});

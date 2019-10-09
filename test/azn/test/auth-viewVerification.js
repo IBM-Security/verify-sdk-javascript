@@ -15,8 +15,9 @@ describe("AuthenticatorContext - viewVerification()", () => {
         authCtx    = new AuthenticatorContext(authClient);
     })
 
-    it("valid params - checks if 'verifications[0].owner' exists", () => {
-        return authCtx.viewVerification(authenticatorId, verificationId, token).then(response => {
+    it("valid params - checks if verification owner exists", () => {
+        // return authCtx.viewVerification(authenticatorId, verificationId, token).then(response => {
+        return authCtx.viewVerification(authenticatorId, global.verificationId, token).then(response => {
             expect(response.response.owner).to.exist;
         }).catch(error => {
             console.log(JSON.stringify(error));
