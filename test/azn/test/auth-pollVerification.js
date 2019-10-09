@@ -17,7 +17,8 @@ describe("AuthenticatorContext - pollVerification(authenticatorId, transactionId
     })
 
     it("valid parameters", () => {
-        return authCtx.pollVerification(authenticatorId, transactionId, token, 1000, 10).then(response => {
+        // return authCtx.pollVerification(authenticatorId, transactionId, token, 1000, 10).then(response => {
+        return authCtx.pollVerification(authenticatorId, global.verificationId, token, 1000, 10).then(response => {
             console.log(response);
             expect(response.state).to.exist;
         }).catch(error => {

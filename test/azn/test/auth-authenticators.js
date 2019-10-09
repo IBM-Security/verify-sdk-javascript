@@ -11,7 +11,7 @@ describe("AuthenticatorContext - authenticators()", () => {
     before( () => {
         authClient = new OAuthContext(config);
         authCtx    = new AuthenticatorContext(authClient);
-    })
+    });
 
     it("valid params - checks if 'authenticators[0].owner' exists", () => {
         return authCtx.authenticators(token).then(response => {
@@ -19,7 +19,7 @@ describe("AuthenticatorContext - authenticators()", () => {
         }).catch(error => {
             console.log(JSON.stringify(error));
             expect(error).to.not.exist;
-        })
+        });
     });
 
     it("without token - should throw error 'not a valid token'", () => {
@@ -28,7 +28,7 @@ describe("AuthenticatorContext - authenticators()", () => {
         }).catch(error => {
             console.log(JSON.stringify(error));
             expect(error.message).to.equal('not a valid token');
-        })
+        });
     });
 
     it("with invalid token (empty object) - should throw error 'not a valid token'", () => {
@@ -36,6 +36,6 @@ describe("AuthenticatorContext - authenticators()", () => {
             expect(response.response.to.not.exist);
         }).catch(error => {
             expect(error.message).to.equal('not a valid token');
-        })
+        });
     });
-})
+});

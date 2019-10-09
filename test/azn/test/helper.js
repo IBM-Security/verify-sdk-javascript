@@ -7,7 +7,6 @@ module.exports.config = {
     tenantUrl             : process.env.TENANT_URL,
     clientId              : process.env.CLIENT_ID,
     clientSecret          : process.env.CLIENT_SECRET,
-    clientId              : process.env.CLIENT_ID,
     redirectUri           : process.env.REDIRECT_URI,
     registrationProfileId : process.env.REGISTRATION_PROFILE_ID,
     responseType          : process.env.RESPONSE_TYPE,
@@ -18,8 +17,7 @@ module.exports.config = {
 // load saved token from `npm run login`
 if (process.env.REAL_TENANT === 'true') {
     module.exports.token = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.token')));
-}
-else {
+} else {
     // fake token
     module.exports.token = {
         "access_token": "88888888",
@@ -29,19 +27,20 @@ else {
         "token_type": "Bearer",
         "scope": "openid",
         "refresh_token": "666666"
-    }
+    };
 }
 
 module.exports.optionalTests = {
     REVOKE_TOKENS        : process.env.REVOKE_TOKENS,
     DELETE_AUTHENTICATOR : process.env.DELETE_AUTHENTICATOR
-}
+};
 
 module.exports.callback = "/?state=BU_zDjVVI30U0Un0&code=idWfb2Ts2TTI2umfPGFbLSh5pusnwt&grant_id=0e57bd36-4dc3-4a8c-841c-d250d3e0aa1b";
 
 module.exports.authenticatorId = process.env.AUTHENTICATOR_ID;
 module.exports.methodId        = process.env.METHOD_ID;
 module.exports.verificationId  = process.env.VERIFICATION_ID;
+
 
 module.exports.AppConfig =  {
     DEFAULT_CLOCK_SKEW : 300,

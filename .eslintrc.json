@@ -33,9 +33,9 @@
       2,
       {
         "arrays": "never",
-        "exports": "always-multiline",
+        "exports": "never",
         "functions": "never",
-        "imports": "always-multiline",
+        "imports": "never",
         "objects": "never"
       }
     ],

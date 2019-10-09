@@ -1,6 +1,6 @@
 {
   "name": "ibm-verify-sdk",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "IBM Verify javascript SDK",
   "main": "dist/index.js",
   "directories": {
@@ -35,24 +35,20 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/polyfill": "^7.4.3",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
+    "@babel/polyfill": "^7.4.4",
     "query-string": "^6.2.0",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.3",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "babel-preset-minify": "^0.5.1",
+    "eslint": "^5.16.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^8.0.0"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
-    ]
   }
 }
