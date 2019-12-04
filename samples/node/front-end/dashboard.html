@@ -25,63 +25,35 @@
 
     </style>
 
-  <title>IBM Verify SDK Sample</title>
+  <title>Node.js Sample application</title>
 </head>
 
 <body>
+		<div class="col jumbotron">
+			<div class="container">
+				<h1>Node.js sample application</h1>
+				<p>This sample is created using <a href="https://www.npmjs.com/package/ibm-verify-sdk" title="IBM Verify javascript SDK" target="_blank">IBM Verify javascript SDK</a></p>
+			</div>
+		</div>
   <div class="container">
-    <div class="row mb-5">
-      <div class="col">
-        <h1>Dashboard </h1>
-        <button type="button" class="btn btn-primary btn-sm" id="refresh" onclick="location.reload()"> Refresh </button>
+    <div class="mb-5 align-items-start">
+			<div class="mb-5">
+				<h3>User name:</h3>
+				<div class="d-block p-4 bg-dark text-white invisible"  id="name"></div>
+			</div>
+      <div>
+        <h3>User info:</h3>
+        <pre class="d-block p-4 bg-dark text-white invisible" id="user-info"></pre>
       </div>
-    </div>
-
-    <div class="row mb-5 align-items-start">
-      <div class="col">
-        <h3>Initiate an Authenticator</h3>
-        <p>Initiate an authenticator registration for IBM Verify instances.</p>
-        <button type="button" class="btn btn-primary btn-sm" id="new-authenticator" onclick="newAuthenticator()">qr
-          code</button>
-      </div>
-      <div class="col">
-        <img id="qr" src="">
-      </div>
-
-    </div>
-    <div class="row mb-5">
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover" id="authenticator-table">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col"> Authenticator ID </th>
-              <th scope="col"> Account Name </th>
-              <th scope="col"> Device Type </th>
-              <th scope="col"> Remove </th>
-            </tr>
-          </thead>
-          <tbody id="auth-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-
-    <div class="row mb-5">
-      <div class="col-md-6">
-        <h3> Authenticator Information </h3>
-        <pre id="authenticator-info"></pre>
-      </div>
-      <div class="col-md-6">
-        <h3> Method Information </h3>
-        <p>Update a specific enrollment of a signature authentication method.</p>
-        <button type="button" class="btn btn-primary btn-sm" id="enable-method" onclick="enableMethod(true)"> Enable
-        </button>
-        <button type="button" class="btn btn-primary btn-sm" id="disable-method" onclick="enableMethod(false)">
-          Disable
-        </button>
-        <pre id="method-info"></pre>
-      </div>
-    </div>
+		</div>
+		<div class="mb-5">
+			<h4>Resources:</h4>
+			<ul>
+				<li>
+				<p><a href="http://developer.ice.ibmcloud.com/verify/javascript/node-js/getting-started" aria-pressed="true">IBM Security Identity and Access: Developer Portal</a></p>
+				</li>
+			</ul>
+		</div>
   </div>
 
 
