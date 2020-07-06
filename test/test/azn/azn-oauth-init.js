@@ -76,19 +76,6 @@ describe("OAuthContext(AZN) - Instantiation", () => {
         expect(() => new OAuthContext(data)).to.throw('scope property is required in config settings');
     });
 
-    it("flowType: authorization but no secret - should throw 'clientSecret property is required in config settings for Authorization Code flow'", () => {
-        let data = {
-            clientId: '123',
-            tenantUrl: 'http://123',
-            redirectUri: '123',
-            responseType: '123',
-            flowType: 'authorization',
-            scope: '123'
-        };
-
-        expect(() => new OAuthContext(data)).to.throw('clientSecret property is required in config settings for Authorization Code flow');
-    });
-
     it("invalid flowType - should throw '\"incorrect\" flowType not valid. Valid flow types are:  \"implicit\", \"authorization\", \"urn:ietf:params:oauth:grant-type:device_code\", \"password\"", () => {
         let data = {
             clientId: '123',

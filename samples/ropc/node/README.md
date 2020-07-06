@@ -1,27 +1,35 @@
-# Node sample application using Authorization grant type
-This sample shows how to use the SDK to
-* Authenticate a user via IBM Security Verify
-* View user information via `userinfo` endpoint
+# ROPC
+
+This sample shows how to use the SDK to authenticate a user via IBM Security Verify using the the ROPC grant.
 
 <br>
 
 ![screenshot](screenshot.png)
 
-To run the sample
+## To run the example
 
-- Copy paste the contents of the `.env.example` file into a `.env` file
-- Update the environment variables in your `.env` file with the appropriate configuration settings.
-- npm install
-- npm start
-- navigate to `http://localhost:3000`
+In your project folder:
+- Create a `.env` file with the following variables in place (remove secret if Public Client):
+```
+TENANT_URL=https://your-tenant-name.ice.ibmcloud.com
+CLIENT_ID=a1b2c3d4-abcd-1234-0000-yourid
+CLIENT_SECRET=yoursecret
+FLOW_TYPE=ropc
+SCOPE=openid
+```
 
-The IBM Verify Javascript SDK also supports the ability to manage IBM Verify registration profiles. You can read more about how this is implemented [here](http://developer.ice.ibmcloud.com/verify/javascript/ibm-verify-sdk-object-model/authenticator-context)
+From your CLI (Command Line Interface), at the root of your project:
+- `npm install`
+- `node ropc-sample.js`
+- Enter user credentials when prompted
+
+Following successful authentication, authenticated user information will be returned.
 
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2019, 2020 IBM
+Copyright (c) 2020 IBM
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
