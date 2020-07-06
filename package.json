@@ -1,6 +1,6 @@
 {
   "name": "ibm-verify-sdk",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "IBM Verify javascript SDK",
   "main": "dist/index.js",
   "directories": {
@@ -8,10 +8,11 @@
     "dist": "dist"
   },
   "scripts": {
-    "start": "npm run clean && npm run lint && babel lib --watch --out-dir dist --source-maps inline",
+    "start": "npm run clean && babel lib --watch --out-dir dist --source-maps inline",
     "lint": "eslint ./lib",
     "clean": "rm -rf dist && mkdir dist && npm run build",
-    "build": "babel lib --out-dir dist --source-maps inline"
+    "build": "babel lib --out-dir dist --source-maps inline",
+    "test": "cd test && npm test"
   },
   "browserslist": [
     "last 2 version",

@@ -11,29 +11,29 @@
 * [AuthenticatorContext API Samples](#authenticatorcontext-api-aamples)
 * [License](#license)
 
-The purpose of the Javascript client library is to enable a developer to create web based applications that enhance the user experience with Cloud Identity Verify.
+The purpose of the Javascript client library is to enable a developer to create web based applications that enhance the user experience with IBM Security Verify.
 IBM Verify SDK currently supports the following grant types:
- - Authorization Code Flow
+ - **Authorization Code Flow**
     - The most commonly used flow for clients that can securely maintain a client secret such as web applications and native mobile applications as the Access Token is passed directly to the web server hosting the app, without going through the end user's web browser which can expose a risk.
- - Resource owner password credentials (ROPC)
+ - **Resource owner password credentials (ROPC)**
 	- In this flow the user's username and password are excahnged for an access token.
 	**This grant type can be enabled, but use it only if no other flows are available.**
- - Device Flow
+ - **Device Flow**
 	-	The device flow enables devices such as Smart TVs that have limited or no browser
 	capabilities to obtain an access token. The device flow still requires browser interaction during authentication.
- - Implicit Flow
+ - **Implicit Flow**
     - Implicit flow is handled purely client-side where the users application might not have a server to store secrets. An example would be a single page application.
 		**This flow should only be recommended in this type of scenario**
 
 
 ## Prerequisites
 **Important both of the following items are required to enable the use of the IBM Verify SDK.**
-- Configuring your [Cloud Identity Tenant](https://iamdevportal.us-east.mybluemix.net/verify/javascript/civ-getting-started/configuring-your-ci-tenant)
- - Creating your custom Cloud Identity [web application](https://www.ibm.com/support/knowledgecenter/SSCT62/com.ibm.iamservice.doc/tasks/oidc_app_sso.html) using OpenID Connect for Single Sign-on.
+- Configuring your [IBM Security Verify Tenant](https://iamdevportal.us-east.mybluemix.net/verify/javascript/civ-getting-started/configuring-your-ci-tenant)
+ - Creating your custom IBM Security Verify [web application](https://www.ibm.com/support/knowledgecenter/SSCT62/com.ibm.iamservice.doc/tasks/oidc_app_sso.html) using OpenID Connect for Single Sign-on.
 
 
 # Getting Started
-After configuring your Tenant and your application on Cloud Identity, you can install the IBM Verify SDK:
+After configuring your Tenant and your application on IBM Security Verify, you can install the IBM Verify SDK:
 ```bash
 npm install ibm-verify-sdk
 ```
@@ -47,13 +47,14 @@ var authClient = new OAuthContext(/*config*/);
 
 ## Configuration Settings
 Configuring your application for authentication / authorization transactions using Single Sign On.
-Initial configuration to kick off your authentication flow with Cloud Identity Authorization server.
+Initial configuration to kick off your authentication flow with IBM Security Verify Authorization server.
 
 Examples on how to configure your oidc applicaiton can be found on the IBM Security Identity and Access: Developer Portal site. [Configuring your application](http://developer.ice.ibmcloud.com/verify/javascript/ibm-verify-sdk-object-model/config).
 
 ## OAuthContext
-The OAuthContext object represents the interactions between the relying party and the Cloud Identity authorization server to acquire access tokens which enable the application access to protected resources.
+The OAuthContext object represents the interactions between the relying party and the IBM Security Verify authorization server to acquire access tokens which enable the application access to protected resources.
 [Additional information about OAuthContext](https://pages.github.ibm.com/ibm-security/iam-docs/verify/javascript/ibm-verify-sdk-object-model/oauthcontext)
+
 
 
 # License

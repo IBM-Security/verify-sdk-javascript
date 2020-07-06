@@ -1,6 +1,6 @@
 # ROPC
 
-This sample shows how to use the SDK to authenticate a user via Cloud Identity using the the ROPC grant.
+This sample shows how to use the SDK to authenticate a user via IBM Security Verify using the the ROPC grant.
 
 <br>
 

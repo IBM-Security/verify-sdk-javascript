@@ -14,11 +14,13 @@ html
 		ol
 			li Copy the following code: <strong>#{userCode}</strong>
 			li Go to the following url #[a(href=verificationUri target='_blank') #{verificationUri}]
+
+if qrCode
 	.container
 		.row
 			.justify-content-md-center
 				p Or scan the QR code below
-				img(src=qrCode)
+				img(src=`data:image;base64, ${qrCode}`)
 
 	script(src="/socket.io/socket.io.js")
 

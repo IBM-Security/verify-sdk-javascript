@@ -40,7 +40,7 @@ app.get('/authorize', (req, res) => {
 			res.render('authorize', {
 				userCode: response.user_code,
 				verificationUri: response.verification_uri,
-				qrCode: `data:image;base64, ${response.verification_uri_complete_qrcode}`
+				qrCode: response.verification_uri_complete_qrcode
 			}, pollToken(response.device_code));
 		})
 		.catch(error => {
