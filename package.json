@@ -1,7 +1,7 @@
 {
   "name": "ibm-verify-sdk",
-  "version": "2.0.1",
-  "description": "IBM Verify javascript SDK",
+  "version": "2.0.2",
+  "description": "IBM Security Verify SDK for JavaScript",
   "main": "dist/index.js",
   "directories": {
     "lib": "lib",
