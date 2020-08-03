@@ -1,4 +1,4 @@
-# IBM Verify SDK
+# IBM Security Verify SDK for JavaScript
 ![Type](https://img.shields.io/badge/Type-JavaScript-blue.svg)
 ![npm](https://img.shields.io/npm/v/ibm-verify-sdk.svg?style=plastic)
 ![NPM](https://img.shields.io/npm/l/ibm-verify-sdk.svg?colorB=blue&style=plastic)
@@ -12,7 +12,7 @@
 * [License](#license)
 
 The purpose of the Javascript client library is to enable a developer to create web based applications that enhance the user experience with IBM Security Verify.
-IBM Verify SDK currently supports the following grant types:
+IBM Security Verify SDK for JavaScript currently supports the following grant types:
  - **Authorization Code Flow**
     - The most commonly used flow for clients that can securely maintain a client secret such as web applications and native mobile applications as the Access Token is passed directly to the web server hosting the app, without going through the end user's web browser which can expose a risk.
  - **Resource owner password credentials (ROPC)**
@@ -33,7 +33,7 @@ IBM Verify SDK currently supports the following grant types:
 
 
 # Getting Started
-After configuring your Tenant and your application on IBM Security Verify, you can install the IBM Verify SDK:
+After configuring your Tenant and your application on IBM Security Verify, you can install the IBM Security Verify SDK for JavaScript:
 ```bash
 npm install ibm-verify-sdk
 ```
