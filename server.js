@@ -135,6 +135,6 @@ app.get('/api/userinfo', middlewareFunction, (req, res) => {
 			res.json(err);
 		});
 });
-app.listen(3000, () => {
+app.listen(8000, () => {
 	console.log('Server started');
 });
