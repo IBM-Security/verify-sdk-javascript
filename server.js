@@ -15,14 +15,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 require('dotenv').config();
 
 const config = {
-	tenantUrl            : process.env.TENANT_URL,
-	clientId             : process.env.CLIENT_ID,
-	clientSecret         : process.env.CLIENT_SECRET,
-	redirectUri          : process.env.REDIRECT_URI,
-	responseType         : process.env.RESPONSE_TYPE,
-	flowType             : process.env.FLOW_TYPE,
-	scope                : process.env.SCOPE
-};
+	tenantUrl: 'https://usaf.ice.ibmcloud.com',
+	clientId: 'ade05eaa-501e-402d-b434-bc5ff11ed97d',
+	clientSecret: 'IcuMii6yGG',
+	redirectUri: 'http://localhost:3000/auth/callback',
+	responseType: 'code',
+	flowType: 'authorization',
+	scope: 'openid'
+   };
 
 const authClient = new OAuthContext(config);
 
