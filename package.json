@@ -1,16 +1,20 @@
 {
-	"name": "eos-auth-test",
-	"version": "0.1.0",
+	"name": "login",
+	"version": "1.0.0",
 	"description": "",
 	"main": "server.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "Bryan Allebone <bryan.allebone@gmail.com>",
+	"author": "Lachlan Ashcroft <lachlan.ashcroft@ibm.com>",
 	"contributors": [
 		{
 			"name": "Lachlan Ashcroft",
 			"email": "lachlan.ashcroft@ibm.com"
+		},
+		{
+			"name": "Truman Butterworth",
+			"email": "trbutter@au1.ibm.com"
 		}
 	],
 	"license": "MIT",
