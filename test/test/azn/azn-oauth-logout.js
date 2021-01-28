@@ -32,7 +32,7 @@ describe("OAuthContext(AZN) - logout()", () => {
         })
 
         it("no path and token", () => {
-            return authClient.logout(token).then(response => {
+            return authClient.logout('', token).then(response => {
                 expect(response).to.exist;
                 expect(authClient.revokeToken.calledOnce).to.equal(true);
                 expect(authClient.revokeToken.getCall(0).args[0]).to.equal(token);

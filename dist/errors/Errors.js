@@ -1,2 +1,47 @@
-"use strict";function _typeof(a){return _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(a){return typeof a}:function(a){return a&&"function"==typeof Symbol&&a.constructor===Symbol&&a!==Symbol.prototype?"symbol":typeof a},_typeof(a)}function _classCallCheck(a,b){if(!(a instanceof b))throw new TypeError("Cannot call a class as a function")}function _possibleConstructorReturn(a,b){return b&&("object"===_typeof(b)||"function"==typeof b)?b:_assertThisInitialized(a)}function _assertThisInitialized(a){if(void 0===a)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return a}function _inherits(a,b){if("function"!=typeof b&&null!==b)throw new TypeError("Super expression must either be null or a function");a.prototype=Object.create(b&&b.prototype,{constructor:{value:a,writable:!0,configurable:!0}}),b&&_setPrototypeOf(a,b)}function _wrapNativeSuper(a){var b="function"==typeof Map?new Map:void 0;return _wrapNativeSuper=function(a){function c(){return _construct(a,arguments,_getPrototypeOf(this).constructor)}if(null===a||!_isNativeFunction(a))return a;if("function"!=typeof a)throw new TypeError("Super expression must either be null or a function");if("undefined"!=typeof b){if(b.has(a))return b.get(a);b.set(a,c)}return c.prototype=Object.create(a.prototype,{constructor:{value:c,enumerable:!1,writable:!0,configurable:!0}}),_setPrototypeOf(c,a)},_wrapNativeSuper(a)}function isNativeReflectConstruct(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],function(){})),!0}catch(a){return!1}}function _construct(){return _construct=isNativeReflectConstruct()?Reflect.construct:function(b,c,d){var e=[null];e.push.apply(e,c);var a=Function.bind.apply(b,e),f=new a;return d&&_setPrototypeOf(f,d.prototype),f},_construct.apply(null,arguments)}function _isNativeFunction(a){return-1!==Function.toString.call(a).indexOf("[native code]")}function _setPrototypeOf(a,b){return _setPrototypeOf=Object.setPrototypeOf||function(a,b){return a.__proto__=b,a},_setPrototypeOf(a,b)}function _getPrototypeOf(a){return _getPrototypeOf=Object.setPrototypeOf?Object.getPrototypeOf:function(a){return a.__proto__||Object.getPrototypeOf(a)},_getPrototypeOf(a)}var VerifyError=/*#__PURE__*/function(a){function b(a,c,d){var e;return _classCallCheck(this,b),e=_possibleConstructorReturn(this,_getPrototypeOf(b).call(this)),e.name=a||"Verify Error",e.status=d,e.messageId=c.messageId||c.error,e.messageDescription=c.messageDescription||c.error_description,e.message=c,Error.captureStackTrace&&Error.captureStackTrace(_assertThisInitialized(e),b),e}return _inherits(b,a),b}(_wrapNativeSuper(Error)),AbstractMethodNotImplementedError=/*#__PURE__*/function(a){function b(){var a,c;_classCallCheck(this,b);for(var d=arguments.length,e=Array(d),f=0;f<d;f++)e[f]=arguments[f];return c=_possibleConstructorReturn(this,(a=_getPrototypeOf(b)).call.apply(a,[this].concat(e))),Error.captureStackTrace(_assertThisInitialized(c),b),c}return _inherits(b,a),b}(_wrapNativeSuper(Error)),InvalidOAuthConfigurationError=/*#__PURE__*/function(a){function b(){var a,c;_classCallCheck(this,b);for(var d=arguments.length,e=Array(d),f=0;f<d;f++)e[f]=arguments[f];return c=_possibleConstructorReturn(this,(a=_getPrototypeOf(b)).call.apply(a,[this].concat(e))),Error.captureStackTrace(_assertThisInitialized(c),b),c}return _inherits(b,a),b}(_wrapNativeSuper(Error)),NotAvailableError=/*#__PURE__*/function(a){function b(){var a,c;_classCallCheck(this,b);for(var d=arguments.length,e=Array(d),f=0;f<d;f++)e[f]=arguments[f];return c=_possibleConstructorReturn(this,(a=_getPrototypeOf(b)).call.apply(a,[this].concat(e))),Error.captureStackTrace(_assertThisInitialized(c),b),c}return _inherits(b,a),b}(_wrapNativeSuper(Error)),DeveloperError=/*#__PURE__*/function(a){function b(){var a,c;_classCallCheck(this,b);for(var d=arguments.length,e=Array(d),f=0;f<d;f++)e[f]=arguments[f];return c=_possibleConstructorReturn(this,(a=_getPrototypeOf(b)).call.apply(a,[this].concat(e))),Error.captureStackTrace(_assertThisInitialized(c),b),c}return _inherits(b,a),b}(_wrapNativeSuper(Error));module.exports={VerifyError:VerifyError,AbstractMethodNotImplementedError:AbstractMethodNotImplementedError,InvalidOAuthConfigurationError:InvalidOAuthConfigurationError,NotAvailableError:NotAvailableError,DeveloperError:DeveloperError};
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL2xpYi9lcnJvcnMvRXJyb3JzLmpzIl0sIm5hbWVzIjpbIlZlcmlmeUVycm9yIiwibmFtZSIsIm1lc3NhZ2UiLCJlcnJvclN0YXR1cyIsInN0YXR1cyIsIm1lc3NhZ2VJZCIsImVycm9yIiwibWVzc2FnZURlc2NyaXB0aW9uIiwiZXJyb3JfZGVzY3JpcHRpb24iLCJFcnJvciIsImNhcHR1cmVTdGFja1RyYWNlIiwiQWJzdHJhY3RNZXRob2ROb3RJbXBsZW1lbnRlZEVycm9yIiwiYXJncyIsIkludmFsaWRPQXV0aENvbmZpZ3VyYXRpb25FcnJvciIsIk5vdEF2YWlsYWJsZUVycm9yIiwiRGV2ZWxvcGVyRXJyb3IiLCJtb2R1bGUiLCJleHBvcnRzIl0sIm1hcHBpbmdzIjoicXpFQUFNQSxDQUFBQSxXLDBCQUNMLFdBQVlDLENBQVosQ0FBa0JDLENBQWxCLENBQTJCQyxDQUEzQixDQUF3Qyx1R0FFdkMsRUFBS0YsSUFBTCxDQUFZQSxDQUFJLEVBQUksY0FGbUIsQ0FHdkMsRUFBS0csTUFBTCxDQUFjRCxDQUh5QixDQUl2QyxFQUFLRSxTQUFMLENBQWlCSCxDQUFPLENBQUNHLFNBQVIsRUFBcUJILENBQU8sQ0FBQ0ksS0FKUCxDQUt2QyxFQUFLQyxrQkFBTCxDQUEwQkwsQ0FBTyxDQUFDSyxrQkFBUixFQUE4QkwsQ0FBTyxDQUFDTSxpQkFMekIsQ0FNdkMsRUFBS04sT0FBTCxDQUFlQSxDQU53QixDQVFuQ08sS0FBSyxDQUFDQyxpQkFSNkIsRUFTdENELEtBQUssQ0FBQ0MsaUJBQU4sMkJBQThCVixDQUE5QixDQVRzQyxFQVd2QyxDLDBDQVp3QlMsSyxHQWNwQkUsaUMsMEJBQ0wsWUFBcUIsNERBQU5DLENBQU0sc0JBQU5BLENBQU0sNEdBQ1hBLENBRFcsSUFFcEJILEtBQUssQ0FBQ0MsaUJBQU4sMkJBQThCQyxDQUE5QixDQUZvQixFQUdwQixDLDBDQUo4Q0YsSyxHQU8xQ0ksOEIsMEJBQ0wsWUFBcUIsNERBQU5ELENBQU0sc0JBQU5BLENBQU0sNEdBQ1hBLENBRFcsSUFFcEJILEtBQUssQ0FBQ0MsaUJBQU4sMkJBQThCRyxDQUE5QixDQUZvQixFQUdwQixDLDBDQUoyQ0osSyxHQU92Q0ssaUIsMEJBQ0wsWUFBcUIsNERBQU5GLENBQU0sc0JBQU5BLENBQU0sNEdBQ1hBLENBRFcsSUFFcEJILEtBQUssQ0FBQ0MsaUJBQU4sMkJBQThCSSxDQUE5QixDQUZvQixFQUdwQixDLDBDQUo4QkwsSyxHQU8xQk0sYywwQkFDTCxZQUFxQiw0REFBTkgsQ0FBTSxzQkFBTkEsQ0FBTSw0R0FDWEEsQ0FEVyxJQUVwQkgsS0FBSyxDQUFDQyxpQkFBTiwyQkFBOEJLLENBQTlCLENBRm9CLEVBR3BCLEMsMENBSjJCTixLLEdBTzdCTyxNQUFNLENBQUNDLE9BQVAsQ0FBaUIsQ0FBQ2pCLFdBQVcsQ0FBWEEsV0FBRCxDQUFjVyxpQ0FBaUMsQ0FBakNBLGlDQUFkLENBQWlERSw4QkFBOEIsQ0FBOUJBLDhCQUFqRCxDQUFpRkMsaUJBQWlCLENBQWpCQSxpQkFBakYsQ0FBb0dDLGNBQWMsQ0FBZEEsY0FBcEcsQyIsInNvdXJjZXNDb250ZW50IjpbImNsYXNzIFZlcmlmeUVycm9yIGV4dGVuZHMgRXJyb3Ige1xuXHRjb25zdHJ1Y3RvcihuYW1lLCBtZXNzYWdlLCBlcnJvclN0YXR1cykge1xuXHRcdHN1cGVyKCk7XG5cdFx0dGhpcy5uYW1lID0gbmFtZSB8fCAnVmVyaWZ5IEVycm9yJztcblx0XHR0aGlzLnN0YXR1cyA9IGVycm9yU3RhdHVzO1xuXHRcdHRoaXMubWVzc2FnZUlkID0gbWVzc2FnZS5tZXNzYWdlSWQgfHwgbWVzc2FnZS5lcnJvcjtcblx0XHR0aGlzLm1lc3NhZ2VEZXNjcmlwdGlvbiA9IG1lc3NhZ2UubWVzc2FnZURlc2NyaXB0aW9uIHx8IG1lc3NhZ2UuZXJyb3JfZGVzY3JpcHRpb247XG5cdFx0dGhpcy5tZXNzYWdlID0gbWVzc2FnZTtcblxuXHRcdGlmIChFcnJvci5jYXB0dXJlU3RhY2tUcmFjZSkge1xuXHRcdFx0RXJyb3IuY2FwdHVyZVN0YWNrVHJhY2UodGhpcywgVmVyaWZ5RXJyb3IpO1xuXHRcdH1cblx0fVxufVxuY2xhc3MgQWJzdHJhY3RNZXRob2ROb3RJbXBsZW1lbnRlZEVycm9yIGV4dGVuZHMgRXJyb3Ige1xuXHRjb25zdHJ1Y3RvciguLi5hcmdzKSB7XG5cdFx0c3VwZXIoLi4uYXJncyk7XG5cdFx0RXJyb3IuY2FwdHVyZVN0YWNrVHJhY2UodGhpcywgQWJzdHJhY3RNZXRob2ROb3RJbXBsZW1lbnRlZEVycm9yKTtcblx0fVxufVxuXG5jbGFzcyBJbnZhbGlkT0F1dGhDb25maWd1cmF0aW9uRXJyb3IgZXh0ZW5kcyBFcnJvciB7XG5cdGNvbnN0cnVjdG9yKC4uLmFyZ3MpIHtcblx0XHRzdXBlciguLi5hcmdzKTtcblx0XHRFcnJvci5jYXB0dXJlU3RhY2tUcmFjZSh0aGlzLCBJbnZhbGlkT0F1dGhDb25maWd1cmF0aW9uRXJyb3IpO1xuXHR9XG59XG5cbmNsYXNzIE5vdEF2YWlsYWJsZUVycm9yIGV4dGVuZHMgRXJyb3Ige1xuXHRjb25zdHJ1Y3RvciguLi5hcmdzKSB7XG5cdFx0c3VwZXIoLi4uYXJncyk7XG5cdFx0RXJyb3IuY2FwdHVyZVN0YWNrVHJhY2UodGhpcywgTm90QXZhaWxhYmxlRXJyb3IpO1xuXHR9XG59XG5cbmNsYXNzIERldmVsb3BlckVycm9yIGV4dGVuZHMgRXJyb3Ige1xuXHRjb25zdHJ1Y3RvciguLi5hcmdzKSB7XG5cdFx0c3VwZXIoLi4uYXJncyk7XG5cdFx0RXJyb3IuY2FwdHVyZVN0YWNrVHJhY2UodGhpcywgRGV2ZWxvcGVyRXJyb3IpO1xuXHR9XG59XG5cbm1vZHVsZS5leHBvcnRzID0ge1ZlcmlmeUVycm9yLCBBYnN0cmFjdE1ldGhvZE5vdEltcGxlbWVudGVkRXJyb3IsIEludmFsaWRPQXV0aENvbmZpZ3VyYXRpb25FcnJvciwgTm90QXZhaWxhYmxlRXJyb3IsIERldmVsb3BlckVycm9yfTtcblxuIl19
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DeveloperError = exports.NotAvailableError = exports.InvalidOAuthConfigurationError = exports.AbstractMethodNotImplementedError = exports.VerifyError = void 0;
+const enums_1 = require("../helpers/enums");
+class VerifyError extends Error {
+    constructor(name, message, errorStatus) {
+        super();
+        this.name = name || enums_1.EErrorNames.VerifyError;
+        this.status = errorStatus;
+        this.messageId = message && message.messageId || message && message.error;
+        this.messageDescription = message && message.messageDescription || message && message.error_description;
+        this.message = message;
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, VerifyError);
+        }
+    }
+}
+exports.VerifyError = VerifyError;
+class AbstractMethodNotImplementedError extends Error {
+    constructor(...args) {
+        super(...args);
+        Error.captureStackTrace(this, AbstractMethodNotImplementedError);
+    }
+}
+exports.AbstractMethodNotImplementedError = AbstractMethodNotImplementedError;
+class InvalidOAuthConfigurationError extends Error {
+    constructor(...args) {
+        super(...args);
+        Error.captureStackTrace(this, InvalidOAuthConfigurationError);
+    }
+}
+exports.InvalidOAuthConfigurationError = InvalidOAuthConfigurationError;
+class NotAvailableError extends Error {
+    constructor(...args) {
+        super(...args);
+        Error.captureStackTrace(this, NotAvailableError);
+    }
+}
+exports.NotAvailableError = NotAvailableError;
+class DeveloperError extends Error {
+    constructor(...args) {
+        super(...args);
+        Error.captureStackTrace(this, DeveloperError);
+    }
+}
+exports.DeveloperError = DeveloperError;
+//# sourceMappingURL=Errors.js.map

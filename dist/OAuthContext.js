@@ -1,138 +1,470 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0,require("@babel/polyfill");var _queryString=_interopRequireDefault(require("query-string")),_Errors=require("./errors/Errors"),_StorageHandler=_interopRequireDefault(require("./helpers/StorageHandler")),_config=require("./config"),_apiRequest=_interopRequireDefault(require("./helpers/apiRequest")),_utils=_interopRequireDefault(require("./helpers/utils"));function _interopRequireDefault(a){return a&&a.__esModule?a:{default:a}}function _get(a,b,c){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get:function(a,b,c){var d=_superPropBase(a,b);if(d){var e=Object.getOwnPropertyDescriptor(d,b);return e.get?e.get.call(c):e.value}},_get(a,b,c||a)}function _superPropBase(a,b){for(;!Object.prototype.hasOwnProperty.call(a,b)&&(a=_getPrototypeOf(a),null!==a););return a}function _possibleConstructorReturn(a,b){return b&&("object"===_typeof(b)||"function"==typeof b)?b:_assertThisInitialized(a)}function _assertThisInitialized(a){if(void 0===a)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return a}function _getPrototypeOf(a){return _getPrototypeOf=Object.setPrototypeOf?Object.getPrototypeOf:function(a){return a.__proto__||Object.getPrototypeOf(a)},_getPrototypeOf(a)}function _inherits(a,b){if("function"!=typeof b&&null!==b)throw new TypeError("Super expression must either be null or a function");a.prototype=Object.create(b&&b.prototype,{constructor:{value:a,writable:!0,configurable:!0}}),b&&_setPrototypeOf(a,b)}function _setPrototypeOf(a,b){return _setPrototypeOf=Object.setPrototypeOf||function(a,b){return a.__proto__=b,a},_setPrototypeOf(a,b)}function _typeof(a){return _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(a){return typeof a}:function(a){return a&&"function"==typeof Symbol&&a.constructor===Symbol&&a!==Symbol.prototype?"symbol":typeof a},_typeof(a)}function asyncGeneratorStep(a,b,c,d,e,f,g){try{var h=a[f](g),i=h.value}catch(a){return void c(a)}h.done?b(i):Promise.resolve(i).then(d,e)}function _asyncToGenerator(a){return function(){var b=this,c=arguments;return new Promise(function(d,e){function f(a){asyncGeneratorStep(h,d,e,f,g,"next",a)}function g(a){asyncGeneratorStep(h,d,e,f,g,"throw",a)}var h=a.apply(b,c);f(void 0)})}}function _defineProperties(a,b){for(var c,d=0;d<b.length;d++)c=b[d],c.enumerable=c.enumerable||!1,c.configurable=!0,"value"in c&&(c.writable=!0),Object.defineProperty(a,c.key,c)}function _createClass(a,b,c){return b&&_defineProperties(a.prototype,b),c&&_defineProperties(a,c),a}function _classCallCheck(a,b){if(!(a instanceof b))throw new TypeError("Cannot call a class as a function")}var FLOW_TYPE={implicitFlow:"implicit",authorizationCodeFlow:"authorization",deviceFlow:"device",ROPC:"ropc"},OAuthContext=function a(b){if(_classCallCheck(this,a),!b)throw new _Errors.InvalidOAuthConfigurationError("Config parameter is required");if(!b.flowType)throw new _Errors.InvalidOAuthConfigurationError("flowType property is required in config settings");if(!b.clientId)throw new _Errors.InvalidOAuthConfigurationError("clientId property is required in config settings");if(!(b.tenantUrl&&_utils.default.isUrl(b.tenantUrl)))throw new _Errors.InvalidOAuthConfigurationError("a valid tenantUrl property is required in config settings");if(!b.scope)throw new _Errors.InvalidOAuthConfigurationError("scope property is required in config settings");// if (!config.responseType) {
-// 	throw new InvalidOAuthConfigurationError('responseType property is required in config settings');
-// }
-switch(b.flowType){case FLOW_TYPE.implicitFlow:return new ImplicitFlow(b);case FLOW_TYPE.authorizationCodeFlow:return new AuthorizationCodeFlow(b);case FLOW_TYPE.deviceFlow:return new DeviceFlow(b);case FLOW_TYPE.ROPC:return new ROPCFlow(b);default:var c=Object.values(FLOW_TYPE).map(function(a){return" \"".concat(a,"\"")});throw new _Errors.InvalidOAuthConfigurationError("\"".concat(b.flowType,"\" flowType not valid. Valid flow types are: ").concat(c));}},FlowAbstract=/*#__PURE__*/function(){function a(b){// cannot instantiate abstract class
-if(_classCallCheck(this,a),(this instanceof a?this.constructor:void 0)===a)throw new TypeError("Cannot instantiate FlowAbstract directly");this.config=b}/**
-	 * @abstract
-	 * @function isValidConfig Validates the config of an OAuthContext instance
-	 * @returns {boolean} Boolean indicating whether the config is valid
-	 * Abstract parent method throws AbstractMethodNotImplementedError()
-	 */return _createClass(a,[{key:"isValidConfig",value:function isValidConfig(){throw new _Errors.AbstractMethodNotImplementedError}/**
-	 * @function logout Revokes a user's current access token
-	 * @param {string} path Optional path
-	 * @param {object} token The token to be revoked containing access_token, refresh_token ...
-	 * @returns {Promise<object>} Response object from revoking the token
-	 */},{key:"logout",value:function logout(a,b){// path and token supplied
-if(2===arguments.length&&!this.isToken(b))return Promise.reject(new _Errors.VerifyError(_config.AppConfig.TOKEN_ERROR,"Token parameter is not a valid token"));// no path but a 'token' provided
-if(1===arguments.length&&!this.isToken(a))return Promise.reject(new _Errors.VerifyError(_config.AppConfig.TOKEN_ERROR,"Token parameter is not a valid token"));try{return 2===arguments.length?this.revokeToken(b,"access_token"):this.revokeToken(a,"access_token")}catch(a){return Promise.reject(a)}}/**
-	 * @function getConfig Gets the config of the current OAuthContext instance
-	 * @returns {object} The config object containing clientId, redirectUri, flowType, ...
-	 */},{key:"getConfig",value:function getConfig(){return this.config}/**
-	 * @function isAuthenticated Checks whether a token is still valid
-	 * @param {object} token The token to be checked for active status containing access_token, refresh_token ...
-	 * @returns {Promise<boolean>} Boolean indicating whether the token is active
-	 */},{key:"isAuthenticated",value:function(){var a=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function a(b){var c;return regeneratorRuntime.wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return a.prev=0,a.next=3,this.introspectToken(b);case 3:return c=a.sent,a.abrupt("return",this.config.flowType===FLOW_TYPE.implicitFlow?!0===c.active:!0===c.response.active);case 7:return a.prev=7,a.t0=a["catch"](0),a.abrupt("return",Promise.reject(a.t0));case 10:case"end":return a.stop();}},a,this,[[0,7]])}));return function isAuthenticated(){return a.apply(this,arguments)}}()/**
-	 * @function introspectToken Introspects a token for more information
-	 * @param {object} token The token to be inspected containing access_token, refresh_token ...
-	 * @returns {Promise<object>} Response object with information about the supplied token
-	 */},{key:"introspectToken",value:function introspectToken(a){if(!this.isToken(a))return Promise.reject(new _Errors.VerifyError(_config.AppConfig.TOKEN_ERROR,"Token parameter is not a valid token"));var b="".concat(this.config.tenantUrl,"/v1.0/endpoint/default/introspect"),c={client_id:this.config.clientId,client_secret:this.config.clientSecret,token:a.access_token},d=_queryString.default.stringify(c);return this.handleResponse({method:"POST",url:b,contentType:"application/x-www-form-urlencoded",data:d},a)}/**
-	 * @function userInfo Retrieves user information associated with the given token
-	 * @param {object} token The associated token to inspect the user information of containing access_token, refresh_token ...
-	 * @returns {Promise<object>} Response object with information about the user of the supplied token
-	 */},{key:"userInfo",value:function userInfo(a){if(!this.isToken(a))return Promise.reject(new _Errors.VerifyError(_config.AppConfig.TOKEN_ERROR,"Token parameter is not a valid token"));var b="".concat(this.config.tenantUrl,"/v1.0/endpoint/default/userinfo"),c={method:"POST",url:b,contentType:"application/x-www-form-urlencoded",data:_queryString.default.stringify({access_token:a.access_token})};return this.handleResponse(c,a)}/**
-	 * @function isToken Validates a token
-	 * @param {object} token The token to check containing access_token, refresh_token ...
-	 * @returns {boolean} Boolean indicating whether the token is valid
-	 */},{key:"isToken",value:function isToken(a){return a&&a.access_token}/**
-	 * @function revokeToken Revokes a token
-	 * @param {object} token The token to be revoked containing access_token, refresh_token ...
-	 * @param {string} tokenType The type of token - 'access_token' or 'refresh_token'
-	 * @returns {Promise<object>} Response object from revoking the token
-	 */},{key:"revokeToken",value:function revokeToken(a,b){var c="".concat(this.config.tenantUrl,"/v1.0/endpoint/default/revoke");if(2>arguments.length)throw new _Errors.VerifyError(_config.AppConfig.OAUTH_CONTEXT_API_ERROR,"revokeToken(token, tokenType), 2 parameters are required "+arguments.length+" were given");if(!a)throw new _Errors.VerifyError(_config.AppConfig.OAUTH_CONTEXT_API_ERROR,"token cannot be null");if("access_token"!==b&&"refresh_token"!==b)throw new _Errors.VerifyError(_config.AppConfig.OAUTH_CONTEXT_API_ERROR,"Parameter: ".concat(b," is invalid.\n Supported values are \"access_token\" or \"refresh_token"));var d="access_token"===b?a.access_token:a.refresh_token,e={client_id:this.config.clientId,client_secret:this.config.clientSecret,token:d},f=_queryString.default.stringify(e);// token is not required, but handleResponse will throw error without it
-return this.handleResponse({method:"POST",contentType:"application/x-www-form-urlencoded",url:c,data:f},a)}/**
-	 * @function parseUrlHash Parses a url hash string into an object
-	 * @param {string} hash The hash to be parsed
-	 * @returns {object} The object representation of the hash string
-	 */},{key:"_parseUrlHash",value:function _parseUrlHash(a){return _queryString.default.parse(a)}/**
-	 * @function getToken Makes an api request to the Cloud Identity Authorization server
-	 * to retrieve access_token, refresh_token, grant_id... used for NodeJS applications that can
-	 * store secure credentials
-	 * @param {object} params Required data and url path to token EP to retrieve a OAuth 2.0 Bearer Token.
-	 * @returns {Promise<object>} Response object containing access token
-	 */},{key:"getToken",value:function getToken(a){var b=a.data,c=a.path;if(!(b&&"object"===_typeof(b)&&b.constructor===Object||b&&"string"==typeof b&&b.includes("?")))throw new _Errors.VerifyError(_config.AppConfig.OAUTH_CONTEXT_API_ERROR,"getToken(params), Params must contain data object or query string");b.client_id=this.config.clientId,b.client_secret=this.config.clientSecret,b.scope=this.config.scope,b.grant_type=this.config.grantType,this.config.flowType===FLOW_TYPE.authorizationCodeFlow&&(b.redirect_uri=this.config.redirectUri);var d=_queryString.default.stringify(b);return(0,_apiRequest.default)({method:"POST",url:c,contentType:"application/x-www-form-urlencoded",data:d})}/**
-	 * @abstract
-	 * @function refreshToken Refreshes a token if it has expired
-	 * @param {object} token The token object to be refreshed containing access_token, refresh_token ...
-	 * @returns {Promise<object|void>} Response object from refreshing the token
-	 */},{key:"refreshToken",value:function refreshToken(a){if(!a.hasOwnProperty("refresh_token"))return Promise.reject(new _Errors.VerifyError(_config.AppConfig.OAUTH_CONTEXT_API_ERROR,"token has no refresh_token property"));var b="".concat(this.config.tenantUrl,"/v1.0/endpoint/default/token"),c={refresh_token:a.refresh_token,client_id:this.config.clientId,client_secret:this.config.clientSecret,grant_type:"refresh_token",scope:this.config.scope},d=_queryString.default.stringify(c);return(0,_apiRequest.default)({method:"POST",url:b,contentType:"application/x-www-form-urlencoded",data:d})}/**
-	 * @function authorize Builds authorization URL using provided config
-	 * @param {object} options Config object with clientId, redirectUri, scope and responseType to authorize against
-	 * @returns {string} Authorization URL
-	 */},{key:"_authorize",value:function _authorize(a){return this._buildUrl(a)}/**
-	 * @function buildUrl Constructs authorization URL given provided options
-	 * @param {object} options Config object with clientId, redirectUri, scope and responseType
-	 * @returns {string} Authorization URL
-	 */},{key:"_buildUrl",value:function _buildUrl(a){return a.tenantUrl+"/oidc/endpoint/default/authorize?"+_queryString.default.stringify({client_id:a.clientId,redirect_uri:a.redirectUri,scope:a.scope,response_type:a.responseType,state:_utils.default.randomString(16),nonce:_utils.default.randomString(16)})}/**
-	 * @function handleResponse Makes a request and refreshes token if token is expired
-	 * @param {object} options Request object containing url path, method, responseType, accept, data to make a valid apiRequest
-	 * @param {object} tokenObj Token object containing access_token, refresh_token ... used to make the request
-	 * @returns {object} Response object from the request
-	 */},{key:"handleResponse",value:function(){var a=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function a(b,c){var d,e,f,g,h,i=arguments;return regeneratorRuntime.wrap(function(a){for(;;)switch(a.prev=a.next){case 0:if(!(2>i.length)){a.next=2;break}return a.abrupt("return",Promise.reject(new _Errors.VerifyError(_config.AppConfig.OAUTH_CONTEXT_API_ERROR,"handleResponse(options, token), 2 parameters are required "+i.length+" were given")));case 2:if(this.isToken(c)){a.next=4;break}return a.abrupt("return",Promise.reject(new _Errors.VerifyError(_config.AppConfig.TOKEN_ERROR,"Token parameter is not a valid token")));case 4:return d=c,e={response:null,token:null},a.prev=6,a.next=9,(0,_apiRequest.default)(b,d.access_token);case 9:if(f=a.sent,e.response=f,this.config.flowType!==FLOW_TYPE.implicitFlow){a.next=13;break}return a.abrupt("return",Promise.resolve(f));case 13:return a.abrupt("return",Promise.resolve(e));case 16:if(a.prev=16,a.t0=a["catch"](6),!(401===a.t0.status&&_utils.default.isNode())){a.next=29;break}if(d.refresh_token){a.next=21;break}return a.abrupt("return",Promise.reject(new _Errors.VerifyError(_config.AppConfig.OAUTH_CONTEXT_API_ERROR,"access_token expired and refresh_token not found")));case 21:return a.next=23,this.refreshToken(d);case 23:return g=a.sent,a.next=26,(0,_apiRequest.default)(b,g.access_token);case 26:return h=a.sent,e={response:h,token:g},a.abrupt("return",Promise.resolve(e));case 29:return a.abrupt("return",Promise.reject(a.t0));case 30:case"end":return a.stop();}},a,this,[[6,16]])}));return function handleResponse(){return a.apply(this,arguments)}}()}]),a}(),ImplicitFlow=/*#__PURE__*/function(a){function b(a){var c;return _classCallCheck(this,b),c=_possibleConstructorReturn(this,_getPrototypeOf(b).call(this,a)),c.isValidConfig(),c.storageHandler=new _StorageHandler.default(a.storageType),c}/**
-	 * @function isValidConfig Validates the config of an ImplicitFlow instance
-	 * @returns {boolean} Boolean indicating whether the config is valid
-	 * Throws error if no storageType in config or instantiating ImplicitFlow in NodeJS
-	 */return _inherits(b,a),_createClass(b,[{key:"isValidConfig",value:function isValidConfig(){if(_utils.default.isNode())throw new _Errors.InvalidOAuthConfigurationError("Implicit flow is not supported in Node");if(!this.config.storageType)throw new _Errors.InvalidOAuthConfigurationError("storageType property is required in config settings for Implicit flow");if(!(this.config.redirectUri&&_utils.default.isUrl(this.config.redirectUri)))throw new _Errors.InvalidOAuthConfigurationError("a valid redirectUri property is required in config settings");return!0}/**
-	 * @function refreshToken Refreshes the token if it has expired
-	 * @param {object} token The token object containing access_token, refresh_token ...
-	 * @returns {Promise<void>} Throws NotAvailableError() as refresh_token is not available in Implicit Flow
-	 */},{key:"refreshToken",value:function refreshToken(){throw new _Errors.NotAvailableError}/**
-	 * @function fetchToken Retrieves the token object from storage
-	 * @returns {object|void} Token object found in storage or throws error
-	 */},{key:"fetchToken",value:function fetchToken(){try{return JSON.parse(this.storageHandler.getStorage("token"))}catch(a){return a}}/**
-	 * @function setSession Sets the session expiration according to the expiration of the stored token
-	 * The token will be cleared from storage once it expires and the session will end.
-	 * @returns {void}
-	 */},{key:"_setSession",value:function _setSession(){var a=this,b=JSON.parse(this.storageHandler.getStorage("token")).expires_in,c=b-(Date.now()-10);0<c&&setTimeout(function(){a.session=!1,a.storageHandler.clearStorage()},c)}/**
-	 * @function login Builds a login URL to authorize against using the instance's config
-	 * @returns {string} Authorization URL
-	 */},{key:"login",value:function login(){return this._authorize(this.config)}/**
-	 * @function logout Redirects user after accessToken has expired.
-	 * @params {string} path Optional path to redirect to, defaults to index page.
-	 */},{key:"logout",value:function(){var a=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function a(b){var c;return regeneratorRuntime.wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return c=this.fetchToken(),a.next=3,this.revokeToken(c,"access_token");case 3:return a.next=5,this.storageHandler.clearStorage();case 5:return a.next=7,window.location.replace(b||"/");case 7:case"end":return a.stop();}},a,this)}));return function logout(){return a.apply(this,arguments)}}()/**
-	 * @function handleCallback Stores token into sessionStorage
-	 * @returns {Promise<void>} Promise rejection if error
-	 */},{key:"handleCallback",value:function handleCallback(){var a,b=/#error/,c=window.location.hash;return a="object"===_typeof(c)?c:this._parseUrlHash(c),new Promise(function(d){b.test(c)?d(a):(this.storageHandler.setStorage(a),this._setSession(),window.location.hash="")}.bind(this))}}]),b}(FlowAbstract),AuthorizationCodeFlow=/*#__PURE__*/function(a){function b(a){var c;return _classCallCheck(this,b),c=_possibleConstructorReturn(this,_getPrototypeOf(b).call(this,a)),c.isValidConfig(),c.config.grantType="authorization_code",c}/**
-	 * @function isValidConfig Validates the config of an AuthorizationCodeFlow instance
-	 * @returns {boolean} Boolean indicating whether the config is valid
-	 * Throws error if no clientSecret in config
-	 */return _inherits(b,a),_createClass(b,[{key:"isValidConfig",value:function isValidConfig(){if(!(this.config.redirectUri&&_utils.default.isUrl(this.config.redirectUri)))throw new _Errors.InvalidOAuthConfigurationError("a valid redirectUri property is required in config settings");if(!this.config.responseType)throw new _Errors.InvalidOAuthConfigurationError("responseType property is required in config settings");return!0}},{key:"getToken",value:function getToken(a){if(!a)throw new _Errors.VerifyError(_config.AppConfig.OAUTH_CONTEXT_CONFIG_SETTINGS_ERROR,"getToken(params), Params are required");if(!(a&&"string"==typeof a&&a.includes("?")))throw new _Errors.VerifyError(_config.AppConfig.OAUTH_CONTEXT_API_ERROR,"getToken(params), Params must contain data object or query string");var b=a.substring(a.indexOf("?")),c="object"===_typeof(b)?b:_queryString.default.parse(b),d="".concat(this.config.tenantUrl,"/v1.0/endpoint/default/token");c.redirect_uri=this.config.redirectUri,c.grant_type=this.config.grantType,c.client_id=this.config.clientId,c.client_secret=this.config.clientSecret,c.scope=this.config.scope;var e=_queryString.default.stringify(c);return(0,_apiRequest.default)({method:"POST",url:d,contentType:"application/x-www-form-urlencoded",data:e})}/**
-	 * @function authenticate Returns a URL used to authenticate against using the instance's config
-	 * @returns {Promise<string>} Authentication URL
-	 */},{key:"authenticate",value:function authenticate(){return new Promise(function(a){a(this._authorize(this.config))}.bind(this))}/**
-	 * @function refreshToken Refreshes a token if it has expired
-	 * @param {object} token The token object to be refreshed containing access_token, refresh_token ...
-	 * @returns {Promise<object|void>} Response object from refreshing the token
-	 */},{key:"refreshToken",value:function refreshToken(a){return _get(_getPrototypeOf(b.prototype),"refreshToken",this).call(this,a)}}]),b}(FlowAbstract),DeviceFlow=/*#__PURE__*/function(a){function b(a){var c;return _classCallCheck(this,b),c=_possibleConstructorReturn(this,_getPrototypeOf(b).call(this,a)),c.isValidConfig(),c.POLLING_TIME=5e3,c.config.grantType="urn:ietf:params:oauth:grant-type:device_code",c}/**
-	 * @function isValidConfig Validates the config of an DeviceFlow instance
-	 * @returns {boolean} Boolean indicating whether the config is valid
-	 */return _inherits(b,a),_createClass(b,[{key:"isValidConfig",value:function isValidConfig(){if(!this.config.clientSecret)throw new _Errors.InvalidOAuthConfigurationError("clientSecret property is required in config settings for  Code flow");return!0}/**
-	 * @function authorize used to initiate request at /device_authorize EP with
-	 * client id (and scope if provided)
-	 * @returns The successful response returned includes a device_code, user_code and verification_uri.
-	 * Note: device_code should not be exposed to the user agent.
-	 */},{key:"authorize",value:function authorize(){var a="".concat(this.config.tenantUrl,"/oidc/endpoint/default/device_authorization"),b={client_id:this.config.clientId,scope:this.config.scope},c=_queryString.default.stringify(b);return(0,_apiRequest.default)({method:"POST",url:a,contentType:"application/x-www-form-urlencoded",data:c})}/**
-	 * @function pollTokenApi Polling the token endpoint of the authorization server
-	 * @param {deviceCode} string used for polling the token EP
-	 * @param {duration} number Optional, used to set the polling time in milliseconds. Default 5000 milliseconds.
-	 * @returns {Promise<object>} Resolved or Rejected promise.
-	 */},{key:"pollTokenApi",value:function(){var a=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function a(b){var c,d,e,f,g,h=arguments;return regeneratorRuntime.wrap(function(a){for(;;)switch(a.prev=a.next){case 0:if(c=1<h.length&&void 0!==h[1]?h[1]:this.POLLING_TIME,!(c<this.POLLING_TIME)){a.next=3;break}return a.abrupt("return",Promise.reject(new _Errors.DeveloperError("The device made an attempt within [5] seconds. This request will not be processed.")));case 3:if(b){a.next=5;break}return a.abrupt("return",Promise.reject(new _Errors.DeveloperError("No device code value provided.")));case 5:d="".concat(this.config.tenantUrl,"/v1.0/endpoint/default/token"),f={client_id:this.config.clientId,client_secret:this.config.clientSecret,grant_type:this.config.grantType,device_code:b},g={messageId:""};case 8:if("expired_token"===g.messageId||e){a.next=23;break}return a.prev=9,a.next=12,this.getToken({data:f,path:d});case 12:return e=a.sent,a.abrupt("break",23);case 16:a.prev=16,a.t0=a["catch"](9),g=a.t0;case 19:return a.next=21,_utils.default.sleep(c);case 21:a.next=8;break;case 23:if(!e){a.next=25;break}return a.abrupt("return",Promise.resolve());case 25:return a.abrupt("return",Promise.reject(g.messageDescription));case 26:case"end":return a.stop();}},a,this,[[9,16]])}));return function pollTokenApi(){return a.apply(this,arguments)}}()/**
-	 * @function refreshToken Refreshes a token if it has expired
-	 * @param {object} token The token object to be refreshed containing access_token, refresh_token ...
-	 * @returns {Promise<object|void>} Response object from refreshing the token
-	 */},{key:"refreshToken",value:function refreshToken(a){return _get(_getPrototypeOf(b.prototype),"refreshToken",this).call(this,a)}}]),b}(FlowAbstract),ROPCFlow=/*#__PURE__*/function(a){function b(a){var c;return _classCallCheck(this,b),c=_possibleConstructorReturn(this,_getPrototypeOf(b).call(this,a)),c.isValidConfig(),c.config.grantType="password",c}/**
-	 * @function isValidConfig Validates the config of a DeviceFlow instance
-	 * @returns {boolean} Boolean indicating whether the config is valid
-	 */return _inherits(b,a),_createClass(b,[{key:"isValidConfig",value:function isValidConfig(){return!0}/**
-	 * @function login Retrieves a token using the supplied credentials
-	 * @param {string} username The user's identifier
-	 * @param {string} password The user's password
-	 * @returns {Promise<object>} Response object from login containing token
-	 */},{key:"login",value:function login(a,b){if(!a||!b)return Promise.reject(new _Errors.DeveloperError("username and password params are required"));var c="".concat(this.config.tenantUrl,"/v1.0/endpoint/default/token"),d={client_id:this.config.clientId,client_secret:this.config.clientSecret,username:a,password:b,grant_type:this.config.grantType,scope:this.config.scope},e=_queryString.default.stringify(d);return(0,_apiRequest.default)({method:"POST",url:c,contentType:"application/x-www-form-urlencoded",data:e})}/**
-	 * @function refreshToken Refreshes a token if it has expired
-	 * @param {object} token The token object to be refreshed containing access_token, refresh_token ...
-	 * @returns {Promise<object|void>} Response object from refreshing the token
-	 */},{key:"refreshToken",value:function refreshToken(a){return _get(_getPrototypeOf(b.prototype),"refreshToken",this).call(this,a)}}]),b}(FlowAbstract),_default=OAuthContext;/**
- * @class OAuthContext
- * Uses Factory pattern to create the appropriate class instance based on the flowType
- */exports.default=_default;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL2xpYi9PQXV0aENvbnRleHQuanMiXSwibmFtZXMiOlsiRkxPV19UWVBFIiwiaW1wbGljaXRGbG93IiwiYXV0aG9yaXphdGlvbkNvZGVGbG93IiwiZGV2aWNlRmxvdyIsIlJPUEMiLCJPQXV0aENvbnRleHQiLCJjb25maWciLCJJbnZhbGlkT0F1dGhDb25maWd1cmF0aW9uRXJyb3IiLCJmbG93VHlwZSIsImNsaWVudElkIiwidGVuYW50VXJsIiwidXRpbHMiLCJpc1VybCIsInNjb3BlIiwiSW1wbGljaXRGbG93IiwiQXV0aG9yaXphdGlvbkNvZGVGbG93IiwiRGV2aWNlRmxvdyIsIlJPUENGbG93IiwiZmxvd1R5cGVzIiwiT2JqZWN0IiwidmFsdWVzIiwibWFwIiwidmFsdWUiLCJGbG93QWJzdHJhY3QiLCJUeXBlRXJyb3IiLCJBYnN0cmFjdE1ldGhvZE5vdEltcGxlbWVudGVkRXJyb3IiLCJwYXRoIiwidG9rZW4iLCJhcmd1bWVudHMiLCJsZW5ndGgiLCJpc1Rva2VuIiwiUHJvbWlzZSIsInJlamVjdCIsIlZlcmlmeUVycm9yIiwiQXBwQ29uZmlnIiwiVE9LRU5fRVJST1IiLCJyZXZva2VUb2tlbiIsImVycm9yIiwiaW50cm9zcGVjdFRva2VuIiwicGF5bG9hZCIsImFjdGl2ZSIsInJlc3BvbnNlIiwiZGF0YSIsImNsaWVudF9pZCIsImNsaWVudF9zZWNyZXQiLCJjbGllbnRTZWNyZXQiLCJhY2Nlc3NfdG9rZW4iLCJlbmNvZGVkRGF0YSIsInFzIiwic3RyaW5naWZ5IiwiaGFuZGxlUmVzcG9uc2UiLCJtZXRob2QiLCJ1cmwiLCJjb250ZW50VHlwZSIsIm9wdGlvbnMiLCJ0b2tlblR5cGUiLCJPQVVUSF9DT05URVhUX0FQSV9FUlJPUiIsImV4cGlyZVRva2VuIiwicmVmcmVzaF90b2tlbiIsImhhc2giLCJwYXJzZSIsInBhcmFtcyIsImNvbnN0cnVjdG9yIiwiaW5jbHVkZXMiLCJncmFudF90eXBlIiwiZ3JhbnRUeXBlIiwicmVkaXJlY3RfdXJpIiwicmVkaXJlY3RVcmkiLCJoYXNPd25Qcm9wZXJ0eSIsIl9idWlsZFVybCIsInJlc3BvbnNlX3R5cGUiLCJyZXNwb25zZVR5cGUiLCJzdGF0ZSIsInJhbmRvbVN0cmluZyIsIm5vbmNlIiwidG9rZW5PYmoiLCJyZXNvbHZlIiwic3RhdHVzIiwiaXNOb2RlIiwicmVmcmVzaFRva2VuIiwibmV3VG9rZW4iLCJvcmlnaW5hbFJlcXVlc3QiLCJpc1ZhbGlkQ29uZmlnIiwic3RvcmFnZUhhbmRsZXIiLCJTdG9yYWdlSGFuZGxlciIsInN0b3JhZ2VUeXBlIiwiTm90QXZhaWxhYmxlRXJyb3IiLCJKU09OIiwiZ2V0U3RvcmFnZSIsImV4cGlyZXNBdCIsImV4cGlyZXNfaW4iLCJkZWxheSIsIkRhdGUiLCJub3ciLCJzZXRUaW1lb3V0Iiwic2Vzc2lvbiIsImNsZWFyU3RvcmFnZSIsIl9hdXRob3JpemUiLCJhY2Nlc3NUb2tlbiIsImZldGNoVG9rZW4iLCJ3aW5kb3ciLCJsb2NhdGlvbiIsInJlcGxhY2UiLCJ1cmxPYmoiLCJlcnJvckNoZWNrIiwiX3BhcnNlVXJsSGFzaCIsInRlc3QiLCJzZXRTdG9yYWdlIiwiX3NldFNlc3Npb24iLCJiaW5kIiwiT0FVVEhfQ09OVEVYVF9DT05GSUdfU0VUVElOR1NfRVJST1IiLCJxdWVyeSIsInN1YnN0cmluZyIsImluZGV4T2YiLCJQT0xMSU5HX1RJTUUiLCJhdXRoU2VydmVyUGF0aCIsImRldmljZUNvZGUiLCJkdXJhdGlvbiIsIkRldmVsb3BlckVycm9yIiwiZGV2aWNlX2NvZGUiLCJtZXNzYWdlSWQiLCJnZXRUb2tlbiIsInNsZWVwIiwibWVzc2FnZURlc2NyaXB0aW9uIiwidXNlcm5hbWUiLCJwYXNzd29yZCJdLCJtYXBwaW5ncyI6IjBwRkFnQk1BLENBQUFBLFNBQVMsQ0FBRyxDQUNqQkMsWUFBWSxDQUFFLFVBREcsQ0FFakJDLHFCQUFxQixDQUFFLGVBRk4sQ0FHakJDLFVBQVUsQ0FBRSxRQUhLLENBSWpCQyxJQUFJLENBQUUsTUFKVyxDLENBV1pDLFksQ0FDTCxXQUFZ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S0FBS3RDLE1BQUwsQ0FBWXVDLFlBRmYsQ0FHWitFLFFBQVEsQ0FBRUEsQ0FIRSxDQUlaQyxRQUFRLENBQUVBLENBSkUsQ0FLWjdELFVBQVUsQ0FBRSxLQUFLMUQsTUFBTCxDQUFZMkQsU0FMWixDQU1acEQsS0FBSyxDQUFFLEtBQUtQLE1BQUwsQ0FBWU8sS0FOUCxDQVBZLENBZ0JyQmtDLENBQVcsQ0FBR0MscUJBQUdDLFNBQUgsQ0FBYVAsQ0FBYixDQWhCTyxDQXlCekIsTUFBTyx3QkFQTyxDQUNiUyxNQUFNLENBQUUsTUFESyxDQUViQyxHQUFHLENBQUUxQixDQUZRLENBR2IyQixXQUFXLENBQUUsbUNBSEEsQ0FJYlgsSUFBSSxDQUFFSyxDQUpPLENBT1AsQ0FDUCxDQUVEOzs7O3NEQUthcEIsQyxDQUFPLENBQ25CLHdFQUEwQkEsQ0FBMUIsQ0FDQSxDLE9BeERxQkosWSxXQTJEUmxCLFksQ0F2dEJmIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICdAYmFiZWwvcG9seWZpbGwnO1xuaW1wb3J0IHFzIGZyb20gJ3F1ZXJ5LXN0cmluZyc7XG5pbXBvcnQge1xuXHRWZXJpZnlFcnJvcixcblx0QWJzdHJhY3RNZXRob2ROb3RJbXBsZW1lbnRlZEVycm9yLFxuXHRJbnZhbGlkT0F1dGhDb25maWd1cmF0aW9uRXJyb3IsXG5cdE5vdEF2YWlsYWJsZUVycm9yLFxuXHREZXZlbG9wZXJFcnJvclxufSBmcm9tICcuL2Vycm9ycy9FcnJvcnMnO1xuaW1wb3J0IFN0b3JhZ2VIYW5kbGVyIGZyb20gJy4vaGVscGVycy9TdG9yYWdlSGFuZGxlcic7XG5pbXBvcnQge1xuXHRBcHBDb25maWdcbn0gZnJvbSAnLi9jb25maWcnO1xuaW1wb3J0IGFwaVJlcXVlc3QgZnJvbSAnLi9oZWxwZXJzL2FwaVJlcXVlc3QnO1xuaW1wb3J0IHV0aWxzIGZyb20gJy4vaGVscGVycy91dGlscyc7XG5cbmNvbnN0IEZMT1dfVFlQRSA9IHtcblx0aW1wbGljaXRGbG93OiAnaW1wbGljaXQnLFxuXHRhdXRob3JpemF0aW9uQ29kZUZsb3c6ICdhdXRob3JpemF0aW9uJyxcblx0ZGV2aWNlRmxvdzogJ2RldmljZScsXG5cdFJPUEM6ICdyb3BjJ1xufTtcblxuLyoqXG4gKiBAY2xhc3MgT0F1dGhDb250ZXh0XG4gKiBVc2VzIEZhY3RvcnkgcGF0dGVybiB0byBjcmVhdGUgdGhlIGFwcHJvcHJpYXRlIGNsYXNzIGluc3RhbmNlIGJhc2VkIG9uIHRoZSBmbG93VHlwZVxuICovXG5jbGFzcyBPQXV0aENvbnRleHQge1xuXHRjb25zdHJ1Y3Rvcihjb25maWcpIHtcblx0XHRpZiAoIWNvbmZpZykge1xuXHRcdFx0dGhyb3cgbmV3IEludmFsaWRPQXV0aENvbmZpZ3VyYXRpb25FcnJvcignQ29uZmlnIHBhcmFtZXRlciBpcyByZXF1aXJlZCcpO1xuXHRcdH1cblx0XHRpZiAoIWNvbmZpZy5mbG93VHlwZSkge1xuXHRcdFx0dGhyb3cgbmV3IEludmFsaWRPQXV0aENvbmZpZ3VyYXRpb25FcnJvcignZmxvd1R5cGUgcHJvcGVydHkgaXMgcmVxdWlyZWQgaW4gY29uZmlnIHNldHRpbmdzJyk7XG5cdFx0fVxuXHRcdGlmICghY29uZmlnLmNsaWVudElkKSB7XG5cdFx0XHR0aHJvdyBuZXcgSW52YWxpZE9BdXRoQ29uZmlndXJhdGlvbkVycm9yKCdjbGllbnRJZCBwcm9wZXJ0eSBpcyByZXF1aXJlZCBpbiBjb25maWcgc2V0dGluZ3MnKTtcblx0XHR9XG5cdFx0aWYgKCEoY29uZmlnLnRlbmFudFVybCAmJiB1dGlscy5pc1VybChjb25maWcudGVuYW50VXJsKSkpIHtcblx0XHRcdHRocm93IG5ldyBJbnZhbGlkT0F1dGhDb25maWd1cmF0aW9uRXJyb3IoJ2EgdmFsaWQgdGVuYW50VXJsIHByb3BlcnR5IGlzIHJlcXVpcmVkIGluIGNvbmZpZyBzZXR0aW5ncycpO1xuXHRcdH1cblx0XHRpZiAoIWNvbmZpZy5zY29wZSkge1xuXHRcdFx0dGhyb3cgbmV3IEludmFsaWRPQXV0aENvbmZpZ3VyYXRpb25FcnJvcignc2NvcGUgcHJvcGVydHkgaXMgcmVxdWlyZWQgaW4gY29uZmlnIHNldHRpbmdzJyk7XG5cdFx0fVxuXHRcdC8vIGlmICghY29uZmlnLnJlc3BvbnNlVHlwZSkge1xuXHRcdC8vIFx0dGhyb3cgbmV3IEludmFsaWRPQXV0aENvbmZpZ3VyYXRpb25FcnJvcigncmVzcG9uc2VUeXBlIHByb3BlcnR5IGlzIHJlcXVpcmVkIGluIGNvbmZpZyBzZXR0aW5ncycpO1xuXHRcdC8vIH1cblx0XHRzd2l0Y2ggKGNvbmZpZy5mbG93VHlwZSkge1xuXHRcdGNhc2UgRkxPV19UWVBFLmltcGxpY2l0Rmxvdzpcblx0XHRcdHJldHVybiBuZXcgSW1wbGljaXRGbG93KGNvbmZpZyk7XG5cdFx0Y2FzZSBGTE9XX1RZUEUuYXV0aG9yaXphdGlvbkNvZGVGbG93OlxuXHRcdFx0cmV0dXJuIG5ldyBBdXRob3JpemF0aW9uQ29kZUZsb3coY29uZmlnKTtcblx0XHRjYXNlIEZMT1dfVFlQRS5kZXZpY2VGbG93OlxuXHRcdFx0cmV0dXJuIG5ldyBEZXZpY2VGbG93KGNvbmZpZyk7XG5cdFx0Y2FzZSBGTE9XX1RZUEUuUk9QQzpcblx0XHRcdHJldHVybiBuZXcgUk9QQ0Zsb3coY29uZmlnKTtcblx0XHRkZWZhdWx0OlxuXHRcdFx0Y29uc3QgZmxvd1R5cGVzID0gT2JqZWN0LnZhbHVlcyhGTE9XX1RZUEUpLm1hcCh2YWx1ZSA9PiBgIFwiJHt2YWx1ZX1cImApO1xuXHRcdFx0dGhyb3cgbmV3IEludmFsaWRPQXV0aENvbmZpZ3VyYXRpb25FcnJvcihgXCIke2NvbmZpZy5mbG93VHlwZX1cIiBmbG93VHlwZSBub3QgdmFsaWQuIFZhbGlkIGZsb3cgdHlwZXMgYXJlOiAke2Zsb3dUeXBlc31gKTtcblx0XHR9XG5cdH1cbn1cblxuLyoqXG4gKiBAYWJzdHJhY3RcbiAqIEBjbGFzcyBGbG93QWJzdHJhY3RcbiAqIEFuIGFic3RyYWN0IGNsYXNzIHRoYXQgZGVmaW5lcyBhbiBPQXV0aEZsb3cgYW5kIHRoZSBvcGVyYXRpb25zXG4gKi9cbmNsYXNzIEZsb3dBYnN0cmFjdCB7XG5cdGNvbnN0cnVjdG9yKGNvbmZpZykge1xuXHRcdC8vIGNhbm5vdCBpbnN0YW50aWF0ZSBhYnN0cmFjdCBjbGFzc1xuXHRcdGlmIChuZXcudGFyZ2V0ID09PSBGbG93QWJzdHJhY3QpIHtcblx0XHRcdHRocm93IG5ldyBUeXBlRXJyb3IoJ0Nhbm5vdCBpbnN0YW50aWF0ZSBGbG93QWJzdHJhY3QgZGlyZWN0bHknKTtcblx0XHR9XG5cdFx0dGhpcy5jb25maWcgPSBjb25maWc7XG5cdH1cblxuXHQvKipcblx0ICogQGFic3RyYWN0XG5cdCAqIEBmdW5jdGlvbiBpc1ZhbGlkQ29uZmlnIFZhbGlkYXRlcyB0aGUgY29uZmlnIG9mIGFuIE9BdXRoQ29udGV4dCBpbnN0YW5jZVxuXHQgKiBAcmV0dXJucyB7Ym9vbGVhbn0gQm9vbGVhbiBpbmRpY2F0aW5nIHdoZXRoZXIgdGhlIGNvbmZpZyBpcyB2YWxpZFxuXHQgKiBBYnN0cmFjdCBwYXJlbnQgbWV0aG9kIHRocm93cyBBYnN0cmFjdE1ldGhvZE5vdEltcGxlbWVudGVkRXJyb3IoKVxuXHQgKi9cblx0aXNWYWxpZENvbmZpZygpIHtcblx0XHR0aHJvdyBuZXcgQWJzdHJhY3RNZXRob2ROb3RJbXBsZW1lbnRlZEVycm9yKCk7XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIGxvZ291dCBSZXZva2VzIGEgdXNlcidzIGN1cnJlbnQgYWNjZXNzIHRva2VuXG5cdCAqIEBwYXJhbSB7c3RyaW5nfSBwYXRoIE9wdGlvbmFsIHBhdGhcblx0ICogQHBhcmFtIHtvYmplY3R9IHRva2VuIFRoZSB0b2tlbiB0byBiZSByZXZva2VkIGNvbnRhaW5pbmcgYWNjZXNzX3Rva2VuLCByZWZyZXNoX3Rva2VuIC4uLlxuXHQgKiBAcmV0dXJucyB7UHJvbWlzZTxvYmplY3Q+fSBSZXNwb25zZSBvYmplY3QgZnJvbSByZXZva2luZyB0aGUgdG9rZW5cblx0ICovXG5cdGxvZ291dChwYXRoLCB0b2tlbikge1xuXHRcdC8vIHBhdGggYW5kIHRva2VuIHN1cHBsaWVkXG5cdFx0aWYgKGFyZ3VtZW50cy5sZW5ndGggPT09IDIgJiYgIXRoaXMuaXNUb2tlbih0b2tlbikpIHtcblx0XHRcdHJldHVybiBQcm9taXNlLnJlamVjdChuZXcgVmVyaWZ5RXJyb3IoQXBwQ29uZmlnLlRPS0VOX0VSUk9SLCAnVG9rZW4gcGFyYW1ldGVyIGlzIG5vdCBhIHZhbGlkIHRva2VuJykpO1xuXHRcdH1cblx0XHQvLyBubyBwYXRoIGJ1dCBhICd0b2tlbicgcHJvdmlkZWRcblx0XHRpZiAoYXJndW1lbnRzLmxlbmd0aCA9PT0gMSAmJiAhdGhpcy5pc1Rva2VuKHBhdGgpKSB7XG5cdFx0XHRyZXR1cm4gUHJvbWlzZS5yZWplY3QobmV3IFZlcmlmeUVycm9yKEFwcENvbmZpZy5UT0tFTl9FUlJPUiwgJ1Rva2VuIHBhcmFtZXRlciBpcyBub3QgYSB2YWxpZCB0b2tlbicpKTtcblx0XHR9XG5cblx0XHR0cnkge1xuXHRcdFx0aWYgKGFyZ3VtZW50cy5sZW5ndGggPT09IDIpIHtcblx0XHRcdFx0cmV0dXJuIHRoaXMucmV2b2tlVG9rZW4odG9rZW4sICdhY2Nlc3NfdG9rZW4nKTtcblx0XHRcdH0gZWxzZSB7XG5cdFx0XHRcdHJldHVybiB0aGlzLnJldm9rZVRva2VuKHBhdGgsICdhY2Nlc3NfdG9rZW4nKTtcblx0XHRcdH1cblx0XHR9IGNhdGNoIChlcnJvcikge1xuXHRcdFx0cmV0dXJuIFByb21pc2UucmVqZWN0KGVycm9yKTtcblx0XHR9XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIGdldENvbmZpZyBHZXRzIHRoZSBjb25maWcgb2YgdGhlIGN1cnJlbnQgT0F1dGhDb250ZXh0IGluc3RhbmNlXG5cdCAqIEByZXR1cm5zIHtvYmplY3R9IFRoZSBjb25maWcgb2JqZWN0IGNvbnRhaW5pbmcgY2xpZW50SWQsIHJlZGlyZWN0VXJpLCBmbG93VHlwZSwgLi4uXG5cdCAqL1xuXG5cdGdldENvbmZpZygpIHtcblx0XHRyZXR1cm4gdGhpcy5jb25maWc7XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIGlzQXV0aGVudGljYXRlZCBDaGVja3Mgd2hldGhlciBhIHRva2VuIGlzIHN0aWxsIHZhbGlkXG5cdCAqIEBwYXJhbSB7b2JqZWN0fSB0b2tlbiBUaGUgdG9rZW4gdG8gYmUgY2hlY2tlZCBmb3IgYWN0aXZlIHN0YXR1cyBjb250YWluaW5nIGFjY2Vzc190b2tlbiwgcmVmcmVzaF90b2tlbiAuLi5cblx0ICogQHJldHVybnMge1Byb21pc2U8Ym9vbGVhbj59IEJvb2xlYW4gaW5kaWNhdGluZyB3aGV0aGVyIHRoZSB0b2tlbiBpcyBhY3RpdmVcblx0ICovXG5cdGFzeW5jIGlzQXV0aGVudGljYXRlZCh0b2tlbikge1xuXHRcdHRyeSB7XG5cdFx0XHRjb25zdCBwYXlsb2FkID0gYXdhaXQgdGhpcy5pbnRyb3NwZWN0VG9rZW4odG9rZW4pO1xuXHRcdFx0cmV0dXJuIHRoaXMuY29uZmlnLmZsb3dUeXBlID09PSBGTE9XX1RZUEUuaW1wbGljaXRGbG93ID8gcGF5bG9hZC5hY3RpdmUgPT09IHRydWUgOiBwYXlsb2FkLnJlc3BvbnNlLmFjdGl2ZSA9PT0gdHJ1ZTtcblx0XHR9IGNhdGNoIChlcnJvcikge1xuXHRcdFx0cmV0dXJuIFByb21pc2UucmVqZWN0KGVycm9yKTtcblx0XHR9XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIGludHJvc3BlY3RUb2tlbiBJbnRyb3NwZWN0cyBhIHRva2VuIGZvciBtb3JlIGluZm9ybWF0aW9uXG5cdCAqIEBwYXJhbSB7b2JqZWN0fSB0b2tlbiBUaGUgdG9rZW4gdG8gYmUgaW5zcGVjdGVkIGNvbnRhaW5pbmcgYWNjZXNzX3Rva2VuLCByZWZyZXNoX3Rva2VuIC4uLlxuXHQgKiBAcmV0dXJucyB7UHJvbWlzZTxvYmplY3Q+fSBSZXNwb25zZSBvYmplY3Qgd2l0aCBpbmZvcm1hdGlvbiBhYm91dCB0aGUgc3VwcGxpZWQgdG9rZW5cblx0ICovXG5cdGludHJvc3BlY3RUb2tlbih0b2tlbikge1xuXHRcdGlmICghdGhpcy5pc1Rva2VuKHRva2VuKSkge1xuXHRcdFx0cmV0dXJuIFByb21pc2UucmVqZWN0KG5ldyBWZXJpZnlFcnJvcihBcHBDb25maWcuVE9LRU5fRVJST1IsICdUb2tlbiBwYXJhbWV0ZXIgaXMgbm90IGEgdmFsaWQgdG9rZW4nKSk7XG5cdFx0fVxuXG5cdFx0bGV0IHBhdGggPSBgJHt0aGlzLmNvbmZpZy50ZW5hbnRVcmx9L3YxLjAvZW5kcG9pbnQvZGVmYXVsdC9pbnRyb3NwZWN0YDtcblxuXHRcdGxldCBkYXRhID0ge1xuXHRcdFx0Y2xpZW50X2lkOiB0aGlzLmNvbmZpZy5jbGllbnRJZCxcblx0XHRcdGNsaWVudF9zZWNyZXQ6IHRoaXMuY29uZmlnLmNsaWVudFNlY3JldCxcblx0XHRcdHRva2VuOiB0b2tlbi5hY2Nlc3NfdG9rZW5cblx0XHR9O1xuXG5cdFx0bGV0IGVuY29kZWREYXRhID0gcXMuc3RyaW5naWZ5KGRhdGEpO1xuXG5cdFx0bGV0IG9wdGlvbnMgPSB7XG5cdFx0XHRtZXRob2Q6ICdQT1NUJyxcblx0XHRcdHVybDogcGF0aCxcblx0XHRcdGNvbnRlbnRUeXBlOiAnYXBwbGljYXRpb24veC13d3ctZm9ybS11cmxlbmNvZGVkJyxcblx0XHRcdGRhdGE6IGVuY29kZWREYXRhXG5cdFx0fTtcblxuXHRcdHJldHVybiB0aGlzLmhhbmRsZVJlc3BvbnNlKG9wdGlvbnMsIHRva2VuKTtcblx0fVxuXG5cdC8qKlxuXHQgKiBAZnVuY3Rpb24gdXNlckluZm8gUmV0cmlldmVzIHVzZXIgaW5mb3JtYXRpb24gYXNzb2NpYXRlZCB3aXRoIHRoZSBnaXZlbiB0b2tlblxuXHQgKiBAcGFyYW0ge29iamVjdH0gdG9rZW4gVGhlIGFzc29jaWF0ZWQgdG9rZW4gdG8gaW5zcGVjdCB0aGUgdXNlciBpbmZvcm1hdGlvbiBvZiBjb250YWluaW5nIGFjY2Vzc190b2tlbiwgcmVmcmVzaF90b2tlbiAuLi5cblx0ICogQHJldHVybnMge1Byb21pc2U8b2JqZWN0Pn0gUmVzcG9uc2Ugb2JqZWN0IHdpdGggaW5mb3JtYXRpb24gYWJvdXQgdGhlIHVzZXIgb2YgdGhlIHN1cHBsaWVkIHRva2VuXG5cdCAqL1xuXHR1c2VySW5mbyh0b2tlbikge1xuXHRcdGlmICghdGhpcy5pc1Rva2VuKHRva2VuKSkge1xuXHRcdFx0cmV0dXJuIFByb21pc2UucmVqZWN0KG5ldyBWZXJpZnlFcnJvcihBcHBDb25maWcuVE9LRU5fRVJST1IsICdUb2tlbiBwYXJhbWV0ZXIgaXMgbm90IGEgdmFsaWQgdG9rZW4nKSk7XG5cdFx0fVxuXG5cdFx0bGV0IHBhdGggPSBgJHt0aGlzLmNvbmZpZy50ZW5hbnRVcmx9L3YxLjAvZW5kcG9pbnQvZGVmYXVsdC91c2VyaW5mb2A7XG5cblx0XHRsZXQgb3B0aW9ucyA9IHtcblx0XHRcdG1ldGhvZDogJ1BPU1QnLFxuXHRcdFx0dXJsOiBwYXRoLFxuXHRcdFx0Y29udGVudFR5cGU6ICdhcHBsaWNhdGlvbi94LXd3dy1mb3JtLXVybGVuY29kZWQnLFxuXHRcdFx0ZGF0YTogcXMuc3RyaW5naWZ5KHtcblx0XHRcdFx0YWNjZXNzX3Rva2VuOiB0b2tlbi5hY2Nlc3NfdG9rZW5cblx0XHRcdH0pXG5cdFx0fTtcblxuXHRcdHJldHVybiB0aGlzLmhhbmRsZVJlc3BvbnNlKG9wdGlvbnMsIHRva2VuKTtcblx0fVxuXG5cdC8qKlxuXHQgKiBAZnVuY3Rpb24gaXNUb2tlbiBWYWxpZGF0ZXMgYSB0b2tlblxuXHQgKiBAcGFyYW0ge29iamVjdH0gdG9rZW4gVGhlIHRva2VuIHRvIGNoZWNrIGNvbnRhaW5pbmcgYWNjZXNzX3Rva2VuLCByZWZyZXNoX3Rva2VuIC4uLlxuXHQgKiBAcmV0dXJucyB7Ym9vbGVhbn0gQm9vbGVhbiBpbmRpY2F0aW5nIHdoZXRoZXIgdGhlIHRva2VuIGlzIHZhbGlkXG5cdCAqL1xuXHRpc1Rva2VuKHRva2VuKSB7XG5cdFx0cmV0dXJuICEoIXRva2VuIHx8ICF0b2tlbi5hY2Nlc3NfdG9rZW4pO1xuXHR9XG5cblx0LyoqXG5cdCAqIEBmdW5jdGlvbiByZXZva2VUb2tlbiBSZXZva2VzIGEgdG9rZW5cblx0ICogQHBhcmFtIHtvYmplY3R9IHRva2VuIFRoZSB0b2tlbiB0byBiZSByZXZva2VkIGNvbnRhaW5pbmcgYWNjZXNzX3Rva2VuLCByZWZyZXNoX3Rva2VuIC4uLlxuXHQgKiBAcGFyYW0ge3N0cmluZ30gdG9rZW5UeXBlIFRoZSB0eXBlIG9mIHRva2VuIC0gJ2FjY2Vzc190b2tlbicgb3IgJ3JlZnJlc2hfdG9rZW4nXG5cdCAqIEByZXR1cm5zIHtQcm9taXNlPG9iamVjdD59IFJlc3BvbnNlIG9iamVjdCBmcm9tIHJldm9raW5nIHRoZSB0b2tlblxuXHQgKi9cblx0cmV2b2tlVG9rZW4odG9rZW4sIHRva2VuVHlwZSkge1xuXHRcdGNvbnN0IHBhdGggPSBgJHt0aGlzLmNvbmZpZy50ZW5hbnRVcmx9L3YxLjAvZW5kcG9pbnQvZGVmYXVsdC9yZXZva2VgO1xuXG5cdFx0aWYgKGFyZ3VtZW50cy5sZW5ndGggPCAyKSB7XG5cdFx0XHR0aHJvdyBuZXcgVmVyaWZ5RXJyb3IoQXBwQ29uZmlnLk9BVVRIX0NPTlRFWFRfQVBJX0VSUk9SLCAncmV2b2tlVG9rZW4odG9rZW4sIHRva2VuVHlwZSksIDIgcGFyYW1ldGVycyBhcmUgcmVxdWlyZWQgJyArIGFyZ3VtZW50cy5sZW5ndGggKyAnIHdlcmUgZ2l2ZW4nKTtcblx0XHR9XG5cblx0XHRpZiAoIXRva2VuKSB7XG5cdFx0XHR0aHJvdyBuZXcgVmVyaWZ5RXJyb3IoQXBwQ29uZmlnLk9BVVRIX0NPTlRFWFRfQVBJX0VSUk9SLCAndG9rZW4gY2Fubm90IGJlIG51bGwnKTtcblx0XHR9XG5cblx0XHRpZiAoISh0b2tlblR5cGUgPT09ICdhY2Nlc3NfdG9rZW4nIHx8IHRva2VuVHlwZSA9PT0gJ3JlZnJlc2hfdG9rZW4nKSkge1xuXHRcdFx0dGhyb3cgbmV3IFZlcmlmeUVycm9yKEFwcENvbmZpZy5PQVVUSF9DT05URVhUX0FQSV9FUlJPUiwgYFBhcmFtZXRlcjogJHt0b2tlblR5cGV9IGlzIGludmFsaWQuXFxuIFN1cHBvcnRlZCB2YWx1ZXMgYXJlIFwiYWNjZXNzX3Rva2VuXCIgb3IgXCJyZWZyZXNoX3Rva2VuYCk7XG5cdFx0fVxuXG5cdFx0Y29uc3QgZXhwaXJlVG9rZW4gPSB0b2tlblR5cGUgPT09ICdhY2Nlc3NfdG9rZW4nID8gdG9rZW4uYWNjZXNzX3Rva2VuIDogdG9rZW4ucmVmcmVzaF90b2tlbjtcblxuXHRcdGxldCBkYXRhID0ge1xuXHRcdFx0Y2xpZW50X2lkOiB0aGlzLmNvbmZpZy5jbGllbnRJZCxcblx0XHRcdGNsaWVudF9zZWNyZXQ6IHRoaXMuY29uZmlnLmNsaWVudFNlY3JldCxcblx0XHRcdHRva2VuOiBleHBpcmVUb2tlblxuXHRcdH07XG5cblx0XHRjb25zdCBlbmNvZGVkRGF0YSA9IHFzLnN0cmluZ2lmeShkYXRhKTtcblxuXHRcdGNvbnN0IG9wdGlvbnMgPSB7XG5cdFx0XHRtZXRob2Q6ICdQT1NUJyxcblx0XHRcdGNvbnRlbnRUeXBlOiAnYXBwbGljYXRpb24veC13d3ctZm9ybS11cmxlbmNvZGVkJyxcblx0XHRcdHVybDogcGF0aCxcblx0XHRcdGRhdGE6IGVuY29kZWREYXRhXG5cdFx0fTtcblxuXHRcdC8vIHRva2VuIGlzIG5vdCByZXF1aXJlZCwgYnV0IGhhbmRsZVJlc3BvbnNlIHdpbGwgdGhyb3cgZXJyb3Igd2l0aG91dCBpdFxuXHRcdHJldHVybiB0aGlzLmhhbmRsZVJlc3BvbnNlKG9wdGlvbnMsIHRva2VuKTtcblx0fVxuXG5cdC8qKlxuXHQgKiBAZnVuY3Rpb24gcGFyc2VVcmxIYXNoIFBhcnNlcyBhIHVybCBoYXNoIHN0cmluZyBpbnRvIGFuIG9iamVjdFxuXHQgKiBAcGFyYW0ge3N0cmluZ30gaGFzaCBUaGUgaGFzaCB0byBiZSBwYXJzZWRcblx0ICogQHJldHVybnMge29iamVjdH0gVGhlIG9iamVjdCByZXByZXNlbnRhdGlvbiBvZiB0aGUgaGFzaCBzdHJpbmdcblx0ICovXG5cdF9wYXJzZVVybEhhc2goaGFzaCkge1xuXHRcdHJldHVybiBxcy5wYXJzZShoYXNoKTtcblx0fVxuXG5cdC8qKlxuXHQgKiBAZnVuY3Rpb24gZ2V0VG9rZW4gTWFrZXMgYW4gYXBpIHJlcXVlc3QgdG8gdGhlIENsb3VkIElkZW50aXR5IEF1dGhvcml6YXRpb24gc2VydmVyXG5cdCAqIHRvIHJldHJpZXZlIGFjY2Vzc190b2tlbiwgcmVmcmVzaF90b2tlbiwgZ3JhbnRfaWQuLi4gdXNlZCBmb3IgTm9kZUpTIGFwcGxpY2F0aW9ucyB0aGF0IGNhblxuXHQgKiBzdG9yZSBzZWN1cmUgY3JlZGVudGlhbHNcblx0ICogQHBhcmFtIHtvYmplY3R9IHBhcmFtcyBSZXF1aXJlZCBkYXRhIGFuZCB1cmwgcGF0aCB0byB0b2tlbiBFUCB0byByZXRyaWV2ZSBhIE9BdXRoIDIuMCBCZWFyZXIgVG9rZW4uXG5cdCAqIEByZXR1cm5zIHtQcm9taXNlPG9iamVjdD59IFJlc3BvbnNlIG9iamVjdCBjb250YWluaW5nIGFjY2VzcyB0b2tlblxuXHQgKi9cblx0Z2V0VG9rZW4ocGFyYW1zKSB7XG5cdFx0Y29uc3Qge1xuXHRcdFx0ZGF0YSxcblx0XHRcdHBhdGhcblx0XHR9ID0gcGFyYW1zO1xuXHRcdGlmICghKChkYXRhICYmIHR5cGVvZiBkYXRhID09PSAnb2JqZWN0JyAmJiBkYXRhLmNvbnN0cnVjdG9yID09PSBPYmplY3QpIHx8ICgoZGF0YSAmJiB0eXBlb2YgZGF0YSA9PT0gJ3N0cmluZycgJiYgZGF0YS5pbmNsdWRlcygnPycpKSkpKSB7XG5cdFx0XHR0aHJvdyBuZXcgVmVyaWZ5RXJyb3IoQXBwQ29uZmlnLk9BVVRIX0NPTlRFWFRfQVBJX0VSUk9SLCAnZ2V0VG9rZW4ocGFyYW1zKSwgUGFyYW1zIG11c3QgY29udGFpbiBkYXRhIG9iamVjdCBvciBxdWVyeSBzdHJpbmcnKTtcblx0XHR9XG5cblx0XHRkYXRhLmNsaWVudF9pZCA9IHRoaXMuY29uZmlnLmNsaWVudElkO1xuXHRcdGRhdGEuY2xpZW50X3NlY3JldCA9IHRoaXMuY29uZmlnLmNsaWVudFNlY3JldDtcblx0XHRkYXRhLnNjb3BlID0gdGhpcy5jb25maWcuc2NvcGU7XG5cdFx0ZGF0YS5ncmFudF90eXBlID0gdGhpcy5jb25maWcuZ3JhbnRUeXBlO1xuXG5cdFx0aWYgKHRoaXMuY29uZmlnLmZsb3dUeXBlID09PSBGTE9XX1RZUEUuYXV0aG9yaXphdGlvbkNvZGVGbG93KSB7XG5cdFx0XHRkYXRhLnJlZGlyZWN0X3VyaSA9IHRoaXMuY29uZmlnLnJlZGlyZWN0VXJpO1xuXHRcdH1cblxuXHRcdGxldCBlbmNvZGVkRGF0YSA9IHFzLnN0cmluZ2lmeShkYXRhKTtcblxuXHRcdGxldCBvcHRpb25zID0ge1xuXHRcdFx0bWV0aG9kOiAnUE9TVCcsXG5cdFx0XHR1cmw6IHBhdGgsXG5cdFx0XHRjb250ZW50VHlwZTogJ2FwcGxpY2F0aW9uL3gtd3d3LWZvcm0tdXJsZW5jb2RlZCcsXG5cdFx0XHRkYXRhOiBlbmNvZGVkRGF0YVxuXHRcdH07XG5cblx0XHRyZXR1cm4gYXBpUmVxdWVzdChvcHRpb25zKTtcblx0fVxuXG5cdC8qKlxuXHQgKiBAYWJzdHJhY3Rcblx0ICogQGZ1bmN0aW9uIHJlZnJlc2hUb2tlbiBSZWZyZXNoZXMgYSB0b2tlbiBpZiBpdCBoYXMgZXhwaXJlZFxuXHQgKiBAcGFyYW0ge29iamVjdH0gdG9rZW4gVGhlIHRva2VuIG9iamVjdCB0byBiZSByZWZyZXNoZWQgY29udGFpbmluZyBhY2Nlc3NfdG9rZW4sIHJlZnJlc2hfdG9rZW4gLi4uXG5cdCAqIEByZXR1cm5zIHtQcm9taXNlPG9iamVjdHx2b2lkPn0gUmVzcG9uc2Ugb2JqZWN0IGZyb20gcmVmcmVzaGluZyB0aGUgdG9rZW5cblx0ICovXG5cdHJlZnJlc2hUb2tlbih0b2tlbikge1xuXHRcdGlmICghdG9rZW4uaGFzT3duUHJvcGVydHkoJ3JlZnJlc2hfdG9rZW4nKSkge1xuXHRcdFx0cmV0dXJuIFByb21pc2UucmVqZWN0KG5ldyBWZXJpZnlFcnJvcihBcHBDb25maWcuT0FVVEhfQ09OVEVYVF9BUElfRVJST1IsICd0b2tlbiBoYXMgbm8gcmVmcmVzaF90b2tlbiBwcm9wZXJ0eScpKTtcblx0XHR9XG5cblx0XHRjb25zdCBwYXRoID0gYCR7dGhpcy5jb25maWcudGVuYW50VXJsfS92MS4wL2VuZHBvaW50L2RlZmF1bHQvdG9rZW5gO1xuXHRcdGNvbnN0IGRhdGEgPSB7XG5cdFx0XHRyZWZyZXNoX3Rva2VuOiB0b2tlbi5yZWZyZXNoX3Rva2VuLFxuXHRcdFx0Y2xpZW50X2lkOiB0aGlzLmNvbmZpZy5jbGllbnRJZCxcblx0XHRcdGNsaWVudF9zZWNyZXQ6IHRoaXMuY29uZmlnLmNsaWVudFNlY3JldCxcblx0XHRcdGdyYW50X3R5cGU6ICdyZWZyZXNoX3Rva2VuJyxcblx0XHRcdHNjb3BlOiB0aGlzLmNvbmZpZy5zY29wZVxuXHRcdH07XG5cblx0XHRjb25zdCBlbmNvZGVkRGF0YSA9IHFzLnN0cmluZ2lmeShkYXRhKTtcblxuXHRcdGNvbnN0IG9wdGlvbnMgPSB7XG5cdFx0XHRtZXRob2Q6ICdQT1NUJyxcblx0XHRcdHVybDogcGF0aCxcblx0XHRcdGNvbnRlbnRUeXBlOiAnYXBwbGljYXRpb24veC13d3ctZm9ybS11cmxlbmNvZGVkJyxcblx0XHRcdGRhdGE6IGVuY29kZWREYXRhXG5cdFx0fTtcblxuXHRcdHJldHVybiBhcGlSZXF1ZXN0KG9wdGlvbnMpO1xuXHR9XG5cblx0LyoqXG5cdCAqIEBmdW5jdGlvbiBhdXRob3JpemUgQnVpbGRzIGF1dGhvcml6YXRpb24gVVJMIHVzaW5nIHByb3ZpZGVkIGNvbmZpZ1xuXHQgKiBAcGFyYW0ge29iamVjdH0gb3B0aW9ucyBDb25maWcgb2JqZWN0IHdpdGggY2xpZW50SWQsIHJlZGlyZWN0VXJpLCBzY29wZSBhbmQgcmVzcG9uc2VUeXBlIHRvIGF1dGhvcml6ZSBhZ2FpbnN0XG5cdCAqIEByZXR1cm5zIHtzdHJpbmd9IEF1dGhvcml6YXRpb24gVVJMXG5cdCAqL1xuXHRfYXV0aG9yaXplKG9wdGlvbnMpIHtcblx0XHRyZXR1cm4gdGhpcy5fYnVpbGRVcmwob3B0aW9ucyk7XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIGJ1aWxkVXJsIENvbnN0cnVjdHMgYXV0aG9yaXphdGlvbiBVUkwgZ2l2ZW4gcHJvdmlkZWQgb3B0aW9uc1xuXHQgKiBAcGFyYW0ge29iamVjdH0gb3B0aW9ucyBDb25maWcgb2JqZWN0IHdpdGggY2xpZW50SWQsIHJlZGlyZWN0VXJpLCBzY29wZSBhbmQgcmVzcG9uc2VUeXBlXG5cdCAqIEByZXR1cm5zIHtzdHJpbmd9IEF1dGhvcml6YXRpb24gVVJMXG5cdCAqL1xuXHRfYnVpbGRVcmwob3B0aW9ucykge1xuXHRcdHJldHVybiAoXG5cdFx0XHRvcHRpb25zLnRlbmFudFVybCArXG5cdFx0XHRcdCcvb2lkYy9lbmRwb2ludC9kZWZhdWx0L2F1dGhvcml6ZT8nICtcblx0XHRcdFx0cXMuc3RyaW5naWZ5KHtcblx0XHRcdFx0XHRjbGllbnRfaWQ6IG9wdGlvbnMuY2xpZW50SWQsXG5cdFx0XHRcdFx0cmVkaXJlY3RfdXJpOiBvcHRpb25zLnJlZGlyZWN0VXJpLFxuXHRcdFx0XHRcdHNjb3BlOiBvcHRpb25zLnNjb3BlLFxuXHRcdFx0XHRcdHJlc3BvbnNlX3R5cGU6IG9wdGlvbnMucmVzcG9uc2VUeXBlLFxuXHRcdFx0XHRcdHN0YXRlOiB1dGlscy5yYW5kb21TdHJpbmcoMTYpLFxuXHRcdFx0XHRcdG5vbmNlOiB1dGlscy5yYW5kb21TdHJpbmcoMTYpXG5cdFx0XHRcdH0pXG5cdFx0KTtcblx0fVxuXG5cdC8qKlxuXHQgKiBAZnVuY3Rpb24gaGFuZGxlUmVzcG9uc2UgTWFrZXMgYSByZXF1ZXN0IGFuZCByZWZyZXNoZXMgdG9rZW4gaWYgdG9rZW4gaXMgZXhwaXJlZFxuXHQgKiBAcGFyYW0ge29iamVjdH0gb3B0aW9ucyBSZXF1ZXN0IG9iamVjdCBjb250YWluaW5nIHVybCBwYXRoLCBtZXRob2QsIHJlc3BvbnNlVHlwZSwgYWNjZXB0LCBkYXRhIHRvIG1ha2UgYSB2YWxpZCBhcGlSZXF1ZXN0XG5cdCAqIEBwYXJhbSB7b2JqZWN0fSB0b2tlbk9iaiBUb2tlbiBvYmplY3QgY29udGFpbmluZyBhY2Nlc3NfdG9rZW4sIHJlZnJlc2hfdG9rZW4gLi4uIHVzZWQgdG8gbWFrZSB0aGUgcmVxdWVzdFxuXHQgKiBAcmV0dXJucyB7b2JqZWN0fSBSZXNwb25zZSBvYmplY3QgZnJvbSB0aGUgcmVxdWVzdFxuXHQgKi9cblx0YXN5bmMgaGFuZGxlUmVzcG9uc2Uob3B0aW9ucywgdG9rZW5PYmopIHtcblx0XHRpZiAoYXJndW1lbnRzLmxlbmd0aCA8IDIpIHtcblx0XHRcdHJldHVybiBQcm9taXNlLnJlamVjdChuZXcgVmVyaWZ5RXJyb3IoQXBwQ29uZmlnLk9BVVRIX0NPTlRFWFRfQVBJX0VSUk9SLCAnaGFuZGxlUmVzcG9uc2Uob3B0aW9ucywgdG9rZW4pLCAyIHBhcmFtZXRlcnMgYXJlIHJlcXVpcmVkICcgKyBhcmd1bWVudHMubGVuZ3RoICsgJyB3ZXJlIGdpdmVuJykpO1xuXHRcdH1cblx0XHRpZiAoIXRoaXMuaXNUb2tlbih0b2tlbk9iaikpIHtcblx0XHRcdHJldHVybiBQcm9taXNlLnJlamVjdChuZXcgVmVyaWZ5RXJyb3IoQXBwQ29uZmlnLlRPS0VOX0VSUk9SLCAnVG9rZW4gcGFyYW1ldGVyIGlzIG5vdCBhIHZhbGlkIHRva2VuJykpO1xuXHRcdH1cblxuXHRcdGNvbnN0IHRva2VuID0gdG9rZW5PYmo7XG5cdFx0Ly8gRGVmaW5lIGVtcHR5IHBheWxvYWQgb2JqZWN0XG5cdFx0bGV0IHBheWxvYWQgPSB7XG5cdFx0XHRyZXNwb25zZTogbnVsbCxcblx0XHRcdHRva2VuOiBudWxsXG5cdFx0fTtcblxuXHRcdHRyeSB7XG5cdFx0XHRjb25zdCByZXNwb25zZSA9IGF3YWl0IGFwaVJlcXVlc3Qob3B0aW9ucywgdG9rZW4uYWNjZXNzX3Rva2VuKTtcblx0XHRcdHBheWxvYWQucmVzcG9uc2UgPSByZXNwb25zZTtcblx0XHRcdGlmICh0aGlzLmNvbmZpZy5mbG93VHlwZSA9PT0gRkxPV19UWVBFLmltcGxpY2l0Rmxvdykge1xuXHRcdFx0XHRyZXR1cm4gUHJvbWlzZS5yZXNvbHZlKHJlc3BvbnNlKTtcblx0XHRcdH1cblx0XHRcdHJldHVybiBQcm9taXNlLnJlc29sdmUocGF5bG9hZCk7XG5cdFx0fSBjYXRjaCAoZXJyb3IpIHtcblx0XHRcdGlmIChlcnJvci5zdGF0dXMgPT09IDQwMSAmJiB1dGlscy5pc05vZGUoKSkge1xuXHRcdFx0XHQvLyB2YWxpZGF0ZSAndG9rZW4nIGhhcyByZWZyZXNoX3Rva2VuXG5cdFx0XHRcdGlmICghdG9rZW4ucmVmcmVzaF90b2tlbikge1xuXHRcdFx0XHRcdHJldHVybiBQcm9taXNlLnJlamVjdChuZXcgVmVyaWZ5RXJyb3IoQXBwQ29uZmlnLk9BVVRIX0NPTlRFWFRfQVBJX0VSUk9SLCAnYWNjZXNzX3Rva2VuIGV4cGlyZWQgYW5kIHJlZnJlc2hfdG9rZW4gbm90IGZvdW5kJykpO1xuXHRcdFx0XHR9XG5cdFx0XHRcdGxldCBuZXdUb2tlbiA9IGF3YWl0IHRoaXMucmVmcmVzaFRva2VuKHRva2VuKTtcblx0XHRcdFx0bGV0IG9yaWdpbmFsUmVxdWVzdCA9IGF3YWl0IGFwaVJlcXVlc3Qob3B0aW9ucywgbmV3VG9rZW4uYWNjZXNzX3Rva2VuKTtcblx0XHRcdFx0cGF5bG9hZCA9IHtcblx0XHRcdFx0XHRyZXNwb25zZTogb3JpZ2luYWxSZXF1ZXN0LFxuXHRcdFx0XHRcdHRva2VuOiBuZXdUb2tlblxuXHRcdFx0XHR9O1xuXHRcdFx0XHRyZXR1cm4gUHJvbWlzZS5yZXNvbHZlKHBheWxvYWQpO1xuXHRcdFx0fVxuXHRcdFx0cmV0dXJuIFByb21pc2UucmVqZWN0KGVycm9yKTtcblx0XHR9XG5cdH1cbn1cblxuLyoqXG4gKiBAY2xhc3MgSW1wbGljaXRGbG93XG4gKi9cbmNsYXNzIEltcGxpY2l0RmxvdyBleHRlbmRzIEZsb3dBYnN0cmFjdCB7XG5cdGNvbnN0cnVjdG9yKGNvbmZpZykge1xuXHRcdHN1cGVyKGNvbmZpZyk7XG5cdFx0dGhpcy5pc1ZhbGlkQ29uZmlnKCk7XG5cblx0XHR0aGlzLnN0b3JhZ2VIYW5kbGVyID0gbmV3IFN0b3JhZ2VIYW5kbGVyKGNvbmZpZy5zdG9yYWdlVHlwZSk7XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIGlzVmFsaWRDb25maWcgVmFsaWRhdGVzIHRoZSBjb25maWcgb2YgYW4gSW1wbGljaXRGbG93IGluc3RhbmNlXG5cdCAqIEByZXR1cm5zIHtib29sZWFufSBCb29sZWFuIGluZGljYXRpbmcgd2hldGhlciB0aGUgY29uZmlnIGlzIHZhbGlkXG5cdCAqIFRocm93cyBlcnJvciBpZiBubyBzdG9yYWdlVHlwZSBpbiBjb25maWcgb3IgaW5zdGFudGlhdGluZyBJbXBsaWNpdEZsb3cgaW4gTm9kZUpTXG5cdCAqL1xuXHRpc1ZhbGlkQ29uZmlnKCkge1xuXHRcdGlmICh1dGlscy5pc05vZGUoKSkge1xuXHRcdFx0dGhyb3cgbmV3IEludmFsaWRPQXV0aENvbmZpZ3VyYXRpb25FcnJvcignSW1wbGljaXQgZmxvdyBpcyBub3Qgc3VwcG9ydGVkIGluIE5vZGUnKTtcblx0XHR9XG5cdFx0aWYgKCF0aGlzLmNvbmZpZy5zdG9yYWdlVHlwZSkge1xuXHRcdFx0dGhyb3cgbmV3IEludmFsaWRPQXV0aENvbmZpZ3VyYXRpb25FcnJvcignc3RvcmFnZVR5cGUgcHJvcGVydHkgaXMgcmVxdWlyZWQgaW4gY29uZmlnIHNldHRpbmdzIGZvciBJbXBsaWNpdCBmbG93Jyk7XG5cdFx0fVxuXHRcdGlmICghKHRoaXMuY29uZmlnLnJlZGlyZWN0VXJpICYmIHV0aWxzLmlzVXJsKHRoaXMuY29uZmlnLnJlZGlyZWN0VXJpKSkpIHtcblx0XHRcdHRocm93IG5ldyBJbnZhbGlkT0F1dGhDb25maWd1cmF0aW9uRXJyb3IoJ2EgdmFsaWQgcmVkaXJlY3RVcmkgcHJvcGVydHkgaXMgcmVxdWlyZWQgaW4gY29uZmlnIHNldHRpbmdzJyk7XG5cdFx0fVxuXHRcdHJldHVybiB0cnVlO1xuXHR9XG5cblx0LyoqXG5cdCAqIEBmdW5jdGlvbiByZWZyZXNoVG9rZW4gUmVmcmVzaGVzIHRoZSB0b2tlbiBpZiBpdCBoYXMgZXhwaXJlZFxuXHQgKiBAcGFyYW0ge29iamVjdH0gdG9rZW4gVGhlIHRva2VuIG9iamVjdCBjb250YWluaW5nIGFjY2Vzc190b2tlbiwgcmVmcmVzaF90b2tlbiAuLi5cblx0ICogQHJldHVybnMge1Byb21pc2U8dm9pZD59IFRocm93cyBOb3RBdmFpbGFibGVFcnJvcigpIGFzIHJlZnJlc2hfdG9rZW4gaXMgbm90IGF2YWlsYWJsZSBpbiBJbXBsaWNpdCBGbG93XG5cdCAqL1xuXHRyZWZyZXNoVG9rZW4odG9rZW4pIHtcblx0XHR0aHJvdyBuZXcgTm90QXZhaWxhYmxlRXJyb3IoKTtcblx0fVxuXG5cdC8qKlxuXHQgKiBAZnVuY3Rpb24gZmV0Y2hUb2tlbiBSZXRyaWV2ZXMgdGhlIHRva2VuIG9iamVjdCBmcm9tIHN0b3JhZ2Vcblx0ICogQHJldHVybnMge29iamVjdHx2b2lkfSBUb2tlbiBvYmplY3QgZm91bmQgaW4gc3RvcmFnZSBvciB0aHJvd3MgZXJyb3Jcblx0ICovXG5cdGZldGNoVG9rZW4oKSB7XG5cdFx0dHJ5IHtcblx0XHRcdHJldHVybiBKU09OLnBhcnNlKHRoaXMuc3RvcmFnZUhhbmRsZXIuZ2V0U3RvcmFnZSgndG9rZW4nKSk7XG5cdFx0fSBjYXRjaCAoZXJyb3IpIHtcblx0XHRcdHJldHVybiBlcnJvcjtcblx0XHR9XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIHNldFNlc3Npb24gU2V0cyB0aGUgc2Vzc2lvbiBleHBpcmF0aW9uIGFjY29yZGluZyB0byB0aGUgZXhwaXJhdGlvbiBvZiB0aGUgc3RvcmVkIHRva2VuXG5cdCAqIFRoZSB0b2tlbiB3aWxsIGJlIGNsZWFyZWQgZnJvbSBzdG9yYWdlIG9uY2UgaXQgZXhwaXJlcyBhbmQgdGhlIHNlc3Npb24gd2lsbCBlbmQuXG5cdCAqIEByZXR1cm5zIHt2b2lkfVxuXHQgKi9cblx0X3NldFNlc3Npb24oKSB7XG5cdFx0Y29uc3QgZXhwaXJlc0F0ID0gSlNPTi5wYXJzZSh0aGlzLnN0b3JhZ2VIYW5kbGVyLmdldFN0b3JhZ2UoJ3Rva2VuJykpLmV4cGlyZXNfaW47XG5cdFx0Ly8gY29uc3QgY2xvY2tTa2V3ID0gQXBwQ29uZmlnLkRFRkFVTFRfQ0xPQ0tfU0tFVztcblx0XHRjb25zdCBjbG9ja1NrZXcgPSAxMDtcblx0XHRjb25zdCBkZWxheSA9IGV4cGlyZXNBdCAtIChEYXRlLm5vdygpIC0gY2xvY2tTa2V3KTtcblxuXHRcdGlmIChkZWxheSA+IDApIHtcblx0XHRcdHNldFRpbWVvdXQoKCkgPT4ge1xuXHRcdFx0XHR0aGlzLnNlc3Npb24gPSBmYWxzZTtcblx0XHRcdFx0dGhpcy5zdG9yYWdlSGFuZGxlci5jbGVhclN0b3JhZ2UoKTtcblx0XHRcdH0sIGRlbGF5KTtcblx0XHR9XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIGxvZ2luIEJ1aWxkcyBhIGxvZ2luIFVSTCB0byBhdXRob3JpemUgYWdhaW5zdCB1c2luZyB0aGUgaW5zdGFuY2UncyBjb25maWdcblx0ICogQHJldHVybnMge3N0cmluZ30gQXV0aG9yaXphdGlvbiBVUkxcblx0ICovXG5cdGxvZ2luKCkge1xuXHRcdHJldHVybiB0aGlzLl9hdXRob3JpemUodGhpcy5jb25maWcpO1xuXHR9XG5cblx0LyoqXG5cdCAqIEBmdW5jdGlvbiBsb2dvdXQgUmVkaXJlY3RzIHVzZXIgYWZ0ZXIgYWNjZXNzVG9rZW4gaGFzIGV4cGlyZWQuXG5cdCAqIEBwYXJhbXMge3N0cmluZ30gcGF0aCBPcHRpb25hbCBwYXRoIHRvIHJlZGlyZWN0IHRvLCBkZWZhdWx0cyB0byBpbmRleCBwYWdlLlxuXHQgKi9cblx0YXN5bmMgbG9nb3V0KHBhdGgpIHtcblx0XHRsZXQgYWNjZXNzVG9rZW4gPSB0aGlzLmZldGNoVG9rZW4oKTtcblx0XHRhd2FpdCB0aGlzLnJldm9rZVRva2VuKGFjY2Vzc1Rva2VuLCAnYWNjZXNzX3Rva2VuJyk7XG5cdFx0YXdhaXQgdGhpcy5zdG9yYWdlSGFuZGxlci5jbGVhclN0b3JhZ2UoKTtcblx0XHRhd2FpdCB3aW5kb3cubG9jYXRpb24ucmVwbGFjZShwYXRoIHx8ICcvJyk7XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIGhhbmRsZUNhbGxiYWNrIFN0b3JlcyB0b2tlbiBpbnRvIHNlc3Npb25TdG9yYWdlXG5cdCAqIEByZXR1cm5zIHtQcm9taXNlPHZvaWQ+fSBQcm9taXNlIHJlamVjdGlvbiBpZiBlcnJvclxuXHQgKi9cblx0aGFuZGxlQ2FsbGJhY2soKSB7XG5cdFx0bGV0IHVybE9iajtcblx0XHRjb25zdCBlcnJvckNoZWNrID0gUmVnRXhwKCcjZXJyb3InKTtcblx0XHRjb25zdCBoYXNoID0gd2luZG93LmxvY2F0aW9uLmhhc2g7XG5cblx0XHR1cmxPYmogPSB0eXBlb2YgaGFzaCA9PT0gJ29iamVjdCcgPyBoYXNoIDogdGhpcy5fcGFyc2VVcmxIYXNoKGhhc2gpO1xuXG5cdFx0cmV0dXJuIG5ldyBQcm9taXNlKGZ1bmN0aW9uKHJlamVjdCkge1xuXHRcdFx0aWYgKGVycm9yQ2hlY2sudGVzdChoYXNoKSkge1xuXHRcdFx0XHRyZWplY3QodXJsT2JqKTtcblx0XHRcdH0gZWxzZSB7XG5cdFx0XHRcdHRoaXMuc3RvcmFnZUhhbmRsZXIuc2V0U3RvcmFnZSh1cmxPYmopO1xuXHRcdFx0XHR0aGlzLl9zZXRTZXNzaW9uKCk7XG5cdFx0XHRcdC8vIHJlbW92ZSB1cmxcblx0XHRcdFx0d2luZG93LmxvY2F0aW9uLmhhc2ggPSAnJztcblx0XHRcdH1cblx0XHR9LmJpbmQodGhpcykpO1xuXHR9XG59XG5cbi8qKlxuICogQGNsYXNzIEF1dGhvcml6YXRpb25Db2RlRmxvd1xuICovXG5jbGFzcyBBdXRob3JpemF0aW9uQ29kZUZsb3cgZXh0ZW5kcyBGbG93QWJzdHJhY3Qge1xuXHRjb25zdHJ1Y3Rvcihjb25maWcpIHtcblx0XHRzdXBlcihjb25maWcpO1xuXHRcdHRoaXMuaXNWYWxpZENvbmZpZygpO1xuXHRcdHRoaXMuY29uZmlnLmdyYW50VHlwZSA9ICdhdXRob3JpemF0aW9uX2NvZGUnO1xuXHR9XG5cblx0LyoqXG5cdCAqIEBmdW5jdGlvbiBpc1ZhbGlkQ29uZmlnIFZhbGlkYXRlcyB0aGUgY29uZmlnIG9mIGFuIEF1dGhvcml6YXRpb25Db2RlRmxvdyBpbnN0YW5jZVxuXHQgKiBAcmV0dXJucyB7Ym9vbGVhbn0gQm9vbGVhbiBpbmRpY2F0aW5nIHdoZXRoZXIgdGhlIGNvbmZpZyBpcyB2YWxpZFxuXHQgKiBUaHJvd3MgZXJyb3IgaWYgbm8gY2xpZW50U2VjcmV0IGluIGNvbmZpZ1xuXHQgKi9cblx0aXNWYWxpZENvbmZpZygpIHtcblx0XHRpZiAoISh0aGlzLmNvbmZpZy5yZWRpcmVjdFVyaSAmJiB1dGlscy5pc1VybCh0aGlzLmNvbmZpZy5yZWRpcmVjdFVyaSkpKSB7XG5cdFx0XHR0aHJvdyBuZXcgSW52YWxpZE9BdXRoQ29uZmlndXJhdGlvbkVycm9yKCdhIHZhbGlkIHJlZGlyZWN0VXJpIHByb3BlcnR5IGlzIHJlcXVpcmVkIGluIGNvbmZpZyBzZXR0aW5ncycpO1xuXHRcdH1cblx0XHRpZiAoIXRoaXMuY29uZmlnLnJlc3BvbnNlVHlwZSkge1xuXHRcdFx0dGhyb3cgbmV3IEludmFsaWRPQXV0aENvbmZpZ3VyYXRpb25FcnJvcigncmVzcG9uc2VUeXBlIHByb3BlcnR5IGlzIHJlcXVpcmVkIGluIGNvbmZpZyBzZXR0aW5ncycpO1xuXHRcdH1cblxuXHRcdHJldHVybiB0cnVlO1xuXHR9XG5cblx0Z2V0VG9rZW4ocGFyYW1zKSB7XG5cdFx0aWYgKCFwYXJhbXMpIHtcblx0XHRcdHRocm93IG5ldyBWZXJpZnlFcnJvcihBcHBDb25maWcuT0FVVEhfQ09OVEVYVF9DT05GSUdfU0VUVElOR1NfRVJST1IsICdnZXRUb2tlbihwYXJhbXMpLCBQYXJhbXMgYXJlIHJlcXVpcmVkJyk7XG5cdFx0fVxuXG5cdFx0aWYgKCEocGFyYW1zICYmIHR5cGVvZiBwYXJhbXMgPT09ICdzdHJpbmcnICYmIHBhcmFtcy5pbmNsdWRlcygnPycpKSkge1xuXHRcdFx0dGhyb3cgbmV3IFZlcmlmeUVycm9yKEFwcENvbmZpZy5PQVVUSF9DT05URVhUX0FQSV9FUlJPUiwgJ2dldFRva2VuKHBhcmFtcyksIFBhcmFtcyBtdXN0IGNvbnRhaW4gZGF0YSBvYmplY3Qgb3IgcXVlcnkgc3RyaW5nJyk7XG5cdFx0fVxuXG5cdFx0bGV0IHF1ZXJ5ID0gcGFyYW1zLnN1YnN0cmluZyhwYXJhbXMuaW5kZXhPZignPycpKTtcblx0XHRsZXQgZGF0YSA9IHR5cGVvZiBxdWVyeSA9PT0gJ29iamVjdCcgPyBxdWVyeSA6IHFzLnBhcnNlKHF1ZXJ5KTtcblx0XHRsZXQgcGF0aCA9IGAke3RoaXMuY29uZmlnLnRlbmFudFVybH0vdjEuMC9lbmRwb2ludC9kZWZhdWx0L3Rva2VuYDtcblxuXG5cdFx0ZGF0YS5yZWRpcmVjdF91cmkgPSB0aGlzLmNvbmZpZy5yZWRpcmVjdFVyaTtcblx0XHRkYXRhLmdyYW50X3R5cGUgPSB0aGlzLmNvbmZpZy5ncmFudFR5cGU7XG5cdFx0ZGF0YS5jbGllbnRfaWQgPSB0aGlzLmNvbmZpZy5jbGllbnRJZDtcblx0XHRkYXRhLmNsaWVudF9zZWNyZXQgPSB0aGlzLmNvbmZpZy5jbGllbnRTZWNyZXQ7XG5cdFx0ZGF0YS5zY29wZSA9IHRoaXMuY29uZmlnLnNjb3BlO1xuXG5cdFx0bGV0IGVuY29kZWREYXRhID0gcXMuc3RyaW5naWZ5KGRhdGEpO1xuXG5cdFx0bGV0IG9wdGlvbnMgPSB7XG5cdFx0XHRtZXRob2Q6ICdQT1NUJyxcblx0XHRcdHVybDogcGF0aCxcblx0XHRcdGNvbnRlbnRUeXBlOiAnYXBwbGljYXRpb24veC13d3ctZm9ybS11cmxlbmNvZGVkJyxcblx0XHRcdGRhdGE6IGVuY29kZWREYXRhXG5cdFx0fTtcblxuXHRcdHJldHVybiBhcGlSZXF1ZXN0KG9wdGlvbnMpO1xuXHR9XG5cblx0LyoqXG5cdCAqIEBmdW5jdGlvbiBhdXRoZW50aWNhdGUgUmV0dXJucyBhIFVSTCB1c2VkIHRvIGF1dGhlbnRpY2F0ZSBhZ2FpbnN0IHVzaW5nIHRoZSBpbnN0YW5jZSdzIGNvbmZpZ1xuXHQgKiBAcmV0dXJucyB7UHJvbWlzZTxzdHJpbmc+fSBBdXRoZW50aWNhdGlvbiBVUkxcblx0ICovXG5cdGF1dGhlbnRpY2F0ZSgpIHtcblx0XHRyZXR1cm4gbmV3IFByb21pc2UoXG5cdFx0XHRmdW5jdGlvbihyZXNvbHZlKSB7XG5cdFx0XHRcdHJlc29sdmUodGhpcy5fYXV0aG9yaXplKHRoaXMuY29uZmlnKSk7XG5cdFx0XHR9LmJpbmQodGhpcylcblx0XHQpO1xuXHR9XG5cblx0LyoqXG5cdCAqIEBmdW5jdGlvbiByZWZyZXNoVG9rZW4gUmVmcmVzaGVzIGEgdG9rZW4gaWYgaXQgaGFzIGV4cGlyZWRcblx0ICogQHBhcmFtIHtvYmplY3R9IHRva2VuIFRoZSB0b2tlbiBvYmplY3QgdG8gYmUgcmVmcmVzaGVkIGNvbnRhaW5pbmcgYWNjZXNzX3Rva2VuLCByZWZyZXNoX3Rva2VuIC4uLlxuXHQgKiBAcmV0dXJucyB7UHJvbWlzZTxvYmplY3R8dm9pZD59IFJlc3BvbnNlIG9iamVjdCBmcm9tIHJlZnJlc2hpbmcgdGhlIHRva2VuXG5cdCAqL1xuXHRyZWZyZXNoVG9rZW4odG9rZW4pIHtcblx0XHRyZXR1cm4gc3VwZXIucmVmcmVzaFRva2VuKHRva2VuKTtcblx0fVxufVxuXG4vKipcbiAqIEBjbGFzcyBEZXZpY2VGbG93XG4gKi9cbmNsYXNzIERldmljZUZsb3cgZXh0ZW5kcyBGbG93QWJzdHJhY3Qge1xuXHRjb25zdHJ1Y3Rvcihjb25maWcpIHtcblx0XHRzdXBlcihjb25maWcpO1xuXHRcdHRoaXMuaXNWYWxpZENvbmZpZygpO1xuXHRcdHRoaXMuUE9MTElOR19USU1FID0gNTAwMDtcblx0XHR0aGlzLmNvbmZpZy5ncmFudFR5cGUgPSAndXJuOmlldGY6cGFyYW1zOm9hdXRoOmdyYW50LXR5cGU6ZGV2aWNlX2NvZGUnO1xuXHR9XG5cblx0LyoqXG5cdCAqIEBmdW5jdGlvbiBpc1ZhbGlkQ29uZmlnIFZhbGlkYXRlcyB0aGUgY29uZmlnIG9mIGFuIERldmljZUZsb3cgaW5zdGFuY2Vcblx0ICogQHJldHVybnMge2Jvb2xlYW59IEJvb2xlYW4gaW5kaWNhdGluZyB3aGV0aGVyIHRoZSBjb25maWcgaXMgdmFsaWRcblx0ICovXG5cdGlzVmFsaWRDb25maWcoKSB7XG5cdFx0aWYgKCF0aGlzLmNvbmZpZy5jbGllbnRTZWNyZXQpIHtcblx0XHRcdHRocm93IG5ldyBJbnZhbGlkT0F1dGhDb25maWd1cmF0aW9uRXJyb3IoJ2NsaWVudFNlY3JldCBwcm9wZXJ0eSBpcyByZXF1aXJlZCBpbiBjb25maWcgc2V0dGluZ3MgZm9yICBDb2RlIGZsb3cnKTtcblx0XHR9XG5cdFx0cmV0dXJuIHRydWU7XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIGF1dGhvcml6ZSB1c2VkIHRvIGluaXRpYXRlIHJlcXVlc3QgYXQgL2RldmljZV9hdXRob3JpemUgRVAgd2l0aFxuXHQgKiBjbGllbnQgaWQgKGFuZCBzY29wZSBpZiBwcm92aWRlZClcblx0ICogQHJldHVybnMgVGhlIHN1Y2Nlc3NmdWwgcmVzcG9uc2UgcmV0dXJuZWQgaW5jbHVkZXMgYSBkZXZpY2VfY29kZSwgdXNlcl9jb2RlIGFuZCB2ZXJpZmljYXRpb25fdXJpLlxuXHQgKiBOb3RlOiBkZXZpY2VfY29kZSBzaG91bGQgbm90IGJlIGV4cG9zZWQgdG8gdGhlIHVzZXIgYWdlbnQuXG5cdCAqL1xuXHRhdXRob3JpemUoKSB7XG5cdFx0bGV0IGF1dGhTZXJ2ZXJQYXRoID0gYCR7dGhpcy5jb25maWcudGVuYW50VXJsfS9vaWRjL2VuZHBvaW50L2RlZmF1bHQvZGV2aWNlX2F1dGhvcml6YXRpb25gO1xuXHRcdGxldCBkYXRhID0ge1xuXHRcdFx0Y2xpZW50X2lkOiB0aGlzLmNvbmZpZy5jbGllbnRJZCxcblx0XHRcdHNjb3BlOiB0aGlzLmNvbmZpZy5zY29wZVxuXHRcdH07XG5cblx0XHRsZXQgZW5jb2RlZERhdGEgPSBxcy5zdHJpbmdpZnkoZGF0YSk7XG5cblx0XHRsZXQgb3B0aW9ucyA9IHtcblx0XHRcdG1ldGhvZDogJ1BPU1QnLFxuXHRcdFx0dXJsOiBhdXRoU2VydmVyUGF0aCxcblx0XHRcdGNvbnRlbnRUeXBlOiAnYXBwbGljYXRpb24veC13d3ctZm9ybS11cmxlbmNvZGVkJyxcblx0XHRcdGRhdGE6IGVuY29kZWREYXRhXG5cdFx0fTtcblxuXHRcdHJldHVybiBhcGlSZXF1ZXN0KG9wdGlvbnMpO1xuXHR9XG5cblx0LyoqXG5cdCAqIEBmdW5jdGlvbiBwb2xsVG9rZW5BcGkgUG9sbGluZyB0aGUgdG9rZW4gZW5kcG9pbnQgb2YgdGhlIGF1dGhvcml6YXRpb24gc2VydmVyXG5cdCAqIEBwYXJhbSB7ZGV2aWNlQ29kZX0gc3RyaW5nIHVzZWQgZm9yIHBvbGxpbmcgdGhlIHRva2VuIEVQXG5cdCAqIEBwYXJhbSB7ZHVyYXRpb259IG51bWJlciBPcHRpb25hbCwgdXNlZCB0byBzZXQgdGhlIHBvbGxpbmcgdGltZSBpbiBtaWxsaXNlY29uZHMuIERlZmF1bHQgNTAwMCBtaWxsaXNlY29uZHMuXG5cdCAqIEByZXR1cm5zIHtQcm9taXNlPG9iamVjdD59IFJlc29sdmVkIG9yIFJlamVjdGVkIHByb21pc2UuXG5cdCAqL1xuXHRhc3luYyBwb2xsVG9rZW5BcGkoZGV2aWNlQ29kZSwgZHVyYXRpb24gPSB0aGlzLlBPTExJTkdfVElNRSkge1xuXHRcdGlmIChkdXJhdGlvbiA8IHRoaXMuUE9MTElOR19USU1FKSB7XG5cdFx0XHRyZXR1cm4gUHJvbWlzZS5yZWplY3QobmV3IERldmVsb3BlckVycm9yKCdUaGUgZGV2aWNlIG1hZGUgYW4gYXR0ZW1wdCB3aXRoaW4gWzVdIHNlY29uZHMuIFRoaXMgcmVxdWVzdCB3aWxsIG5vdCBiZSBwcm9jZXNzZWQuJykpO1xuXHRcdH1cblxuXHRcdGlmICghZGV2aWNlQ29kZSkge1xuXHRcdFx0cmV0dXJuIFByb21pc2UucmVqZWN0KG5ldyBEZXZlbG9wZXJFcnJvcignTm8gZGV2aWNlIGNvZGUgdmFsdWUgcHJvdmlkZWQuJykpO1xuXHRcdH1cblx0XHRjb25zdCBwYXRoID0gYCR7dGhpcy5jb25maWcudGVuYW50VXJsfS92MS4wL2VuZHBvaW50L2RlZmF1bHQvdG9rZW5gO1xuXHRcdGxldCByZXNwb25zZTtcblx0XHRsZXQgZGF0YSA9IHtcblx0XHRcdGNsaWVudF9pZDogdGhpcy5jb25maWcuY2xpZW50SWQsXG5cdFx0XHRjbGllbnRfc2VjcmV0OiB0aGlzLmNvbmZpZy5jbGllbnRTZWNyZXQsXG5cdFx0XHRncmFudF90eXBlOiB0aGlzLmNvbmZpZy5ncmFudFR5cGUsXG5cdFx0XHRkZXZpY2VfY29kZTogZGV2aWNlQ29kZVxuXHRcdH07XG5cblx0XHRsZXQgZXJyb3IgPSB7XG5cdFx0XHRtZXNzYWdlSWQ6ICcnXG5cdFx0fTtcblxuXHRcdHdoaWxlIChlcnJvci5tZXNzYWdlSWQgIT09ICdleHBpcmVkX3Rva2VuJyAmJiAhcmVzcG9uc2UpIHtcblx0XHRcdHRyeSB7XG5cdFx0XHRcdHJlc3BvbnNlID0gYXdhaXQgdGhpcy5nZXRUb2tlbih7IGRhdGEsIHBhdGggfSk7XG5cdFx0XHRcdGJyZWFrO1xuXHRcdFx0fSBjYXRjaCAoZSkge1xuXHRcdFx0XHRlcnJvciA9IGU7XG5cdFx0XHR9XG5cdFx0XHRhd2FpdCB1dGlscy5zbGVlcChkdXJhdGlvbik7XG5cdFx0fVxuXG5cdFx0aWYgKHJlc3BvbnNlKSB7XG5cdFx0XHRyZXR1cm4gUHJvbWlzZS5yZXNvbHZlKCk7XG5cdFx0fVxuXHRcdHJldHVybiBQcm9taXNlLnJlamVjdChlcnJvci5tZXNzYWdlRGVzY3JpcHRpb24pO1xuXHR9XG5cblx0LyoqXG5cdCAqIEBmdW5jdGlvbiByZWZyZXNoVG9rZW4gUmVmcmVzaGVzIGEgdG9rZW4gaWYgaXQgaGFzIGV4cGlyZWRcblx0ICogQHBhcmFtIHtvYmplY3R9IHRva2VuIFRoZSB0b2tlbiBvYmplY3QgdG8gYmUgcmVmcmVzaGVkIGNvbnRhaW5pbmcgYWNjZXNzX3Rva2VuLCByZWZyZXNoX3Rva2VuIC4uLlxuXHQgKiBAcmV0dXJucyB7UHJvbWlzZTxvYmplY3R8dm9pZD59IFJlc3BvbnNlIG9iamVjdCBmcm9tIHJlZnJlc2hpbmcgdGhlIHRva2VuXG5cdCAqL1xuXHRyZWZyZXNoVG9rZW4odG9rZW4pIHtcblx0XHRyZXR1cm4gc3VwZXIucmVmcmVzaFRva2VuKHRva2VuKTtcblx0fVxufVxuXG4vKipcbiAqIEBjbGFzcyBST1BDRmxvd1xuICovXG5jbGFzcyBST1BDRmxvdyBleHRlbmRzIEZsb3dBYnN0cmFjdCB7XG5cdGNvbnN0cnVjdG9yKGNvbmZpZykge1xuXHRcdHN1cGVyKGNvbmZpZyk7XG5cdFx0dGhpcy5pc1ZhbGlkQ29uZmlnKCk7XG5cdFx0dGhpcy5jb25maWcuZ3JhbnRUeXBlID0gJ3Bhc3N3b3JkJztcblx0fVxuXG5cdC8qKlxuXHQgKiBAZnVuY3Rpb24gaXNWYWxpZENvbmZpZyBWYWxpZGF0ZXMgdGhlIGNvbmZpZyBvZiBhIERldmljZUZsb3cgaW5zdGFuY2Vcblx0ICogQHJldHVybnMge2Jvb2xlYW59IEJvb2xlYW4gaW5kaWNhdGluZyB3aGV0aGVyIHRoZSBjb25maWcgaXMgdmFsaWRcblx0ICovXG5cdGlzVmFsaWRDb25maWcoKSB7XG5cdFx0cmV0dXJuIHRydWU7XG5cdH1cblxuXHQvKipcblx0ICogQGZ1bmN0aW9uIGxvZ2luIFJldHJpZXZlcyBhIHRva2VuIHVzaW5nIHRoZSBzdXBwbGllZCBjcmVkZW50aWFsc1xuXHQgKiBAcGFyYW0ge3N0cmluZ30gdXNlcm5hbWUgVGhlIHVzZXIncyBpZGVudGlmaWVyXG5cdCAqIEBwYXJhbSB7c3RyaW5nfSBwYXNzd29yZCBUaGUgdXNlcidzIHBhc3N3b3JkXG5cdCAqIEByZXR1cm5zIHtQcm9taXNlPG9iamVjdD59IFJlc3BvbnNlIG9iamVjdCBmcm9tIGxvZ2luIGNvbnRhaW5pbmcgdG9rZW5cblx0ICovXG5cdGxvZ2luKHVzZXJuYW1lLCBwYXNzd29yZCkge1xuXHRcdGlmICghdXNlcm5hbWUgfHwgIXBhc3N3b3JkKSB7XG5cdFx0XHRyZXR1cm4gUHJvbWlzZS5yZWplY3QobmV3IERldmVsb3BlckVycm9yKCd1c2VybmFtZSBhbmQgcGFzc3dvcmQgcGFyYW1zIGFyZSByZXF1aXJlZCcpKTtcblx0XHR9XG5cblx0XHRsZXQgcGF0aCA9IGAke3RoaXMuY29uZmlnLnRlbmFudFVybH0vdjEuMC9lbmRwb2ludC9kZWZhdWx0L3Rva2VuYDtcblxuXHRcdGNvbnN0IGRhdGEgPSB7XG5cdFx0XHRjbGllbnRfaWQ6IHRoaXMuY29uZmlnLmNsaWVudElkLFxuXHRcdFx0Y2xpZW50X3NlY3JldDogdGhpcy5jb25maWcuY2xpZW50U2VjcmV0LFxuXHRcdFx0dXNlcm5hbWU6IHVzZXJuYW1lLFxuXHRcdFx0cGFzc3dvcmQ6IHBhc3N3b3JkLFxuXHRcdFx0Z3JhbnRfdHlwZTogdGhpcy5jb25maWcuZ3JhbnRUeXBlLFxuXHRcdFx0c2NvcGU6IHRoaXMuY29uZmlnLnNjb3BlXG5cdFx0fTtcblxuXHRcdGxldCBlbmNvZGVkRGF0YSA9IHFzLnN0cmluZ2lmeShkYXRhKTtcblxuXHRcdGxldCBvcHRpb25zID0ge1xuXHRcdFx0bWV0aG9kOiAnUE9TVCcsXG5cdFx0XHR1cmw6IHBhdGgsXG5cdFx0XHRjb250ZW50VHlwZTogJ2FwcGxpY2F0aW9uL3gtd3d3LWZvcm0tdXJsZW5jb2RlZCcsXG5cdFx0XHRkYXRhOiBlbmNvZGVkRGF0YVxuXHRcdH07XG5cblx0XHRyZXR1cm4gYXBpUmVxdWVzdChvcHRpb25zKTtcblx0fVxuXG5cdC8qKlxuXHQgKiBAZnVuY3Rpb24gcmVmcmVzaFRva2VuIFJlZnJlc2hlcyBhIHRva2VuIGlmIGl0IGhhcyBleHBpcmVkXG5cdCAqIEBwYXJhbSB7b2JqZWN0fSB0b2tlbiBUaGUgdG9rZW4gb2JqZWN0IHRvIGJlIHJlZnJlc2hlZCBjb250YWluaW5nIGFjY2Vzc190b2tlbiwgcmVmcmVzaF90b2tlbiAuLi5cblx0ICogQHJldHVybnMge1Byb21pc2U8b2JqZWN0fHZvaWQ+fSBSZXNwb25zZSBvYmplY3QgZnJvbSByZWZyZXNoaW5nIHRoZSB0b2tlblxuXHQgKi9cblx0cmVmcmVzaFRva2VuKHRva2VuKSB7XG5cdFx0cmV0dXJuIHN1cGVyLnJlZnJlc2hUb2tlbih0b2tlbik7XG5cdH1cbn1cblxuZXhwb3J0IGRlZmF1bHQgT0F1dGhDb250ZXh0OyJdfQ==
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const query_string_1 = __importDefault(require("query-string"));
+const Errors_1 = require("./errors/Errors");
+const StorageHandler_1 = __importDefault(require("./helpers/StorageHandler"));
+const config_1 = require("./config");
+const apiRequest_1 = __importDefault(require("./helpers/apiRequest"));
+const utils_1 = __importDefault(require("./helpers/utils"));
+const enums_1 = require("./helpers/enums");
+class OAuthContext {
+    constructor(config) {
+        if (!config) {
+            throw new Errors_1.InvalidOAuthConfigurationError('Config parameter is required');
+        }
+        if (!config.flowType) {
+            throw new Errors_1.InvalidOAuthConfigurationError('flowType property is required in config settings');
+        }
+        if (!config.clientId) {
+            throw new Errors_1.InvalidOAuthConfigurationError('clientId property is required in config settings');
+        }
+        if (!(config.tenantUrl && utils_1.default.isUrl(config.tenantUrl))) {
+            throw new Errors_1.InvalidOAuthConfigurationError('a valid tenantUrl property is required in config settings');
+        }
+        if (!config.scope) {
+            throw new Errors_1.InvalidOAuthConfigurationError('scope property is required in config settings');
+        }
+        switch (config.flowType) {
+            case enums_1.EFlowTypes.ImplicitFlow:
+                return new ImplicitFlow(config);
+            case enums_1.EFlowTypes.AuthoriztionCodeFlow:
+                return new AuthorizationCodeFlow(config);
+            case enums_1.EFlowTypes.DeviceFlow:
+                return new DeviceFlow(config);
+            case enums_1.EFlowTypes.ROPCFlow:
+                return new ROPCFlow(config);
+            default:
+                const flowTypes = Object.values(enums_1.EFlowTypes).map((value) => ` "${value}"`);
+                throw new Errors_1.InvalidOAuthConfigurationError(`"${config.flowType}" flowType not valid. Valid flow types are: ${flowTypes}`);
+        }
+    }
+}
+class FlowAbstract {
+    constructor(config) {
+        if (new.target === FlowAbstract) {
+            throw new TypeError('Cannot instantiate FlowAbstract directly');
+        }
+        this.config = config;
+    }
+    isValidConfig() {
+        throw new Errors_1.AbstractMethodNotImplementedError();
+    }
+    logout(path, token) {
+        if (arguments.length === 2 && !this.isToken(token)) {
+            return Promise.reject(new Errors_1.VerifyError(config_1.AppConfig.TOKEN_ERROR, 'Token parameter is not a valid token'));
+        }
+        if (arguments.length === 1 && !this.isToken(path)) {
+            return Promise.reject(new Errors_1.VerifyError(config_1.AppConfig.TOKEN_ERROR, 'Token parameter is not a valid token'));
+        }
+        try {
+            return this.revokeToken(token, enums_1.ETokens.AccessToken);
+        }
+        catch (error) {
+            return Promise.reject(error);
+        }
+    }
+    getConfig() {
+        return this.config;
+    }
+    isAuthenticated(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const payload = yield this.introspectToken(token);
+                return this.config.flowType === enums_1.EFlowTypes.ImplicitFlow ? payload.active : payload.response.active;
+            }
+            catch (error) {
+                return Promise.reject(error);
+            }
+        });
+    }
+    introspectToken(token) {
+        if (!this.isToken(token)) {
+            return Promise.reject(new Errors_1.VerifyError(config_1.AppConfig.TOKEN_ERROR, 'Token parameter is not a valid token'));
+        }
+        const path = `${this.config.tenantUrl}/v1.0/endpoint/default/introspect`;
+        const data = {
+            client_id: this.config.clientId,
+            client_secret: this.config.clientSecret,
+            token: token.access_token
+        };
+        const encodedData = query_string_1.default.stringify(data);
+        const options = {
+            method: enums_1.EMethods.POST,
+            url: path,
+            contentType: 'application/x-www-form-urlencoded',
+            data: encodedData
+        };
+        return this.handleResponse(options, token);
+    }
+    userInfo(token) {
+        if (!this.isToken(token)) {
+            return Promise.reject(new Errors_1.VerifyError(config_1.AppConfig.TOKEN_ERROR, 'Token parameter is not a valid token'));
+        }
+        const path = `${this.config.tenantUrl}/v1.0/endpoint/default/userinfo`;
+        const options = {
+            method: enums_1.EMethods.POST,
+            url: path,
+            contentType: 'application/x-www-form-urlencoded',
+            data: query_string_1.default.stringify({
+                access_token: token.access_token
+            })
+        };
+        return this.handleResponse(options, token);
+    }
+    isToken(token) {
+        return !(!token || !token.access_token);
+    }
+    revokeToken(token, tokenType) {
+        const path = `${this.config.tenantUrl}/v1.0/endpoint/default/revoke`;
+        if (arguments.length < 2) {
+            throw new Errors_1.VerifyError(config_1.AppConfig.OAUTH_CONTEXT_API_ERROR, 'revokeToken(token, tokenType), 2 parameters are required ' + arguments.length + ' were given');
+        }
+        if (!token) {
+            throw new Errors_1.VerifyError(config_1.AppConfig.OAUTH_CONTEXT_API_ERROR, 'token cannot be null');
+        }
+        if (!(tokenType === enums_1.ETokens.AccessToken || tokenType === enums_1.ETokens.RefreshToken)) {
+            throw new Errors_1.VerifyError(config_1.AppConfig.OAUTH_CONTEXT_API_ERROR, `Parameter: ${tokenType} is invalid.\n Supported values are "access_token" or "refresh_token`);
+        }
+        const expireToken = tokenType === enums_1.ETokens.AccessToken ? token.access_token : token.refresh_token;
+        const data = {
+            client_id: this.config.clientId,
+            client_secret: this.config.clientSecret,
+            token: expireToken
+        };
+        const encodedData = query_string_1.default.stringify(data);
+        const options = {
+            method: enums_1.EMethods.POST,
+            contentType: 'application/x-www-form-urlencoded',
+            url: path,
+            data: encodedData
+        };
+        return this.handleResponse(options, token);
+    }
+    _parseUrlHash(hash) {
+        return query_string_1.default.parse(hash);
+    }
+    getToken(params) {
+        const { data, path } = params;
+        if (!((data && typeof data === 'object' && data.constructor === Object) || ((data && typeof data === 'string' && data.includes('?'))))) {
+            throw new Errors_1.VerifyError(config_1.AppConfig.OAUTH_CONTEXT_API_ERROR, 'getToken(params), Params must contain data object or query string');
+        }
+        data.client_id = this.config.clientId;
+        data.client_secret = this.config.clientSecret;
+        data.scope = this.config.scope;
+        let encodedData = query_string_1.default.stringify(data);
+        let options = {
+            method: enums_1.EMethods.POST,
+            url: path,
+            contentType: 'application/x-www-form-urlencoded',
+            data: encodedData
+        };
+        return apiRequest_1.default(options);
+    }
+    refreshToken(token) {
+        if (!token.hasOwnProperty(enums_1.ETokens.RefreshToken)) {
+            return Promise.reject(new Errors_1.VerifyError(config_1.AppConfig.OAUTH_CONTEXT_API_ERROR, 'token has no refresh_token property'));
+        }
+        const path = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
+        const data = {
+            refresh_token: token.refresh_token,
+            client_id: this.config.clientId,
+            client_secret: this.config.clientSecret,
+            grant_type: enums_1.ETokens.RefreshToken,
+            scope: this.config.scope
+        };
+        const encodedData = query_string_1.default.stringify(data);
+        const options = {
+            method: enums_1.EMethods.POST,
+            url: path,
+            contentType: 'application/x-www-form-urlencoded',
+            data: encodedData
+        };
+        return apiRequest_1.default(options);
+    }
+    _authorize(options) {
+        return this._buildUrl(options);
+    }
+    _buildUrl(options) {
+        return (options.tenantUrl +
+            '/oidc/endpoint/default/authorize?' +
+            query_string_1.default.stringify({
+                client_id: options.clientId,
+                redirect_uri: options.redirectUri,
+                scope: options.scope,
+                response_type: options.responseType,
+                state: utils_1.default.randomString(16),
+                nonce: utils_1.default.randomString(16)
+            }));
+    }
+    handleResponse(options, tokenObj) {
+        return __awaiter(this, arguments, void 0, function* () {
+            if (arguments.length < 2) {
+                return Promise.reject(new Errors_1.VerifyError(config_1.AppConfig.OAUTH_CONTEXT_API_ERROR, 'handleResponse(options, token), 2 parameters are required ' + arguments.length + ' were given'));
+            }
+            if (!this.isToken(tokenObj)) {
+                return Promise.reject(new Errors_1.VerifyError(config_1.AppConfig.TOKEN_ERROR, 'Token parameter is not a valid token'));
+            }
+            const token = tokenObj;
+            let payload = {
+                response: null,
+                token: {}
+            };
+            try {
+                const response = yield apiRequest_1.default(options, token.access_token);
+                payload.response = response;
+                if (this.config.flowType === enums_1.EFlowTypes.ImplicitFlow) {
+                    return Promise.resolve(response);
+                }
+                return Promise.resolve(payload);
+            }
+            catch (error) {
+                if (error.status === 401 && utils_1.default.isNode()) {
+                    if (!token.refresh_token) {
+                        return Promise.reject(new Errors_1.VerifyError(config_1.AppConfig.OAUTH_CONTEXT_API_ERROR, 'access_token expired and refresh_token not found'));
+                    }
+                    let newToken = yield this.refreshToken(token);
+                    let originalRequest = yield apiRequest_1.default(options, newToken.access_token);
+                    payload = {
+                        response: originalRequest,
+                        token: newToken
+                    };
+                    return Promise.resolve(payload);
+                }
+                return Promise.reject(error);
+            }
+        });
+    }
+}
+class ImplicitFlow extends FlowAbstract {
+    constructor(config) {
+        super(config);
+        this.isValidConfig();
+        this.session = false;
+        this.storageHandler = StorageHandler_1.default(config.storageType);
+    }
+    isValidConfig() {
+        if (utils_1.default.isNode()) {
+            throw new Errors_1.InvalidOAuthConfigurationError('Implicit flow is not supported in Node');
+        }
+        if (!this.config.storageType) {
+            throw new Errors_1.InvalidOAuthConfigurationError('storageType property is required in config settings for Implicit flow');
+        }
+        if (!(this.config.redirectUri && utils_1.default.isUrl(this.config.redirectUri))) {
+            throw new Errors_1.InvalidOAuthConfigurationError('a valid redirectUri property is required in config settings');
+        }
+        return true;
+    }
+    refreshToken() {
+        throw new Errors_1.NotAvailableError();
+    }
+    fetchToken() {
+        try {
+            return JSON.parse(this.storageHandler.getStorage('token'));
+        }
+        catch (error) {
+            return error;
+        }
+    }
+    _setSession() {
+        const expiresAt = JSON.parse(this.storageHandler.getStorage('token')).expires_in;
+        const clockSkew = config_1.AppConfig.DEFAULT_CLOCK_SKEW;
+        const delay = expiresAt - (Date.now() - clockSkew);
+        if (delay > 0) {
+            setTimeout(() => {
+                this.session = false;
+                this.storageHandler.clearStorage();
+            }, delay);
+        }
+    }
+    login() {
+        return this._authorize(this.config);
+    }
+    logout(path) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const accessToken = this.fetchToken();
+            yield this.revokeToken(accessToken, enums_1.ETokens.AccessToken);
+            yield this.storageHandler.clearStorage();
+            yield window.location.replace(path || '/');
+        });
+    }
+    handleCallback() {
+        let urlObj;
+        const errorCheck = RegExp('#error');
+        const hash = window.location.hash;
+        urlObj = typeof hash === 'object' ? hash : this._parseUrlHash(hash);
+        return new Promise((reject) => {
+            if (errorCheck.test(hash)) {
+                reject(urlObj);
+            }
+            else {
+                this.storageHandler.setStorage(urlObj);
+                this._setSession();
+                window.location.hash = '';
+            }
+        });
+    }
+}
+class AuthorizationCodeFlow extends FlowAbstract {
+    constructor(config) {
+        super(config);
+        this.isValidConfig();
+        this.config.flowType = enums_1.EFlowTypes.AuthoriztionCodeFlow;
+    }
+    isValidConfig() {
+        if (!(this.config.redirectUri && utils_1.default.isUrl(this.config.redirectUri))) {
+            throw new Errors_1.InvalidOAuthConfigurationError('a valid redirectUri property is required in config settings');
+        }
+        if (!this.config.responseType) {
+            throw new Errors_1.InvalidOAuthConfigurationError('responseType property is required in config settings');
+        }
+        return true;
+    }
+    getToken(params) {
+        let query = '';
+        if (typeof params === 'string' && params.includes('?')) {
+            query = params.substring(params.indexOf('?'));
+        }
+        if (!params) {
+            throw new Errors_1.VerifyError(config_1.AppConfig.OAUTH_CONTEXT_CONFIG_SETTINGS_ERROR, 'getToken(params), Params are required');
+        }
+        if (!(params && typeof params === 'string' && params.includes('?'))) {
+            throw new Errors_1.VerifyError(config_1.AppConfig.OAUTH_CONTEXT_API_ERROR, 'getToken(params), Params must contain data object or query string');
+        }
+        const data = typeof params === 'object' ? params : query_string_1.default.parse(query);
+        const path = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
+        data.redirect_uri = this.config.redirectUri;
+        data.grant_type = enums_1.EGrantTypes.Authorization_Grant_Type;
+        data.client_id = this.config.clientId;
+        data.client_secret = this.config.clientSecret;
+        data.scope = this.config.scope;
+        const encodedData = query_string_1.default.stringify(data);
+        const options = {
+            method: enums_1.EMethods.POST,
+            url: path,
+            contentType: 'application/x-www-form-urlencoded',
+            data: encodedData
+        };
+        return apiRequest_1.default(options);
+    }
+    authenticate() {
+        return new Promise((resolve) => {
+            resolve(this._authorize(this.config));
+        });
+    }
+    refreshToken(token) {
+        return super.refreshToken(token);
+    }
+}
+class DeviceFlow extends FlowAbstract {
+    constructor(config) {
+        super(config);
+        this.isValidConfig();
+        this.POLLING_TIME = 5000;
+        this.config.grantType = enums_1.EGrantTypes.Device;
+    }
+    isValidConfig() {
+        if (!this.config.clientSecret) {
+            throw new Errors_1.InvalidOAuthConfigurationError('clientSecret property is required in config settings for  Code flow');
+        }
+        return true;
+    }
+    authorize() {
+        const authServerPath = `${this.config.tenantUrl}/oidc/endpoint/default/device_authorization`;
+        const data = {
+            client_id: this.config.clientId,
+            scope: this.config.scope
+        };
+        const encodedData = query_string_1.default.stringify(data);
+        const options = {
+            method: 'POST',
+            url: authServerPath,
+            contentType: 'application/x-www-form-urlencoded',
+            data: encodedData
+        };
+        return apiRequest_1.default(options);
+    }
+    pollTokenApi(deviceCode, duration = this.POLLING_TIME) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (duration < this.POLLING_TIME) {
+                return Promise.reject(new Errors_1.DeveloperError('The device made an attempt within [5] seconds. This request will not be processed.'));
+            }
+            if (!deviceCode) {
+                return Promise.reject(new Errors_1.DeveloperError('No device code value provided.'));
+            }
+            const path = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
+            let response;
+            let data = {
+                client_id: this.config.clientId,
+                client_secret: this.config.clientSecret,
+                grant_type: enums_1.EGrantTypes.Device,
+                device_code: deviceCode
+            };
+            let error = {};
+            while (error.messageId !== enums_1.ETokens.ExpiredToken && !response) {
+                try {
+                    response = yield this.getToken({ data, path });
+                    break;
+                }
+                catch (e) {
+                    error = e;
+                }
+                yield utils_1.default.sleep(duration);
+            }
+            if (response) {
+                return Promise.resolve();
+            }
+            return Promise.reject(error.messageDescription);
+        });
+    }
+    refreshToken(token) {
+        return super.refreshToken(token);
+    }
+}
+class ROPCFlow extends FlowAbstract {
+    constructor(config) {
+        super(config);
+        this.isValidConfig();
+    }
+    isValidConfig() {
+        return true;
+    }
+    login(username, password) {
+        if (!username || !password) {
+            return Promise.reject(new Errors_1.DeveloperError('username and password params are required'));
+        }
+        const path = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
+        const data = {
+            client_id: this.config.clientId,
+            client_secret: this.config.clientSecret,
+            username: username,
+            password: password,
+            grant_type: enums_1.EGrantTypes.ROPC,
+            scope: this.config.scope
+        };
+        const encodedData = query_string_1.default.stringify(data);
+        const options = {
+            method: enums_1.EMethods.POST,
+            url: path,
+            contentType: 'application/x-www-form-urlencoded',
+            data: encodedData
+        };
+        return apiRequest_1.default(options);
+    }
+    refreshToken(token) {
+        return super.refreshToken(token);
+    }
+}
+exports.default = OAuthContext;
+//# sourceMappingURL=OAuthContext.js.map

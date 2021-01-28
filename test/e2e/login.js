@@ -27,9 +27,6 @@ let config = {
     registrationProfileId: process.env.REGISTRATION_PROFILE_ID
 };
 
-
-console.log(config);
-
 let authClient = new OAuthContext(config);
 let authCtx = new AuthenticatorContext(authClient);
 

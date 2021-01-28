@@ -1,7 +1,7 @@
 # IBM Security Verify SDK for JavaScript
-![Type](https://img.shields.io/badge/Type-JavaScript-blue.svg)
-![npm](https://img.shields.io/npm/v/ibm-verify-sdk.svg?style=plastic)
-![NPM](https://img.shields.io/npm/l/ibm-verify-sdk.svg?colorB=blue&style=plastic)
+![Type](https://img.shields.io/badge/Type-Typescript-blue.svg?style=flat-square)
+![npm](https://img.shields.io/npm/v/ibm-verify-sdk.svg?style=flat-square)
+![NPM](https://img.shields.io/npm/l/ibm-verify-sdk.svg?colorB=blue&style=flat-square)
 
 * [Getting Started](#getting-started)
 * [Configuration Settings](#configuration-settings)
@@ -60,7 +60,7 @@ The OAuthContext object represents the interactions between the relying party an
 # License
 The MIT License (MIT)
 
-Copyright (c) 2019, 2020 IBM
+Copyright (c) 2019, 2021 - IBM Corp.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

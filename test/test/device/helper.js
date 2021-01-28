@@ -16,7 +16,7 @@ module.exports.config = {
 };
 
 // load saved token from `npm run login`
-if (process.env.REAL_TENANT === 'true') {
+if (process.env.REAL_TENANT === true) {
     module.exports.token = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../.token')));
 } else {
     // fake token
