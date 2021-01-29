@@ -1,7 +1,98 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;/**
- * @function StorageHandler
- * StorageHandler functionality to handle browser storage with 'Implicit flow'
- * @param {string} storageType Set via config obj options: 'sessionStorage, localStorage, cookies'
- * @returns get and set type methods for handling storage
- */function StorageHandler(a){var b=this.setStorageMethod(a);return{setStorage:function(a){try{var c={};if(a.id_token&&(c.id_token=a.id_token),a.access_token){var d=JSON.stringify(1e3*a.expires_in+new Date().getTime());c.access_token=a.access_token,c.expires_in=d}b.setItem("token",JSON.stringify(c))}catch(a){throw new Error("Unable to set browser storage "+a)}},getStorage:function(a){try{return b.getItem(a)}catch(a){throw new Error("Unable to get storage "+a)}},clearStorage:function(){return b.removeItem("token")}}}StorageHandler.prototype.setStorageMethod=function(a){switch(a){case localStorage:if(!this._supportsLocalStorage())break;return localStorage;case sessionStorage:if(!this._supportsSessionStorage())break;return sessionStorage;default:}throw new Error("Unable to set storage, check your config settings. valid options [sessionStorage, localStorage]")},StorageHandler.prototype._supportsSessionStorage=function(){try{return!!window.sessionStorage&&(window.sessionStorage.setItem("storageTest","storageValue"),"storageValue"===window.sessionStorage.getItem("storageTest"))&&(window.sessionStorage.removeItem("storageTest"),!window.sessionStorage.getItem("storageTest"))}catch(a){return!1}},StorageHandler.prototype._supportsLocalStorage=function(){try{return!!window.localStorage&&(window.localStorage.setItem("storageTest","storageValue"),"storageValue"===window.localStorage.getItem("storageTest"))&&(window.localStorage.removeItem("storageTest"),!window.localStorage.getItem("storageTest"))}catch(a){return!1}};var _default=StorageHandler;exports.default=_default;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL2xpYi9oZWxwZXJzL1N0b3JhZ2VIYW5kbGVyLmpzIl0sIm5hbWVzIjpbIlN0b3JhZ2VIYW5kbGVyIiwic3RvcmFnZVR5cGUiLCJzdG9yYWdlIiwic2V0U3RvcmFnZU1ldGhvZCIsInNldFN0b3JhZ2UiLCJvYmoiLCJ0b2tlbiIsImlkX3Rva2VuIiwiYWNjZXNzX3Rva2VuIiwiZXhwaXJlc0luIiwiSlNPTiIsInN0cmluZ2lmeSIsImV4cGlyZXNfaW4iLCJEYXRlIiwiZ2V0VGltZSIsInNldEl0ZW0iLCJlcnJvciIsIkVycm9yIiwiZ2V0U3RvcmFnZSIsIm9wdCIsImdldEl0ZW0iLCJjbGVhclN0b3JhZ2UiLCJyZW1vdmVJdGVtIiwicHJvdG90eXBlIiwibG9jYWxTdG9yYWdlIiwiX3N1cHBvcnRzTG9jYWxTdG9yYWdlIiwic2Vzc2lvblN0b3JhZ2UiLCJfc3VwcG9ydHNTZXNzaW9uU3RvcmFnZSIsIndpbmRvdyJdLCJtYXBwaW5ncyI6IjJGQUFBOzs7OztHQU9BLFFBQVNBLENBQUFBLGNBQVQsQ0FBd0JDLENBQXhCLENBQXFDLENBQ25DLEdBQUlDLENBQUFBLENBQU8sQ0FBRyxLQUFLQyxnQkFBTCxDQUFzQkYsQ0FBdEIsQ0FBZCxDQW1DQSxNQUFPLENBQ0xHLFVBQVUsQ0FsQ1osU0FBb0JDLENBQXBCLENBQXlCLENBQ3ZCLEdBQUksQ0FHRixHQUFJQyxDQUFBQSxDQUFLLENBQUcsRUFBWixDQUtBLEdBSElELENBQUcsQ0FBQ0UsUUFHUixHQUZFRCxDQUFLLENBQUNDLFFBQU4sQ0FBaUJGLENBQUcsQ0FBQ0UsUUFFdkIsRUFBSUYsQ0FBRyxDQUFDRyxZQUFSLENBQXFCLENBQ25CLEdBQUlDLENBQUFBLENBQVMsQ0FBR0MsSUFBSSxDQUFDQyxTQUFMLENBQWdDLEdBQWpCLENBQUFOLENBQUcsQ0FBQ08sVUFBSixDQUF3QixHQUFJQyxDQUFBQSxJQUFKLEdBQVdDLE9BQVgsRUFBdkMsQ0FBaEIsQ0FDQVIsQ0FBSyxDQUFDRSxZQUFOLENBQXFCSCxDQUFHLENBQUNHLFlBRk4sQ0FHbkJGLENBQUssQ0FBQ00sVUFBTixDQUFtQkgsQ0FDcEIsQ0FFRFAsQ0FBTyxDQUFDYSxPQUFSLENBQWdCLE9BQWhCLENBQXlCTCxJQUFJLENBQUNDLFNBQUwsQ0FBZUwsQ0FBZixDQUF6QixDQUNELENBQUMsTUFBT1UsQ0FBUCxDQUFjLENBQ2QsS0FBTSxJQUFJQyxDQUFBQSxLQUFKLENBQVUsaUNBQW1DRCxDQUE3QyxDQUNQLENBQ0YsQ0FjTSxDQUVMRSxVQUFVLENBZFosU0FBb0JDLENBQXBCLENBQXlCLENBQ3ZCLEdBQUksQ0FDRixNQUFPakIsQ0FBQUEsQ0FBTyxDQUFDa0IsT0FBUixDQUFnQkQsQ0FBaEIsQ0FDUixDQUFDLE1BQU9ILENBQVAsQ0FBYyxDQUNkLEtBQU0sSUFBSUMsQ0FBQUEsS0FBSixDQUFVLHlCQUEyQkQsQ0FBckMsQ0FDUCxDQUNGLENBTU0sQ0FHTEssWUFBWSxDQVBkLFVBQXdCLENBRXRCLE1BQU9uQixDQUFBQSxDQUFPLENBQUNvQixVQUFSLENBQW1CLE9BQW5CLENBQ1IsQ0FDTSxDQUtSLENBQ0R0QixjQUFjLENBQUN1QixTQUFmLENBQXlCcEIsZ0JBQXpCLENBQTRDLFNBQVNGLENBQVQsQ0FBc0IsQ0FDaEUsT0FBUUEsQ0FBUixFQUNFLElBQUt1QixDQUFBQSxZQUFMLENBQ0UsR0FBSSxDQUFDLEtBQUtDLHFCQUFMLEVBQUwsQ0FFRSxNQUVGLE1BQU9ELENBQUFBLFlBQVAsQ0FDRixJQUFLRSxDQUFBQSxjQUFMLENBQ0UsR0FBSSxDQUFDLEtBQUtDLHVCQUFMLEVBQUwsQ0FFRSxNQUVGLE1BQU9ELENBQUFBLGNBQVAsQ0FFRixRQWRGLENBaUJBLEtBQU0sSUFBSVQsQ0FBQUEsS0FBSixDQUNKLGlHQURJLENBR1AsQyxDQU1EakIsY0FBYyxDQUFDdUIsU0FBZixDQUF5QkksdUJBQXpCLENBQW1ELFVBQVcsQ0FDNUQsR0FBSSxTQUNHQyxNQUFNLENBQUNGLGNBRFYsR0FJRkUsTUFBTSxDQUFDRixjQUFQLENBQXNCWCxPQUF0QixDQUE4QixhQUE5QixDQUE2QyxjQUE3QyxDQUpFLENBS21ELGNBQWpELEdBQUFhLE1BQU0sQ0FBQ0YsY0FBUCxDQUFzQk4sT0FBdEIsQ0FBOEIsYUFBOUIsQ0FMRixJQVFGUSxNQUFNLENBQUNGLGNBQVAsQ0FBc0JKLFVBQXRCLENBQWlDLGFBQWpDLENBUkUsRUFTRU0sTUFBTSxDQUFDRixjQUFQLENBQXNCTixPQUF0QixDQUE4QixhQUE5QixDQVRGLENBYUgsQ0FBQyxNQUFPSixDQUFQLENBQWMsQ0FDZCxRQUNELENBQ0YsQyxDQUtEaEIsY0FBYyxDQUFDdUIsU0FBZixDQUF5QkUscUJBQXpCLENBQWlELFVBQVcsQ0FDMUQsR0FBSSxTQUNHRyxNQUFNLENBQUNKLFlBRFYsR0FJRkksTUFBTSxDQUFDSixZQUFQLENBQW9CVCxPQUFwQixDQUE0QixhQUE1QixDQUEyQyxjQUEzQyxDQUpFLENBS2lELGNBQS9DLEdBQUFhLE1BQU0sQ0FBQ0osWUFBUCxDQUFvQkosT0FBcEIsQ0FBNEIsYUFBNUIsQ0FMRixJQVFGUSxNQUFNLENBQUNKLFlBQVAsQ0FBb0JGLFVBQXBCLENBQStCLGFBQS9CLENBUkUsRUFTRU0sTUFBTSxDQUFDSixZQUFQLENBQW9CSixPQUFwQixDQUE0QixhQUE1QixDQVRGLENBYUgsQ0FBQyxNQUFPSixDQUFQLENBQWMsQ0FDZCxRQUNELENBQ0YsQyxjQUVjaEIsYyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGZ1bmN0aW9uIFN0b3JhZ2VIYW5kbGVyXG4gKiBTdG9yYWdlSGFuZGxlciBmdW5jdGlvbmFsaXR5IHRvIGhhbmRsZSBicm93c2VyIHN0b3JhZ2Ugd2l0aCAnSW1wbGljaXQgZmxvdydcbiAqIEBwYXJhbSB7c3RyaW5nfSBzdG9yYWdlVHlwZSBTZXQgdmlhIGNvbmZpZyBvYmogb3B0aW9uczogJ3Nlc3Npb25TdG9yYWdlLCBsb2NhbFN0b3JhZ2UsIGNvb2tpZXMnXG4gKiBAcmV0dXJucyBnZXQgYW5kIHNldCB0eXBlIG1ldGhvZHMgZm9yIGhhbmRsaW5nIHN0b3JhZ2VcbiAqL1xuXG5mdW5jdGlvbiBTdG9yYWdlSGFuZGxlcihzdG9yYWdlVHlwZSkge1xuICBsZXQgc3RvcmFnZSA9IHRoaXMuc2V0U3RvcmFnZU1ldGhvZChzdG9yYWdlVHlwZSk7XG5cbiAgZnVuY3Rpb24gc2V0U3RvcmFnZShvYmopIHtcbiAgICB0cnkge1xuICAgICAgY29uc29sZS5sb2coJ1NFVFRJTkcgU1RPUkFHRSBJVEVNUzogJywgb2JqKTtcblxuICAgICAgbGV0IHRva2VuID0ge307XG5cbiAgICAgIGlmIChvYmouaWRfdG9rZW4pe1xuICAgICAgICB0b2tlbi5pZF90b2tlbiA9IG9iai5pZF90b2tlbjtcbiAgICAgIH1cbiAgICAgIGlmIChvYmouYWNjZXNzX3Rva2VuKXtcbiAgICAgICAgbGV0IGV4cGlyZXNJbiA9IEpTT04uc3RyaW5naWZ5KG9iai5leHBpcmVzX2luICogMTAwMCArIG5ldyBEYXRlKCkuZ2V0VGltZSgpKTtcbiAgICAgICAgdG9rZW4uYWNjZXNzX3Rva2VuID0gb2JqLmFjY2Vzc190b2tlbjtcbiAgICAgICAgdG9rZW4uZXhwaXJlc19pbiA9IGV4cGlyZXNJbjtcbiAgICAgIH1cblxuICAgICAgc3RvcmFnZS5zZXRJdGVtKCd0b2tlbicsIEpTT04uc3RyaW5naWZ5KHRva2VuKSk7XG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgIHRocm93IG5ldyBFcnJvcignVW5hYmxlIHRvIHNldCBicm93c2VyIHN0b3JhZ2UgJyArIGVycm9yKTtcbiAgICB9XG4gIH1cblxuICBmdW5jdGlvbiBnZXRTdG9yYWdlKG9wdCkge1xuICAgIHRyeSB7XG4gICAgICByZXR1cm4gc3RvcmFnZS5nZXRJdGVtKG9wdCk7XG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgIHRocm93IG5ldyBFcnJvcignVW5hYmxlIHRvIGdldCBzdG9yYWdlICcgKyBlcnJvcik7XG4gICAgfVxuICB9XG5cbiAgZnVuY3Rpb24gY2xlYXJTdG9yYWdlKCkge1xuICAgIGNvbnNvbGUubG9nKCdCcm93c2VyIHN0b3JhZ2UgY2xlYXJlZCcpO1xuICAgIHJldHVybiBzdG9yYWdlLnJlbW92ZUl0ZW0oJ3Rva2VuJyk7XG4gIH1cbiAgcmV0dXJuIHtcbiAgICBzZXRTdG9yYWdlOiBzZXRTdG9yYWdlLFxuICAgIGdldFN0b3JhZ2U6IGdldFN0b3JhZ2UsXG4gICAgY2xlYXJTdG9yYWdlOiBjbGVhclN0b3JhZ2VcbiAgfTtcbn1cblN0b3JhZ2VIYW5kbGVyLnByb3RvdHlwZS5zZXRTdG9yYWdlTWV0aG9kID0gZnVuY3Rpb24oc3RvcmFnZVR5cGUpIHtcbiAgc3dpdGNoIChzdG9yYWdlVHlwZSkge1xuICAgIGNhc2UgbG9jYWxTdG9yYWdlOlxuICAgICAgaWYgKCF0aGlzLl9zdXBwb3J0c0xvY2FsU3RvcmFnZSgpKSB7XG4gICAgICAgIGNvbnNvbGUubG9nKFwiQnJvd3NlciBkb2Vzbid0IHN1cHBvcnQgbG9jYWxTdG9yYWdlXCIpO1xuICAgICAgICBicmVhaztcbiAgICAgIH1cbiAgICAgIHJldHVybiBsb2NhbFN0b3JhZ2U7XG4gICAgY2FzZSBzZXNzaW9uU3RvcmFnZTpcbiAgICAgIGlmICghdGhpcy5fc3VwcG9ydHNTZXNzaW9uU3RvcmFnZSgpKSB7XG4gICAgICAgIGNvbnNvbGUubG9nKFwiQnJvd3NlciBkb2Vzbid0IHN1cHBvcnQgc2Vzc2lvblN0b3JhZ2VcIik7XG4gICAgICAgIGJyZWFrO1xuICAgICAgfVxuICAgICAgcmV0dXJuIHNlc3Npb25TdG9yYWdlO1xuXG4gICAgZGVmYXVsdDpcbiAgICAgIGNvbnNvbGUud2FybihgRXJyb3Igc2V0dGluZyBicm93c2VyIHN0b3JhZ2UgdXNpbmcgJHtzdG9yYWdlVHlwZX1gKTtcbiAgfVxuICB0aHJvdyBuZXcgRXJyb3IoXG4gICAgJ1VuYWJsZSB0byBzZXQgc3RvcmFnZSwgY2hlY2sgeW91ciBjb25maWcgc2V0dGluZ3MuIHZhbGlkIG9wdGlvbnMgW3Nlc3Npb25TdG9yYWdlLCBsb2NhbFN0b3JhZ2VdJ1xuICApO1xufTtcblxuLyoqXG4gKlxuICogUmV0dXJucyB0cnVlIG9yIGZhbHNlIGlmIGJyb3dzZXIgc3VwcG9ydHMgc2Vzc2lvblN0b3JhZ2VcbiAqL1xuU3RvcmFnZUhhbmRsZXIucHJvdG90eXBlLl9zdXBwb3J0c1Nlc3Npb25TdG9yYWdlID0gZnVuY3Rpb24oKSB7XG4gIHRyeSB7XG4gICAgaWYgKCF3aW5kb3cuc2Vzc2lvblN0b3JhZ2UpIHtcbiAgICAgIHJldHVybiBmYWxzZTtcbiAgICB9XG4gICAgd2luZG93LnNlc3Npb25TdG9yYWdlLnNldEl0ZW0oJ3N0b3JhZ2VUZXN0JywgJ3N0b3JhZ2VWYWx1ZScpO1xuICAgIGlmICh3aW5kb3cuc2Vzc2lvblN0b3JhZ2UuZ2V0SXRlbSgnc3RvcmFnZVRlc3QnKSAhPT0gJ3N0b3JhZ2VWYWx1ZScpIHtcbiAgICAgIHJldHVybiBmYWxzZTtcbiAgICB9XG4gICAgd2luZG93LnNlc3Npb25TdG9yYWdlLnJlbW92ZUl0ZW0oJ3N0b3JhZ2VUZXN0Jyk7XG4gICAgaWYgKHdpbmRvdy5zZXNzaW9uU3RvcmFnZS5nZXRJdGVtKCdzdG9yYWdlVGVzdCcpKSB7XG4gICAgICByZXR1cm4gZmFsc2U7XG4gICAgfVxuICAgIHJldHVybiB0cnVlO1xuICB9IGNhdGNoIChlcnJvcikge1xuICAgIHJldHVybiBmYWxzZTtcbiAgfVxufTtcbi8qKlxuICpcbiAqIFJldHVybnMgdHJ1ZSBvciBmYWxzZSBpZiBicm93c2VyIHN1cHBvcnRzIGxvY2FsU3RvcmFnZVxuICovXG5TdG9yYWdlSGFuZGxlci5wcm90b3R5cGUuX3N1cHBvcnRzTG9jYWxTdG9yYWdlID0gZnVuY3Rpb24oKSB7XG4gIHRyeSB7XG4gICAgaWYgKCF3aW5kb3cubG9jYWxTdG9yYWdlKSB7XG4gICAgICByZXR1cm4gZmFsc2U7XG4gICAgfVxuICAgIHdpbmRvdy5sb2NhbFN0b3JhZ2Uuc2V0SXRlbSgnc3RvcmFnZVRlc3QnLCAnc3RvcmFnZVZhbHVlJyk7XG4gICAgaWYgKHdpbmRvdy5sb2NhbFN0b3JhZ2UuZ2V0SXRlbSgnc3RvcmFnZVRlc3QnKSAhPT0gJ3N0b3JhZ2VWYWx1ZScpIHtcbiAgICAgIHJldHVybiBmYWxzZTtcbiAgICB9XG4gICAgd2luZG93LmxvY2FsU3RvcmFnZS5yZW1vdmVJdGVtKCdzdG9yYWdlVGVzdCcpO1xuICAgIGlmICh3aW5kb3cubG9jYWxTdG9yYWdlLmdldEl0ZW0oJ3N0b3JhZ2VUZXN0JykpIHtcbiAgICAgIHJldHVybiBmYWxzZTtcbiAgICB9XG4gICAgcmV0dXJuIHRydWU7XG4gIH0gY2F0Y2ggKGVycm9yKSB7XG4gICAgcmV0dXJuIGZhbHNlO1xuICB9XG59O1xuXG5leHBvcnQgZGVmYXVsdCBTdG9yYWdlSGFuZGxlcjtcbiJdfQ==
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+function StorageHandler(storageType) {
+    let storage = setStorageMethod(storageType);
+    function setStorage(obj) {
+        try {
+            let token = {};
+            if (obj.id_token) {
+                token.id_token = obj.id_token;
+            }
+            if (obj.access_token) {
+                let expiresIn = JSON.stringify(obj.expires_in * 1000 + new Date().getTime());
+                token.access_token = obj.access_token;
+                token.expires_in = expiresIn;
+            }
+            storage.setItem('token', JSON.stringify(token));
+        }
+        catch (error) {
+            throw new Error('Unable to set browser storage ' + error);
+        }
+    }
+    function getStorage(opt) {
+        try {
+            return storage.getItem(opt);
+        }
+        catch (error) {
+            throw new Error('Unable to get storage ' + error);
+        }
+    }
+    function clearStorage() {
+        console.log('Browser storage cleared');
+        return storage.removeItem('token');
+    }
+    return {
+        setStorage: setStorage,
+        getStorage: getStorage,
+        clearStorage: clearStorage
+    };
+}
+const setStorageMethod = (storageType) => {
+    switch (storageType) {
+        case 'localStorage':
+            if (!supportsLocalStorage()) {
+                console.log("Browser doesn't support localStorage");
+                break;
+            }
+            return localStorage;
+        case 'sessionStorage':
+            if (!supportsSessionStorage()) {
+                console.log("Browser doesn't support sessionStorage");
+                break;
+            }
+            return sessionStorage;
+        default:
+            console.warn(`Error setting browser storage using ${storageType}`);
+    }
+    throw new Error('Unable to set storage, check your config settings. valid options [sessionStorage, localStorage]');
+};
+const supportsSessionStorage = () => {
+    try {
+        if (!window.sessionStorage) {
+            return false;
+        }
+        window.sessionStorage.setItem('storageTest', 'storageValue');
+        if (window.sessionStorage.getItem('storageTest') !== 'storageValue') {
+            return false;
+        }
+        window.sessionStorage.removeItem('storageTest');
+        if (window.sessionStorage.getItem('storageTest')) {
+            return false;
+        }
+        return true;
+    }
+    catch (error) {
+        return false;
+    }
+};
+const supportsLocalStorage = () => {
+    try {
+        if (!window.localStorage) {
+            return false;
+        }
+        window.localStorage.setItem('storageTest', 'storageValue');
+        if (window.localStorage.getItem('storageTest') !== 'storageValue') {
+            return false;
+        }
+        window.localStorage.removeItem('storageTest');
+        if (window.localStorage.getItem('storageTest')) {
+            return false;
+        }
+        return true;
+    }
+    catch (error) {
+        return false;
+    }
+};
+exports.default = StorageHandler;
+//# sourceMappingURL=StorageHandler.js.map

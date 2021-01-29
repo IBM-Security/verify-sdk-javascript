@@ -1,14 +1,43 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var utils={/**
-	 * return random string with a given length
-	 */randomString:function randomString(a){for(var b="0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~",d="",e=0,f=b.length;e<a;++e)d+=b[Math.floor(Math.random()*f)];return d},/**
-	 * return readable date string of the given value
-	 */dateString:function dateString(a){var b=new Date(Date.parse(a)),c=b.toDateString();return c},/**
-	 * return boolean to detect if we're in a node env or browser based.
-	 */isNode:function(){var a;try{return a="[object process]"===Object.prototype.toString.call(global.process)}catch(b){return a=!1}},/**
-	 * return boolean to detect if the object has an accessToken
-	 */isToken:function isToken(a){return!!(a&&a.access_token)},/**
-	 * sleeps execution for the given duration
-	 */sleep:function sleep(a){return new Promise(function(b){setTimeout(b,a)})},/*
-	 * returns whether or not the string begins with 'http(s)://'
-	 */isUrl:function isUrl(a){var b=a.startsWith("https://")||a.startsWith("http://");return b}},_default=utils;exports.default=_default;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL2xpYi9oZWxwZXJzL3V0aWxzLmpzIl0sIm5hbWVzIjpbInV0aWxzIiwicmFuZG9tU3RyaW5nIiwibGVuZ3RoIiwicmFuZG9tQ2hhcnNldCIsInJhbmRvbSIsImMiLCJjbCIsIk1hdGgiLCJmbG9vciIsImRhdGVTdHJpbmciLCJ2YWx1ZSIsImRhdGVPYmplY3QiLCJEYXRlIiwicGFyc2UiLCJkYXRlUmVhZGFibGUiLCJ0b0RhdGVTdHJpbmciLCJpc05vZGUiLCJPYmplY3QiLCJwcm90b3R5cGUiLCJ0b1N0cmluZyIsImNhbGwiLCJnbG9iYWwiLCJwcm9jZXNzIiwiZSIsImlzVG9rZW4iLCJ0b2tlbiIsImFjY2Vzc190b2tlbiIsInNsZWVwIiwiZHVyYXRpb24iLCJQcm9taXNlIiwicmVzb2x2ZSIsInNldFRpbWVvdXQiLCJpc1VybCIsInVybCIsInZhbGlkIiwic3RhcnRzV2l0aCJdLCJtYXBwaW5ncyI6IjhGQUFNQSxDQUFBQSxLQUFLLENBQUcsQ0FDYjs7SUFHQUMsWUFBWSxDQUFFLHNCQUFTQyxDQUFULENBQWlCLENBRzlCLE9BRklDLENBQUFBLENBQWEsQ0FBRyxtRUFFcEIsQ0FESUMsQ0FBTSxDQUFHLEVBQ2IsQ0FBU0MsQ0FBQyxDQUFHLENBQWIsQ0FBZ0JDLENBQUUsQ0FBR0gsQ0FBYSxDQUFDRCxNQUFuQyxDQUEyQ0csQ0FBQyxDQUFHSCxDQUEvQyxDQUF1RCxFQUFFRyxDQUF6RCxDQUNDRCxDQUFNLEVBQUlELENBQWEsQ0FBQ0ksSUFBSSxDQUFDQyxLQUFMLENBQVdELElBQUksQ0FBQ0gsTUFBTCxHQUFnQkUsQ0FBM0IsQ0FBRCxDQUF2QixDQUVELE1BQU9GLENBQUFBLENBQ1AsQ0FYWSxDQWFiOztJQUdBSyxVQUFVLENBQUUsb0JBQVNDLENBQVQsQ0FBZ0IsSUFFdkJDLENBQUFBLENBQVUsQ0FBRyxHQUFJQyxDQUFBQSxJQUFKLENBQVNBLElBQUksQ0FBQ0MsS0FBTCxDQURYSCxDQUNXLENBQVQsQ0FGVSxDQUd2QkksQ0FBWSxDQUFHSCxDQUFVLENBQUNJLFlBQVgsRUFIUSxDQUszQixNQUFPRCxDQUFBQSxDQUNQLENBdEJZLENBdUJiOztJQUdBRSxNQUFNLENBQUUsVUFBVyxDQUNsQixHQUFJQSxDQUFBQSxDQUFKLENBQ0EsR0FBSSxDQUNILE1BQU9BLENBQUFBLENBQU0sQ0FBc0Qsa0JBQW5ELEdBQUFDLE1BQU0sQ0FBQ0MsU0FBUCxDQUFpQkMsUUFBakIsQ0FBMEJDLElBQTFCLENBQStCQyxNQUFNLENBQUNDLE9BQXRDLENBQ2hCLENBQUMsTUFBT0MsQ0FBUCxDQUFVLENBQ1gsTUFBT1AsQ0FBQUEsQ0FBTSxHQUNiLENBQ0QsQ0FqQ1ksQ0FrQ2I7O0lBR0FRLE9BQU8sQ0FBRSxpQkFBU0MsQ0FBVCxDQUFnQixVQUNuQkEsQ0FBRCxFQUFXQSxDQUFLLENBQUNDLFlBREcsQ0FLeEIsQ0ExQ1ksQ0E0Q2I7O0lBR0FDLEtBQUssQ0FBRSxlQUFTQyxDQUFULENBQW1CLENBQ3pCLE1BQU8sSUFBSUMsQ0FBQUEsT0FBSixDQUFZLFNBQUFDLENBQU8sQ0FBSSxDQUM3QkMsVUFBVSxDQUFDRCxDQUFELENBQVVGLENBQVYsQ0FDVixDQUZNLENBR1AsQ0FuRFksQ0FxRGI7O0lBR0FJLEtBQUssQ0FBRSxlQUFTQyxDQUFULENBQWMsQ0FDcEIsR0FBTUMsQ0FBQUEsQ0FBSyxDQUFHRCxDQUFHLENBQUNFLFVBQUosQ0FBZSxVQUFmLEdBQThCRixDQUFHLENBQUNFLFVBQUosQ0FBZSxTQUFmLENBQTVDLENBRUEsTUFBT0QsQ0FBQUEsQ0FDUCxDQTVEWSxDLFVBK0RDbEMsSyIsInNvdXJjZXNDb250ZW50IjpbImNvbnN0IHV0aWxzID0ge1xuXHQvKipcblx0ICogcmV0dXJuIHJhbmRvbSBzdHJpbmcgd2l0aCBhIGdpdmVuIGxlbmd0aFxuXHQgKi9cblx0cmFuZG9tU3RyaW5nOiBmdW5jdGlvbihsZW5ndGgpIHtcblx0XHR2YXIgcmFuZG9tQ2hhcnNldCA9ICcwMTIzNDU2Nzg5QUJDREVGR0hJSktMTU5PUFFSU1RVVlhZWmFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6LS5ffic7XG5cdFx0dmFyIHJhbmRvbSA9ICcnO1xuXHRcdGZvciAodmFyIGMgPSAwLCBjbCA9IHJhbmRvbUNoYXJzZXQubGVuZ3RoOyBjIDwgbGVuZ3RoOyArK2MpIHtcblx0XHRcdHJhbmRvbSArPSByYW5kb21DaGFyc2V0W01hdGguZmxvb3IoTWF0aC5yYW5kb20oKSAqIGNsKV07XG5cdFx0fVxuXHRcdHJldHVybiByYW5kb207XG5cdH0sXG5cblx0LyoqXG5cdCAqIHJldHVybiByZWFkYWJsZSBkYXRlIHN0cmluZyBvZiB0aGUgZ2l2ZW4gdmFsdWVcblx0ICovXG5cdGRhdGVTdHJpbmc6IGZ1bmN0aW9uKHZhbHVlKSB7XG5cdFx0bGV0IGRhdGVEYXRhID0gdmFsdWU7XG5cdFx0bGV0IGRhdGVPYmplY3QgPSBuZXcgRGF0ZShEYXRlLnBhcnNlKGRhdGVEYXRhKSk7XG5cdFx0bGV0IGRhdGVSZWFkYWJsZSA9IGRhdGVPYmplY3QudG9EYXRlU3RyaW5nKCk7XG5cblx0XHRyZXR1cm4gZGF0ZVJlYWRhYmxlO1xuXHR9LFxuXHQvKipcblx0ICogcmV0dXJuIGJvb2xlYW4gdG8gZGV0ZWN0IGlmIHdlJ3JlIGluIGEgbm9kZSBlbnYgb3IgYnJvd3NlciBiYXNlZC5cblx0ICovXG5cdGlzTm9kZTogZnVuY3Rpb24oKSB7XG5cdFx0bGV0IGlzTm9kZTtcblx0XHR0cnkge1xuXHRcdFx0cmV0dXJuIGlzTm9kZSA9IE9iamVjdC5wcm90b3R5cGUudG9TdHJpbmcuY2FsbChnbG9iYWwucHJvY2VzcykgPT09ICdbb2JqZWN0IHByb2Nlc3NdJztcblx0XHR9IGNhdGNoIChlKSB7XG5cdFx0XHRyZXR1cm4gaXNOb2RlID0gZmFsc2U7XG5cdFx0fVxuXHR9LFxuXHQvKipcblx0ICogcmV0dXJuIGJvb2xlYW4gdG8gZGV0ZWN0IGlmIHRoZSBvYmplY3QgaGFzIGFuIGFjY2Vzc1Rva2VuXG5cdCAqL1xuXHRpc1Rva2VuOiBmdW5jdGlvbih0b2tlbikge1xuXHRcdGlmICghdG9rZW4gfHwgIXRva2VuLmFjY2Vzc190b2tlbikge1xuXHRcdFx0cmV0dXJuIGZhbHNlO1xuXHRcdH1cblx0XHRyZXR1cm4gdHJ1ZTtcblx0fSxcblxuXHQvKipcblx0ICogc2xlZXBzIGV4ZWN1dGlvbiBmb3IgdGhlIGdpdmVuIGR1cmF0aW9uXG5cdCAqL1xuXHRzbGVlcDogZnVuY3Rpb24oZHVyYXRpb24pIHtcblx0XHRyZXR1cm4gbmV3IFByb21pc2UocmVzb2x2ZSA9PiB7XG5cdFx0XHRzZXRUaW1lb3V0KHJlc29sdmUsIGR1cmF0aW9uKTtcblx0XHR9KTtcblx0fSxcblxuXHQvKlxuXHQgKiByZXR1cm5zIHdoZXRoZXIgb3Igbm90IHRoZSBzdHJpbmcgYmVnaW5zIHdpdGggJ2h0dHAocyk6Ly8nXG5cdCAqL1xuXHRpc1VybDogZnVuY3Rpb24odXJsKSB7XG5cdFx0Y29uc3QgdmFsaWQgPSB1cmwuc3RhcnRzV2l0aCgnaHR0cHM6Ly8nKSB8fCB1cmwuc3RhcnRzV2l0aCgnaHR0cDovLycpO1xuXG5cdFx0cmV0dXJuIHZhbGlkO1xuXHR9XG59O1xuXG5leHBvcnQgZGVmYXVsdCB1dGlsczsiXX0=
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const utils = {
+    randomString: function (length) {
+        const randomCharset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~';
+        let random = '';
+        for (let c = 0, cl = randomCharset.length; c < length; ++c) {
+            random += randomCharset[Math.floor(Math.random() * cl)];
+        }
+        return random;
+    },
+    dateString: function (value) {
+        const dateData = value;
+        const dateObject = new Date(Date.parse(dateData));
+        const dateReadable = dateObject.toDateString();
+        return dateReadable;
+    },
+    isNode: function () {
+        try {
+            return Object.prototype.toString.call(global.process) === '[object process]';
+        }
+        catch (e) {
+            return false;
+        }
+    },
+    isToken: function (token) {
+        if (!token || !token.access_token) {
+            return false;
+        }
+        return true;
+    },
+    sleep: function (duration) {
+        return new Promise(resolve => {
+            setTimeout(resolve, duration);
+        });
+    },
+    isUrl: function (url) {
+        const valid = url.startsWith('https://') || url.startsWith('http://');
+        return valid;
+    }
+};
+exports.default = utils;
+//# sourceMappingURL=utils.js.map

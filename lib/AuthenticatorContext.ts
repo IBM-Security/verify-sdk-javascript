@@ -1,33 +1,31 @@
 /* eslint-disable indent */
 import { AppConfig } from './config';
 import { VerifyError } from './errors/Errors';
+import { EFlowTypes, EMethods, ERequestHeaders } from './helpers/enums';
+import { IApiRequest, IAuthenticatorInitPayload, IAuthenticatorVerify, ISDKConfig, IToken } from './helpers/interfaces';
 import utils from './helpers/utils';
 
 const {
 	AUTHENTICATOR_CONTEXT_ERROR,
 	DEFAULT_POLLING_DELAY,
 	DEFAULT_POLLING_ATTEMPTS
-} = AppConfig;
-
-const FLOW_TYPE = {
-	implicitFlow: 'implicit',
-	authorizationCodeFlow: 'authorization',
-	deviceFlow: 'device',
-	ROPC: 'ropc'
-};
+} = AppConfig as ISDKConfig;
 
 /**
  * AuthenticatorContext handles all requests in regards to authenticators, such
  * as the IBM Verify mobile application
  */
 class AuthenticatorContext {
-	constructor(oauth) {
+	oauth: any;
+	config: any;
+	token: any;
+	constructor(oauth: any) {
 		if (!oauth) {
 			throw new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'Oauth parameter is required');
 		}
 		this.oauth = oauth;
 		this.config = this.oauth.getConfig();
-		if (this.config.flowType === FLOW_TYPE.implicitFlow) {
+		if (this.config.flowType === EFlowTypes.ImplicitFlow) {
 			this.token = this._fetchToken();
 		}
 	}
@@ -36,11 +34,11 @@ class AuthenticatorContext {
 		return this.oauth.fetchToken();
 	}
 
-	_isAuthenticated(token) {
+	_isAuthenticated(token: IToken) {
 		return this.oauth.isAuthenticated(token);
 	}
 
-	_handleResponse(options, token) {
+	_handleResponse(options: IApiRequest, token: IToken) {
 		return this.oauth.handleResponse(options, token);
 	}
 
@@ -49,16 +47,16 @@ class AuthenticatorContext {
 	 * device information and remove methods
 	 * @param {object} tokenObj containing access_token, refresh_token ...
 	 */
-	authenticators(tokenObj) {
-		let token = tokenObj || this.token;
+	authenticators(tokenObj: IToken): Promise<any> {
+		const token = tokenObj || this.token;
 		if (!token) {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'token is a required parameter'));
 		}
-		let path = `${this.config.tenantUrl}/v1.0/authenticators`;
-		let options = {
-			method: 'GET',
+		const path: string = `${this.config.tenantUrl}/v1.0/authenticators`;
+		const options = {
+			method: EMethods.GET,
 			url: path
-		};
+		} as IApiRequest;
 
 		return this._handleResponse(options, token);
 	}
@@ -70,8 +68,8 @@ class AuthenticatorContext {
 	 * @param {object} dataObj containing a user friendly name for the registration.
 	 * @param {object} tokenObj containing access_token, refresh_token ...
 	 */
-	initiateAuthenticator(dataObj, tokenObj) {
-		if (arguments.length < 2 && this.config.flowType !== FLOW_TYPE.implicitFlow) {
+	initiateAuthenticator(dataObj: IAuthenticatorInitPayload, tokenObj: IToken) {
+		if (arguments.length < 2 && this.config.flowType !== EFlowTypes.ImplicitFlow) {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'initiateAuthenticator(dataObj, token), 2 parameters are required ' + arguments.length + ' were given'));
 		}
 
@@ -79,25 +77,25 @@ class AuthenticatorContext {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'dataObj cannot be null'));
 		}
 
-		let options = {};
-		let qrcodeParam = '?qrcodeInResponse=';
-		let path = `${this.config.tenantUrl}/v1.0/authenticators/initiation`;
+		let options = {} as IApiRequest;
+		let path: string = `${this.config.tenantUrl}/v1.0/authenticators/initiation`;
 
-		if (dataObj.hasOwnProperty('qrcodeInResponse') && dataObj.qrcodeInResponse === true) {
-			qrcodeParam = `${qrcodeParam}true`;
-			path = `${path}${qrcodeParam}`;
-			options.accept = 'image/png';
+		if (dataObj.hasOwnProperty('qrcodeInResponse') && dataObj.qrcodeInResponse) {
+			path = `${path}?qrcodeInResponse=true`;
+			options.accept = ERequestHeaders.ImagePNG;
 		}
+
+		let data = {
+			owner: dataObj.owner || null,
+			clientId: this.config.registrationProfileId,
+			accountName: dataObj.accountName || 'Default Account'
+		};
 
 		let token = tokenObj || this.token;
 		options = {
-			method: 'POST',
+			method: EMethods.POST,
 			url: path,
-			data: {
-				owner: dataObj.owner || null,
-				clientId: this.config.registrationProfileId,
-				accountName: dataObj.accountName || 'Default Account'
-			}
+			data: JSON.stringify(data)
 		};
 		return this._handleResponse(options, token);
 	}
@@ -109,8 +107,8 @@ class AuthenticatorContext {
 	 * @param {object} formData  a JSON payload that specifies the verification transaction data
 	 * @param {object} tokenObj containing access_token, refresh_token ...
 	 */
-	createVerification(authenticatorId, formData, tokenObj) {
-		if (arguments.length < 3 && this.config.flowType !== FLOW_TYPE.implicitFlow) {
+	createVerification(authenticatorId: string, formData: IAuthenticatorVerify, tokenObj: IToken) {
+		if (arguments.length < 3 && this.config.flowType !== EFlowTypes.ImplicitFlow) {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'createVerification(authenticatorId, formData, token), 3 parameters are required ' + arguments.length + ' were given'));
 		}
 
@@ -118,10 +116,10 @@ class AuthenticatorContext {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'formData is a required parameter'));
 		}
 
-		let token = tokenObj || this.token;
-		let path = `${this.config.tenantUrl}/v1.0/authenticators/${authenticatorId}/verifications`;
+		const token: IToken = tokenObj || this.token;
+		const path: string = `${this.config.tenantUrl}/v1.0/authenticators/${authenticatorId}/verifications`;
 
-		let data = {
+		const data = {
 			transactionData: {
 				message: formData.txMessage || ' ',
 				originIpAddress: formData.originIpAddress || ' ',
@@ -142,31 +140,30 @@ class AuthenticatorContext {
 		};
 
 		let options = {
-			method: 'POST',
+			method: EMethods.POST,
 			url: path,
 			data: data
-		};
+		} as IApiRequest;
 
 		return this._handleResponse(options, token);
 	}
-
 
 	/**
 	 * @function viewVerifications Retrieve the list of verification transactions.
 	 * @param {string} authenticatorId The authenticator registration identifier.
 	 * @param {object} tokenObj containing access_token, refresh_token ...
 	 */
-	viewVerifications(authenticatorId, tokenObj) {
-		if (arguments.length < 2 && this.config.flowType !== FLOW_TYPE.implicitFlow) {
+	viewVerifications(authenticatorId: string, tokenObj: IToken): Promise<any> {
+		if (arguments.length < 2 && this.config.flowType !== EFlowTypes.ImplicitFlow) {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'viewVerifications(authenticatorId, token), 2 parameters are required ' + arguments.length + ' were given'));
 		}
 
-		let token = tokenObj || this.token;
-		let path = `${this.config.tenantUrl}/v1.0/authenticators/${authenticatorId}/verifications`;
-		let options = {
-			method: 'GET',
+		const token: IToken = tokenObj || this.token;
+		const path: string = `${this.config.tenantUrl}/v1.0/authenticators/${authenticatorId}/verifications`;
+		const options = {
+			method: EMethods.GET,
 			url: path
-		};
+		} as IApiRequest;
 		return this._handleResponse(options, token);
 	}
 
@@ -176,34 +173,34 @@ class AuthenticatorContext {
 	 * @param {string} transactionId The verification transaction identifier.
 	 * @param {object} tokenObj containing access_token, refresh_token ...
 	 */
-	viewVerification(authenticatorId, transactionId, tokenObj) {
-		if (arguments.length < 3 && this.config.flowType !== FLOW_TYPE.implicitFlow) {
+	viewVerification(authenticatorId: string, transactionId: string, tokenObj: IToken) {
+		if (arguments.length < 3 && this.config.flowType !== EFlowTypes.ImplicitFlow) {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'viewVerification(authenticatorId, transactionId, token), 3 parameters are required ' + arguments.length + ' were given'));
 		}
 
-		let token = tokenObj || this.token;
-		let path = `${this.config.tenantUrl}/v1.0/authenticators/${authenticatorId}/verifications/${transactionId}`;
-		let options = {
-			method: 'GET',
+		const token: IToken = tokenObj || this.token;
+		const path: string = `${this.config.tenantUrl}/v1.0/authenticators/${authenticatorId}/verifications/${transactionId}`;
+		const options = {
+			method: EMethods.GET,
 			url: path
-		};
+		} as IApiRequest;
 		return this._handleResponse(options, token);
 	}
 
 	/**
 	 * @function pollVerification recursive function that polls a given transaction id for a state change
 	 * @param {string} authenticatorId authenticator id
-	 * @param {object} transactionId transaction id
+	 * @param {string} transactionId transaction id
 	 * @param {object} tokenObj containing access_token, refresh_token ...
-	 * @param {object} delay delay between polls
-	 * @param {object} attempts how many times to poll
+	 * @param {string} delay delay between polls
+	 * @param {number} attempts how many times to poll
 	 */
-	async pollVerification(authenticatorId, transactionId, tokenObj, delay, attempts) {
-		let _tokenObj = tokenObj;
-		let _attempts = attempts || DEFAULT_POLLING_ATTEMPTS;
-		let _delay = delay || DEFAULT_POLLING_DELAY;
+	async pollVerification(authenticatorId: string, transactionId: string, tokenObj: IToken, delay: number, attempts: number): Promise<any> {
+		let _tokenObj: IToken = tokenObj;
+		let _attempts: number = attempts || DEFAULT_POLLING_ATTEMPTS;
+		const _delay: number = delay || DEFAULT_POLLING_DELAY;
 
-		let tokenRefreshed = false;
+		let tokenRefreshed: boolean = false;
 
 		while (_attempts > 0) {
 			try {
@@ -238,15 +235,15 @@ class AuthenticatorContext {
 	 * @param {boolean} enabled boolean to enable/disable enrolled method
 	 * @param {object} tokenObj containing access_token, refresh_token ...
 	 */
-	enabled(authenticatorId, enabled, tokenObj) {
-		if (arguments.length < 3 && this.config.flowType !== FLOW_TYPE.implicitFlow) {
+	enabled(authenticatorId: string, enabled: boolean, tokenObj: IToken) {
+		if (arguments.length < 3 && this.config.flowType !== EFlowTypes.ImplicitFlow) {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'enabled(authenticatorId, enabled, token), 3 parameters are required ' + arguments.length + ' were given'));
 		}
 
-		let token = tokenObj || this.token;
-		let path = `${this.config.tenantUrl}/v1.0/authenticators/${authenticatorId}`;
-		let options = {
-			method: 'PATCH',
+		const token: IToken = tokenObj || this.token;
+		const path: string = `${this.config.tenantUrl}/v1.0/authenticators/${authenticatorId}`;
+		const options = {
+			method: EMethods.PATCH,
 			url: path,
 			data: [{
 				path: '/enabled',
@@ -265,18 +262,18 @@ class AuthenticatorContext {
 	 * @param {string} authenticatorId Id of authenticated device to be deleted.
 	 * @param {object} tokenObj containing access_token, refresh_token ...
 	 */
-	deleteAuthenticator(authenticatorId, tokenObj) {
-		if (arguments.length < 2 && this.config.flowType !== FLOW_TYPE.implicitFlow) {
+	deleteAuthenticator(authenticatorId: string, tokenObj: IToken) {
+		if (arguments.length < 2 && this.config.flowType !== EFlowTypes.ImplicitFlow) {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'deleteAuthenticator(authenticatorId, token), 2 parameters are required ' + arguments.length + ' were given'));
 		}
 
-		let token = tokenObj || this.token;
-		let path = `${this.config.tenantUrl}/v1.0/authenticators/${authenticatorId}`;
-		let options = {
-			method: 'DELETE',
+		const token: IToken  = tokenObj || this.token;
+		const path: string = `${this.config.tenantUrl}/v1.0/authenticators/${authenticatorId}`;
+		const options = {
+			method: EMethods.DELETE,
 			url: path,
 			data: false
-		};
+		} as IApiRequest;
 		return this._handleResponse(options, token);
 	}
 
@@ -286,15 +283,15 @@ class AuthenticatorContext {
 	 * @param {boolean} enabled Enable / Disable enrolled signature method.
 	 * @param {object} tokenObj containing access_token, refresh_token ...
 	 */
-	methodEnabled(id, enabled, tokenObj) {
-		if (arguments.length < 3 && this.config.flowType !== FLOW_TYPE.implicitFlow) {
+	methodEnabled(id: string, enabled: boolean, tokenObj: IToken) {
+		if (arguments.length < 3 && this.config.flowType !== EFlowTypes.ImplicitFlow) {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'methodEnabled(id, enabled, token), 3 parameters are required ' + arguments.length + ' were given'));
 		}
 
-		let token = tokenObj || this.token;
-		let path = `${this.config.tenantUrl}/v1.0/authnmethods/signatures/${id}`;
-		let options = {
-			method: 'PATCH',
+		const token: IToken = tokenObj || this.token;
+		const path: string = `${this.config.tenantUrl}/v1.0/authnmethods/signatures/${id}`;
+		const options = {
+			method: EMethods.PATCH,
 			url: path,
 			data: [{
 				path: '/enabled',
@@ -302,7 +299,7 @@ class AuthenticatorContext {
 				op: 'replace'
 			}],
 			contentType: 'application/json-patch+json'
-		};
+		} as IApiRequest;
 
 		return this._handleResponse(options, token);
 	}
@@ -312,18 +309,18 @@ class AuthenticatorContext {
 	 * @param {string} authenticatorId unique ID of registered authenticator
 	 * @param {object} tokenObj containing access_token, refresh_token ...
 	 */
-	methods(authenticatorId, tokenObj) {
-		if (arguments.length < 2 && this.config.flowType !== FLOW_TYPE.implicitFlow) {
+	methods(authenticatorId: string, tokenObj: IToken) {
+		if (arguments.length < 2 && this.config.flowType !== EFlowTypes.ImplicitFlow) {
 			return Promise.reject(new VerifyError(AUTHENTICATOR_CONTEXT_ERROR, 'methods(authenticatorId, token), 2 parameters are required ' + arguments.length + ' were given'));
 		}
 
-		let token = tokenObj || this.token;
-		let encodedValue = encodeURIComponent(`attributes/authenticatorId="${authenticatorId}"`);
-		let path = `${this.config.tenantUrl}/v1.0/authnmethods/signatures?search=${encodedValue}`;
-		let options = {
-			method: 'GET',
+		const token: IToken = tokenObj || this.token;
+		const encodedValue: string = encodeURIComponent(`attributes/authenticatorId="${authenticatorId}"`);
+		const path: string = `${this.config.tenantUrl}/v1.0/authnmethods/signatures?search=${encodedValue}`;
+		const options = {
+			method: EMethods.GET,
 			url: path
-		};
+		} as IApiRequest;
 
 		return this._handleResponse(options, token);
 	}

@@ -1,6 +1,6 @@
 {
   "name": "ibm-verify-sdk",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "IBM Security Verify SDK for JavaScript",
   "main": "dist/index.js",
   "directories": {
@@ -8,10 +8,10 @@
     "dist": "dist"
   },
   "scripts": {
-    "start": "npm run clean && babel lib --watch --out-dir dist --source-maps inline",
+    "start": "npm run clean && tsc --watch",
     "lint": "eslint ./lib",
     "clean": "rm -rf dist && mkdir dist && npm run build",
-    "build": "babel lib --out-dir dist --source-maps inline",
+    "build": "tsc --build",
     "test": "cd test && npm test"
   },
   "browserslist": [
@@ -36,20 +36,15 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/polyfill": "^7.4.4",
-    "query-string": "^6.2.0",
-    "xmlhttprequest": "^1.8.0"
+    "query-string": "^6.13.7",
+    "xmlhttprequest": "1.8.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/preset-react": "^7.0.0",
-    "babel-eslint": "^10.0.3",
-    "babel-plugin-transform-remove-console": "^6.9.4",
-    "babel-preset-minify": "^0.5.1",
-    "eslint": "^5.16.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^8.0.0"
+    "@types/node": "^14.14.13",
+    "@typescript-eslint/parser": "4.10.0",
+    "eslint": "5.16.0",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-node": "8.0.0",
+    "typescript": "4.1.3"
   }
 }

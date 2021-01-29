@@ -4,7 +4,7 @@
     "es6": true,
     "node": true
   },
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module"
@@ -65,7 +65,10 @@
     "handle-callback-err": 0,
     "id-length": 0,
     "id-match": 0,
-    "indent": 0,
+    "indent": [
+			1,
+			"tab"
+		],
     "init-declarations": 0,
     "key-spacing": 0,
     "keyword-spacing": 1,
@@ -125,7 +128,7 @@
     "no-lonely-if": 0,
     "no-loop-func": 2,
     "no-mixed-requires": 0,
-    "no-mixed-spaces-and-tabs": 0,
+    "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
     "no-multi-spaces": 0,
     "no-multi-str": 0,
     "no-multiple-empty-lines": 1,
@@ -157,18 +160,18 @@
     "no-script-url": 0,
     "no-self-compare": 2,
     "no-sequences": 0,
-    "no-shadow": [
-      2,
-      {
-        "builtinGlobals": false,
-        "hoist": "functions",
-        "allow": [
-          "resolve",
-          "reject",
-          "err"
-        ]
-      }
-    ],
+    // "no-shadow": [
+    //   2,
+    //   {
+    //     "builtinGlobals": true,
+    //     "hoist": "functions",
+    //     "allow": [
+    //       "resolve",
+    //       "reject",
+    //       "err"
+    //     ]
+    //   }
+    // ],
     "no-shadow-restricted-names": 2,
     "no-spaced-func": 1,
     "no-sparse-arrays": 2,

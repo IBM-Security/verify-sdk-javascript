@@ -1,4 +1,3 @@
-import '@babel/polyfill';
 import qs from 'query-string';
 import {
 	VerifyError,
@@ -13,20 +12,14 @@ import {
 } from './config';
 import apiRequest from './helpers/apiRequest';
 import utils from './helpers/utils';
-
-const FLOW_TYPE = {
-	implicitFlow: 'implicit',
-	authorizationCodeFlow: 'authorization',
-	deviceFlow: 'device',
-	ROPC: 'ropc'
-};
-
+import { EFlowTypes, EGrantTypes, EMethods, ETokens } from './helpers/enums';
+import { IApiRequest, IDeviceFlow, IError, IOAuthConfig, IRequestData, IResponse, IROPCFlow, IToken, ITokenProps } from './helpers';
 /**
  * @class OAuthContext
  * Uses Factory pattern to create the appropriate class instance based on the flowType
  */
 class OAuthContext {
-	constructor(config) {
+	constructor(config: IOAuthConfig) {
 		if (!config) {
 			throw new InvalidOAuthConfigurationError('Config parameter is required');
 		}
@@ -46,16 +39,16 @@ class OAuthContext {
 		// 	throw new InvalidOAuthConfigurationError('responseType property is required in config settings');
 		// }
 		switch (config.flowType) {
-		case FLOW_TYPE.implicitFlow:
+		case EFlowTypes.ImplicitFlow:
 			return new ImplicitFlow(config);
-		case FLOW_TYPE.authorizationCodeFlow:
+		case EFlowTypes.AuthoriztionCodeFlow:
 			return new AuthorizationCodeFlow(config);
-		case FLOW_TYPE.deviceFlow:
+		case EFlowTypes.DeviceFlow:
 			return new DeviceFlow(config);
-		case FLOW_TYPE.ROPC:
+		case EFlowTypes.ROPCFlow:
 			return new ROPCFlow(config);
 		default:
-			const flowTypes = Object.values(FLOW_TYPE).map(value => ` "${value}"`);
+			const flowTypes = Object.values(EFlowTypes).map((value) => ` "${value}"`);
 			throw new InvalidOAuthConfigurationError(`"${config.flowType}" flowType not valid. Valid flow types are: ${flowTypes}`);
 		}
 	}
@@ -67,7 +60,8 @@ class OAuthContext {
  * An abstract class that defines an OAuthFlow and the operations
  */
 class FlowAbstract {
-	constructor(config) {
+	config: IOAuthConfig;
+	constructor(config: IOAuthConfig) {
 		// cannot instantiate abstract class
 		if (new.target === FlowAbstract) {
 			throw new TypeError('Cannot instantiate FlowAbstract directly');
@@ -81,17 +75,17 @@ class FlowAbstract {
 	 * @returns {boolean} Boolean indicating whether the config is valid
 	 * Abstract parent method throws AbstractMethodNotImplementedError()
 	 */
-	isValidConfig() {
+	isValidConfig(): AbstractMethodNotImplementedError | InvalidOAuthConfigurationError | boolean {
 		throw new AbstractMethodNotImplementedError();
 	}
 
 	/**
 	 * @function logout Revokes a user's current access token
-	 * @param {string} path Optional path
+	 * @param {string} path path
 	 * @param {object} token The token to be revoked containing access_token, refresh_token ...
 	 * @returns {Promise<object>} Response object from revoking the token
 	 */
-	logout(path, token) {
+	logout(path: string, token: IToken): Promise<any> {
 		// path and token supplied
 		if (arguments.length === 2 && !this.isToken(token)) {
 			return Promise.reject(new VerifyError(AppConfig.TOKEN_ERROR, 'Token parameter is not a valid token'));
@@ -102,11 +96,7 @@ class FlowAbstract {
 		}
 
 		try {
-			if (arguments.length === 2) {
-				return this.revokeToken(token, 'access_token');
-			} else {
-				return this.revokeToken(path, 'access_token');
-			}
+			return this.revokeToken(token, ETokens.AccessToken);
 		} catch (error) {
 			return Promise.reject(error);
 		}
@@ -117,7 +107,7 @@ class FlowAbstract {
 	 * @returns {object} The config object containing clientId, redirectUri, flowType, ...
 	 */
 
-	getConfig() {
+	getConfig(): IOAuthConfig {
 		return this.config;
 	}
 
@@ -126,10 +116,10 @@ class FlowAbstract {
 	 * @param {object} token The token to be checked for active status containing access_token, refresh_token ...
 	 * @returns {Promise<boolean>} Boolean indicating whether the token is active
 	 */
-	async isAuthenticated(token) {
+	async isAuthenticated(token: IToken): Promise<boolean> {
 		try {
 			const payload = await this.introspectToken(token);
-			return this.config.flowType === FLOW_TYPE.implicitFlow ? payload.active === true : payload.response.active === true;
+			return this.config.flowType === EFlowTypes.ImplicitFlow ? payload.active : payload.response.active;
 		} catch (error) {
 			return Promise.reject(error);
 		}
@@ -140,23 +130,23 @@ class FlowAbstract {
 	 * @param {object} token The token to be inspected containing access_token, refresh_token ...
 	 * @returns {Promise<object>} Response object with information about the supplied token
 	 */
-	introspectToken(token) {
+	introspectToken(token: IToken) {
 		if (!this.isToken(token)) {
 			return Promise.reject(new VerifyError(AppConfig.TOKEN_ERROR, 'Token parameter is not a valid token'));
 		}
 
-		let path = `${this.config.tenantUrl}/v1.0/endpoint/default/introspect`;
+		const path: string = `${this.config.tenantUrl}/v1.0/endpoint/default/introspect`;
 
-		let data = {
+		const data = {
 			client_id: this.config.clientId,
 			client_secret: this.config.clientSecret,
 			token: token.access_token
-		};
+		} as IRequestData;
 
-		let encodedData = qs.stringify(data);
+		const encodedData: string = qs.stringify(data);
 
-		let options = {
-			method: 'POST',
+		const options: IApiRequest = {
+			method: EMethods.POST,
 			url: path,
 			contentType: 'application/x-www-form-urlencoded',
 			data: encodedData
@@ -170,15 +160,15 @@ class FlowAbstract {
 	 * @param {object} token The associated token to inspect the user information of containing access_token, refresh_token ...
 	 * @returns {Promise<object>} Response object with information about the user of the supplied token
 	 */
-	userInfo(token) {
-		if (!this.isToken(token)) {
+	userInfo(token: IToken): Promise<any> {
+		if (!this.isToken(token)){
 			return Promise.reject(new VerifyError(AppConfig.TOKEN_ERROR, 'Token parameter is not a valid token'));
 		}
 
-		let path = `${this.config.tenantUrl}/v1.0/endpoint/default/userinfo`;
+		const path: string = `${this.config.tenantUrl}/v1.0/endpoint/default/userinfo`;
 
-		let options = {
-			method: 'POST',
+		const options: IApiRequest = {
+			method: EMethods.POST,
 			url: path,
 			contentType: 'application/x-www-form-urlencoded',
 			data: qs.stringify({
@@ -194,7 +184,7 @@ class FlowAbstract {
 	 * @param {object} token The token to check containing access_token, refresh_token ...
 	 * @returns {boolean} Boolean indicating whether the token is valid
 	 */
-	isToken(token) {
+	isToken(token: any ): boolean {
 		return !(!token || !token.access_token);
 	}
 
@@ -204,8 +194,8 @@ class FlowAbstract {
 	 * @param {string} tokenType The type of token - 'access_token' or 'refresh_token'
 	 * @returns {Promise<object>} Response object from revoking the token
 	 */
-	revokeToken(token, tokenType) {
-		const path = `${this.config.tenantUrl}/v1.0/endpoint/default/revoke`;
+	revokeToken(token: IToken, tokenType: string) {
+		const path: string = `${this.config.tenantUrl}/v1.0/endpoint/default/revoke`;
 
 		if (arguments.length < 2) {
 			throw new VerifyError(AppConfig.OAUTH_CONTEXT_API_ERROR, 'revokeToken(token, tokenType), 2 parameters are required ' + arguments.length + ' were given');
@@ -215,22 +205,22 @@ class FlowAbstract {
 			throw new VerifyError(AppConfig.OAUTH_CONTEXT_API_ERROR, 'token cannot be null');
 		}
 
-		if (!(tokenType === 'access_token' || tokenType === 'refresh_token')) {
+		if (!(tokenType === ETokens.AccessToken || tokenType === ETokens.RefreshToken)) {
 			throw new VerifyError(AppConfig.OAUTH_CONTEXT_API_ERROR, `Parameter: ${tokenType} is invalid.\n Supported values are "access_token" or "refresh_token`);
 		}
 
-		const expireToken = tokenType === 'access_token' ? token.access_token : token.refresh_token;
+		const expireToken: string = tokenType === ETokens.AccessToken ? token.access_token : token.refresh_token;
 
-		let data = {
+		const data = {
 			client_id: this.config.clientId,
 			client_secret: this.config.clientSecret,
 			token: expireToken
-		};
+		} as IRequestData;
 
-		const encodedData = qs.stringify(data);
+		const encodedData: string = qs.stringify(data);
 
-		const options = {
-			method: 'POST',
+		const options: IApiRequest = {
+			method: EMethods.POST,
 			contentType: 'application/x-www-form-urlencoded',
 			url: path,
 			data: encodedData
@@ -245,7 +235,7 @@ class FlowAbstract {
 	 * @param {string} hash The hash to be parsed
 	 * @returns {object} The object representation of the hash string
 	 */
-	_parseUrlHash(hash) {
+	_parseUrlHash(hash: string): {[key: string]: string} {
 		return qs.parse(hash);
 	}
 
@@ -256,7 +246,7 @@ class FlowAbstract {
 	 * @param {object} params Required data and url path to token EP to retrieve a OAuth 2.0 Bearer Token.
 	 * @returns {Promise<object>} Response object containing access token
 	 */
-	getToken(params) {
+	getToken(params: any) {
 		const {
 			data,
 			path
@@ -268,16 +258,11 @@ class FlowAbstract {
 		data.client_id = this.config.clientId;
 		data.client_secret = this.config.clientSecret;
 		data.scope = this.config.scope;
-		data.grant_type = this.config.grantType;
 
-		if (this.config.flowType === FLOW_TYPE.authorizationCodeFlow) {
-			data.redirect_uri = this.config.redirectUri;
-		}
+		let encodedData: string = qs.stringify(data);
 
-		let encodedData = qs.stringify(data);
-
-		let options = {
-			method: 'POST',
+		let options: IApiRequest = {
+			method: EMethods.POST,
 			url: path,
 			contentType: 'application/x-www-form-urlencoded',
 			data: encodedData
@@ -292,24 +277,24 @@ class FlowAbstract {
 	 * @param {object} token The token object to be refreshed containing access_token, refresh_token ...
 	 * @returns {Promise<object|void>} Response object from refreshing the token
 	 */
-	refreshToken(token) {
-		if (!token.hasOwnProperty('refresh_token')) {
+	refreshToken(token: IToken): Promise<any> | void  | NotAvailableError {
+		if (!token.hasOwnProperty(ETokens.RefreshToken)) {
 			return Promise.reject(new VerifyError(AppConfig.OAUTH_CONTEXT_API_ERROR, 'token has no refresh_token property'));
 		}
 
 		const path = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
-		const data = {
+		const data: IRequestData = {
 			refresh_token: token.refresh_token,
 			client_id: this.config.clientId,
 			client_secret: this.config.clientSecret,
-			grant_type: 'refresh_token',
+			grant_type: ETokens.RefreshToken,
 			scope: this.config.scope
 		};
 
-		const encodedData = qs.stringify(data);
+		const encodedData: string = qs.stringify(data);
 
-		const options = {
-			method: 'POST',
+		const options: IApiRequest = {
+			method: EMethods.POST,
 			url: path,
 			contentType: 'application/x-www-form-urlencoded',
 			data: encodedData
@@ -323,7 +308,7 @@ class FlowAbstract {
 	 * @param {object} options Config object with clientId, redirectUri, scope and responseType to authorize against
 	 * @returns {string} Authorization URL
 	 */
-	_authorize(options) {
+	_authorize(options: IOAuthConfig) {
 		return this._buildUrl(options);
 	}
 
@@ -332,7 +317,7 @@ class FlowAbstract {
 	 * @param {object} options Config object with clientId, redirectUri, scope and responseType
 	 * @returns {string} Authorization URL
 	 */
-	_buildUrl(options) {
+	_buildUrl(options: IOAuthConfig) {
 		return (
 			options.tenantUrl +
 				'/oidc/endpoint/default/authorize?' +
@@ -353,7 +338,7 @@ class FlowAbstract {
 	 * @param {object} tokenObj Token object containing access_token, refresh_token ... used to make the request
 	 * @returns {object} Response object from the request
 	 */
-	async handleResponse(options, tokenObj) {
+	async handleResponse(options: IApiRequest, tokenObj: IToken): Promise<any> {
 		if (arguments.length < 2) {
 			return Promise.reject(new VerifyError(AppConfig.OAUTH_CONTEXT_API_ERROR, 'handleResponse(options, token), 2 parameters are required ' + arguments.length + ' were given'));
 		}
@@ -361,17 +346,17 @@ class FlowAbstract {
 			return Promise.reject(new VerifyError(AppConfig.TOKEN_ERROR, 'Token parameter is not a valid token'));
 		}
 
-		const token = tokenObj;
+		const token: IToken = tokenObj;
 		// Define empty payload object
 		let payload = {
 			response: null,
-			token: null
-		};
+			token: {} as IToken
+		} as IResponse;
 
 		try {
-			const response = await apiRequest(options, token.access_token);
+			const response: Promise<any> = await apiRequest(options, token.access_token);
 			payload.response = response;
-			if (this.config.flowType === FLOW_TYPE.implicitFlow) {
+			if (this.config.flowType === EFlowTypes.ImplicitFlow) {
 				return Promise.resolve(response);
 			}
 			return Promise.resolve(payload);
@@ -398,11 +383,13 @@ class FlowAbstract {
  * @class ImplicitFlow
  */
 class ImplicitFlow extends FlowAbstract {
-	constructor(config) {
+	storageHandler: any;
+	session: boolean;
+	constructor(config: IOAuthConfig) {
 		super(config);
 		this.isValidConfig();
-
-		this.storageHandler = new StorageHandler(config.storageType);
+		this.session = false;
+		this.storageHandler = StorageHandler(config.storageType as string) as any;
 	}
 
 	/**
@@ -410,7 +397,7 @@ class ImplicitFlow extends FlowAbstract {
 	 * @returns {boolean} Boolean indicating whether the config is valid
 	 * Throws error if no storageType in config or instantiating ImplicitFlow in NodeJS
 	 */
-	isValidConfig() {
+	isValidConfig(): InvalidOAuthConfigurationError | boolean {
 		if (utils.isNode()) {
 			throw new InvalidOAuthConfigurationError('Implicit flow is not supported in Node');
 		}
@@ -428,7 +415,7 @@ class ImplicitFlow extends FlowAbstract {
 	 * @param {object} token The token object containing access_token, refresh_token ...
 	 * @returns {Promise<void>} Throws NotAvailableError() as refresh_token is not available in Implicit Flow
 	 */
-	refreshToken(token) {
+	refreshToken(): NotAvailableError {
 		throw new NotAvailableError();
 	}
 
@@ -451,9 +438,9 @@ class ImplicitFlow extends FlowAbstract {
 	 */
 	_setSession() {
 		const expiresAt = JSON.parse(this.storageHandler.getStorage('token')).expires_in;
-		// const clockSkew = AppConfig.DEFAULT_CLOCK_SKEW;
-		const clockSkew = 10;
-		const delay = expiresAt - (Date.now() - clockSkew);
+		const clockSkew: number = AppConfig.DEFAULT_CLOCK_SKEW;
+		// const clockSkew: number = 10;
+		const delay: number = expiresAt - (Date.now() - clockSkew);
 
 		if (delay > 0) {
 			setTimeout(() => {
@@ -475,9 +462,9 @@ class ImplicitFlow extends FlowAbstract {
 	 * @function logout Redirects user after accessToken has expired.
 	 * @params {string} path Optional path to redirect to, defaults to index page.
 	 */
-	async logout(path) {
-		let accessToken = this.fetchToken();
-		await this.revokeToken(accessToken, 'access_token');
+	async logout(path: string) {
+		const accessToken: IToken = this.fetchToken();
+		await this.revokeToken(accessToken, ETokens.AccessToken);
 		await this.storageHandler.clearStorage();
 		await window.location.replace(path || '/');
 	}
@@ -487,22 +474,22 @@ class ImplicitFlow extends FlowAbstract {
 	 * @returns {Promise<void>} Promise rejection if error
 	 */
 	handleCallback() {
-		let urlObj;
-		const errorCheck = RegExp('#error');
-		const hash = window.location.hash;
+		let urlObj: Object | string;
+		const errorCheck: RegExp = RegExp('#error');
+		const hash: string = window.location.hash;
 
 		urlObj = typeof hash === 'object' ? hash : this._parseUrlHash(hash);
 
-		return new Promise(function(reject) {
+		return new Promise((reject) => {
 			if (errorCheck.test(hash)) {
 				reject(urlObj);
 			} else {
-				this.storageHandler.setStorage(urlObj);
+				this.storageHandler.setStorage(urlObj as IToken);
 				this._setSession();
 				// remove url
 				window.location.hash = '';
 			}
-		}.bind(this));
+		});
 	}
 }
 
@@ -510,10 +497,10 @@ class ImplicitFlow extends FlowAbstract {
  * @class AuthorizationCodeFlow
  */
 class AuthorizationCodeFlow extends FlowAbstract {
-	constructor(config) {
+	constructor(config: IOAuthConfig) {
 		super(config);
 		this.isValidConfig();
-		this.config.grantType = 'authorization_code';
+		this.config.flowType = EFlowTypes.AuthoriztionCodeFlow;
 	}
 
 	/**
@@ -525,14 +512,20 @@ class AuthorizationCodeFlow extends FlowAbstract {
 		if (!(this.config.redirectUri && utils.isUrl(this.config.redirectUri))) {
 			throw new InvalidOAuthConfigurationError('a valid redirectUri property is required in config settings');
 		}
-		if (!this.config.responseType) {
+		if (!this.config.responseType
+		) {
 			throw new InvalidOAuthConfigurationError('responseType property is required in config settings');
 		}
 
 		return true;
 	}
 
-	getToken(params) {
+	getToken(params: string | ITokenProps) {
+		let query: string = '';
+		if (typeof params === 'string' && params.includes('?')) {
+			query = params.substring(params.indexOf('?'));
+		}
+
 		if (!params) {
 			throw new VerifyError(AppConfig.OAUTH_CONTEXT_CONFIG_SETTINGS_ERROR, 'getToken(params), Params are required');
 		}
@@ -541,21 +534,19 @@ class AuthorizationCodeFlow extends FlowAbstract {
 			throw new VerifyError(AppConfig.OAUTH_CONTEXT_API_ERROR, 'getToken(params), Params must contain data object or query string');
 		}
 
-		let query = params.substring(params.indexOf('?'));
-		let data = typeof query === 'object' ? query : qs.parse(query);
-		let path = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
-
+		const data: ITokenProps = typeof params === 'object' ? params : qs.parse(query);
+		const path: string = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
 
 		data.redirect_uri = this.config.redirectUri;
-		data.grant_type = this.config.grantType;
+		data.grant_type = EGrantTypes.Authorization_Grant_Type;
 		data.client_id = this.config.clientId;
 		data.client_secret = this.config.clientSecret;
 		data.scope = this.config.scope;
 
-		let encodedData = qs.stringify(data);
+		const encodedData: string = qs.stringify(data);
 
-		let options = {
-			method: 'POST',
+		const options: IApiRequest = {
+			method: EMethods.POST,
 			url: path,
 			contentType: 'application/x-www-form-urlencoded',
 			data: encodedData
@@ -569,11 +560,9 @@ class AuthorizationCodeFlow extends FlowAbstract {
 	 * @returns {Promise<string>} Authentication URL
 	 */
 	authenticate() {
-		return new Promise(
-			function(resolve) {
-				resolve(this._authorize(this.config));
-			}.bind(this)
-		);
+		return new Promise((resolve) => {
+			resolve(this._authorize(this.config));
+		});
 	}
 
 	/**
@@ -581,7 +570,7 @@ class AuthorizationCodeFlow extends FlowAbstract {
 	 * @param {object} token The token object to be refreshed containing access_token, refresh_token ...
 	 * @returns {Promise<object|void>} Response object from refreshing the token
 	 */
-	refreshToken(token) {
+	refreshToken(token: IToken) {
 		return super.refreshToken(token);
 	}
 }
@@ -590,11 +579,12 @@ class AuthorizationCodeFlow extends FlowAbstract {
  * @class DeviceFlow
  */
 class DeviceFlow extends FlowAbstract {
-	constructor(config) {
+	POLLING_TIME: number;
+	constructor(config: IOAuthConfig) {
 		super(config);
 		this.isValidConfig();
 		this.POLLING_TIME = 5000;
-		this.config.grantType = 'urn:ietf:params:oauth:grant-type:device_code';
+		this.config.grantType = EGrantTypes.Device;
 	}
 
 	/**
@@ -615,15 +605,15 @@ class DeviceFlow extends FlowAbstract {
 	 * Note: device_code should not be exposed to the user agent.
 	 */
 	authorize() {
-		let authServerPath = `${this.config.tenantUrl}/oidc/endpoint/default/device_authorization`;
-		let data = {
+		const authServerPath: string = `${this.config.tenantUrl}/oidc/endpoint/default/device_authorization`;
+		const data = {
 			client_id: this.config.clientId,
 			scope: this.config.scope
 		};
 
-		let encodedData = qs.stringify(data);
+		const encodedData: string = qs.stringify(data);
 
-		let options = {
+		const options: IApiRequest = {
 			method: 'POST',
 			url: authServerPath,
 			contentType: 'application/x-www-form-urlencoded',
@@ -639,7 +629,7 @@ class DeviceFlow extends FlowAbstract {
 	 * @param {duration} number Optional, used to set the polling time in milliseconds. Default 5000 milliseconds.
 	 * @returns {Promise<object>} Resolved or Rejected promise.
 	 */
-	async pollTokenApi(deviceCode, duration = this.POLLING_TIME) {
+	async pollTokenApi(deviceCode: string, duration: number = this.POLLING_TIME) {
 		if (duration < this.POLLING_TIME) {
 			return Promise.reject(new DeveloperError('The device made an attempt within [5] seconds. This request will not be processed.'));
 		}
@@ -647,20 +637,19 @@ class DeviceFlow extends FlowAbstract {
 		if (!deviceCode) {
 			return Promise.reject(new DeveloperError('No device code value provided.'));
 		}
-		const path = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
+		const path: string = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
 		let response;
+
 		let data = {
 			client_id: this.config.clientId,
 			client_secret: this.config.clientSecret,
-			grant_type: this.config.grantType,
+			grant_type: EGrantTypes.Device,
 			device_code: deviceCode
-		};
+		} as IDeviceFlow;
 
-		let error = {
-			messageId: ''
-		};
+		let error = {} as IError;
 
-		while (error.messageId !== 'expired_token' && !response) {
+		while (error.messageId !== ETokens.ExpiredToken && !response) {
 			try {
 				response = await this.getToken({ data, path });
 				break;
@@ -681,7 +670,7 @@ class DeviceFlow extends FlowAbstract {
 	 * @param {object} token The token object to be refreshed containing access_token, refresh_token ...
 	 * @returns {Promise<object|void>} Response object from refreshing the token
 	 */
-	refreshToken(token) {
+	refreshToken(token: IToken){
 		return super.refreshToken(token);
 	}
 }
@@ -690,17 +679,16 @@ class DeviceFlow extends FlowAbstract {
  * @class ROPCFlow
  */
 class ROPCFlow extends FlowAbstract {
-	constructor(config) {
+	constructor(config: IOAuthConfig) {
 		super(config);
 		this.isValidConfig();
-		this.config.grantType = 'password';
 	}
 
 	/**
 	 * @function isValidConfig Validates the config of a DeviceFlow instance
 	 * @returns {boolean} Boolean indicating whether the config is valid
 	 */
-	isValidConfig() {
+	isValidConfig(): boolean {
 		return true;
 	}
 
@@ -710,26 +698,26 @@ class ROPCFlow extends FlowAbstract {
 	 * @param {string} password The user's password
 	 * @returns {Promise<object>} Response object from login containing token
 	 */
-	login(username, password) {
+	login(username: string, password: string): Promise<PromiseRejectionEvent> {
 		if (!username || !password) {
 			return Promise.reject(new DeveloperError('username and password params are required'));
 		}
 
-		let path = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
+		const path: string = `${this.config.tenantUrl}/v1.0/endpoint/default/token`;
 
 		const data = {
 			client_id: this.config.clientId,
 			client_secret: this.config.clientSecret,
 			username: username,
 			password: password,
-			grant_type: this.config.grantType,
+			grant_type: EGrantTypes.ROPC,
 			scope: this.config.scope
-		};
+		} as IROPCFlow;
 
-		let encodedData = qs.stringify(data);
+		const encodedData: string = qs.stringify(data);
 
-		let options = {
-			method: 'POST',
+		const options: IApiRequest = {
+			method: EMethods.POST,
 			url: path,
 			contentType: 'application/x-www-form-urlencoded',
 			data: encodedData
@@ -743,7 +731,7 @@ class ROPCFlow extends FlowAbstract {
 	 * @param {object} token The token object to be refreshed containing access_token, refresh_token ...
 	 * @returns {Promise<object|void>} Response object from refreshing the token
 	 */
-	refreshToken(token) {
+	refreshToken(token: IToken) {
 		return super.refreshToken(token);
 	}
 }

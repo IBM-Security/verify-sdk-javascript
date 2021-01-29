@@ -8,7 +8,7 @@ Each flow will load the config from `.env` first, and then any flow-specific env
 <br>
 There are sample `mock.env` files for the above.
 
-The structure is `tenant config`, `test data` and `extra config`. 
+The structure is `tenant config`, `test data` and `extra config`.
 
 Below are samples of using the `mock-server` and a `production tenant`.
 
@@ -30,6 +30,9 @@ Any extra configuration.
 **NOTE:** If `REAL_TENANT` is true the logout and getToken tests will not be run.
 
 ## Using mock-server
+To run the unit tests using mock data you'll also need the mock-server. You can clone the repo: https://github.ibm.com/IBM-Verify/mock-server.
+
+You can read more about how the mock-server works https://github.ibm.com/IBM-Verify/mock-server/blob/master/README.md.
 ### Sample config
 
 ```

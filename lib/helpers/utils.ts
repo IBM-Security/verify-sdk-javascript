@@ -1,11 +1,13 @@
-const utils = {
+import { IToken, IUtils } from './interfaces';
+
+const utils: IUtils = {
 	/**
 	 * return random string with a given length
 	 */
-	randomString: function(length) {
-		var randomCharset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~';
-		var random = '';
-		for (var c = 0, cl = randomCharset.length; c < length; ++c) {
+	randomString: function(length: number): string {
+		const randomCharset: string = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~';
+		let random: string = '';
+		for (let c = 0, cl = randomCharset.length; c < length; ++c) {
 			random += randomCharset[Math.floor(Math.random() * cl)];
 		}
 		return random;
@@ -14,28 +16,28 @@ const utils = {
 	/**
 	 * return readable date string of the given value
 	 */
-	dateString: function(value) {
-		let dateData = value;
-		let dateObject = new Date(Date.parse(dateData));
-		let dateReadable = dateObject.toDateString();
+	dateString: function(value: string): string {
+		const dateData: string = value;
+		const dateObject: Date = new Date(Date.parse(dateData));
+		const dateReadable: string = dateObject.toDateString();
 
 		return dateReadable;
 	},
+
 	/**
 	 * return boolean to detect if we're in a node env or browser based.
 	 */
-	isNode: function() {
-		let isNode;
+	isNode: function(): boolean {
 		try {
-			return isNode = Object.prototype.toString.call(global.process) === '[object process]';
+			return Object.prototype.toString.call(global.process) === '[object process]';
 		} catch (e) {
-			return isNode = false;
+			return  false;
 		}
 	},
 	/**
 	 * return boolean to detect if the object has an accessToken
 	 */
-	isToken: function(token) {
+	isToken: function(token: IToken): boolean {
 		if (!token || !token.access_token) {
 			return false;
 		}
@@ -45,7 +47,7 @@ const utils = {
 	/**
 	 * sleeps execution for the given duration
 	 */
-	sleep: function(duration) {
+	sleep: function(duration: number): Promise<void> {
 		return new Promise(resolve => {
 			setTimeout(resolve, duration);
 		});
@@ -54,7 +56,7 @@ const utils = {
 	/*
 	 * returns whether or not the string begins with 'http(s)://'
 	 */
-	isUrl: function(url) {
+	isUrl: function(url: string): boolean {
 		const valid = url.startsWith('https://') || url.startsWith('http://');
 
 		return valid;

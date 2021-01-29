@@ -1,5 +1,7 @@
-import {VerifyError} from '../errors/Errors';
-import {AppConfig} from '../config';
+import { VerifyError } from '../errors/Errors';
+import { AppConfig } from '../config';
+import { IApiRequest } from './interfaces';
+
 let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
 /**
@@ -10,8 +12,8 @@ let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
  */
 
 
-let HTTP_ERROR = AppConfig.HTTP_ERROR;
-let apiRequest = function(request, accessToken) {
+const HTTP_ERROR: string = AppConfig.HTTP_ERROR;
+const apiRequest = function(request: IApiRequest, accessToken?: string): Promise<any> {
 	return new Promise((resolve, reject) => {
 		let err;
 		let httpRequest = new XMLHttpRequest();
@@ -20,7 +22,6 @@ let apiRequest = function(request, accessToken) {
 		}
 
 		httpRequest.onreadystatechange = handleResponse;
-		// httpRequest.onerror = handleError;
 		httpRequest.open(request.method, request.url, true);
 		if (request.accept) {
 			httpRequest.setRequestHeader('Accept', `${request.accept}, text/html`);
@@ -70,13 +71,7 @@ let apiRequest = function(request, accessToken) {
 				}
 			}
 		}
-
-		// function handleError(){
-		//   if (httpRequest.status === 0 ){
-		//     return reject(httpRequest.responseText);
-		//   }
-		// }
 	});
 };
 
-module.exports = apiRequest;
+export default apiRequest;
