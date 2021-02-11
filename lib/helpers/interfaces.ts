@@ -17,7 +17,7 @@ interface IOAuthConfig {
 	responseType: string;
 	flowType: string;
 	scope: string;
-	storageType? : string;
+	storageType? : Storage;
 	grantType?: string;
 }
 

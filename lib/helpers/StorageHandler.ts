@@ -8,7 +8,7 @@
 import { IToken } from '.';
 
 
-function StorageHandler(storageType: string) {
+function StorageHandler(storageType: Storage) {
 	let storage = setStorageMethod(storageType);
 
 	function setStorage(obj: IToken) {
@@ -48,15 +48,15 @@ function StorageHandler(storageType: string) {
 		clearStorage: clearStorage
 	};
 }
-const setStorageMethod = (storageType: string) => {
+const setStorageMethod = (storageType: Storage) => {
 	switch (storageType) {
-	case 'localStorage':
+	case localStorage:
 		if (!supportsLocalStorage()) {
 			console.log("Browser doesn't support localStorage");
 			break;
 		}
 		return localStorage;
-	case 'sessionStorage':
+	case sessionStorage:
 		if (!supportsSessionStorage()) {
 			console.log("Browser doesn't support sessionStorage");
 			break;

@@ -20,7 +20,7 @@ SCOPE=openid
 
 From your CLI (Command Line Interface), at the root of your project:
 - `npm install`
-- `node ropc-sample.js`
+- `npm run start`
 - Enter user credentials when prompted
 
 Following successful authentication, authenticated user information will be returned.

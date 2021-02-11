@@ -33,4 +33,5 @@ app.get(config.REDIRECT_URI_ROUTE, (req, res) => {
 
 app.listen(3000, () => {
 	console.log('Server started');
+	console.log('Navigate to http://localhost:3000');
 });

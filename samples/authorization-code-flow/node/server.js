@@ -2,7 +2,7 @@ const express              = require('express');
 const bodyParser           = require('body-parser');
 const cookieParser         = require('cookie-parser');                        // optional
 const uuidv1               = require('uuid/v1');                              // optional
-const OAuthContext         = require('ibm-verify-sdk').OAuthContext;
+const {OAuthContext} = require('ibm-verify-sdk');
 const path = require('path');
 const app = express();
 
@@ -137,4 +137,5 @@ app.get('/api/userinfo', middlewareFunction, (req, res) => {
 });
 app.listen(3000, () => {
 	console.log('Server started');
+	console.log('Navigate to http://localhost:3000');
 });
