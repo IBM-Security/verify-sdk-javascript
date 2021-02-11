@@ -14,7 +14,7 @@ To run the example
 -  Update the Config object in `vanilla/config.js` with the appropriate configuration settings.
 - Transpile `browserify front-end/dashboard.js > front-end/dashboard-transpile.js`
 - npm install
-- npm start
+- npm run start
 - navigate to `http://localhost:3000` in your browser
 
 This sample application uses￼ ￼[Implicit Flow](http://developer.ice.ibmcloud.com/verify/javascript/oauth/implicit-flow) to authenticate a user.

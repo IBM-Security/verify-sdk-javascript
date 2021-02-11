@@ -17,7 +17,7 @@ Copyright (c) 2019, 2021 - IBM Corp.
  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-let OAuthContext         = require('ibm-verify-sdk').OAuthContext;
+let OAuthContext = require('ibm-verify-sdk');
 let authClient = new OAuthContext(config);
 
 if (window.location.pathname === config.REDIRECT_URI_ROUTE) {

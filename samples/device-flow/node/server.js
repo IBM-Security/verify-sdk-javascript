@@ -21,7 +21,7 @@ require('dotenv').config({path: './.env'});
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const OAuthContext = require('ibm-verify-sdk').OAuthContext;
+const {OAuthContext} = require('ibm-verify-sdk');
 
 const app = express();
 app.use(bodyParser.json());
@@ -88,5 +88,6 @@ function pollToken(device_code) {
 }
 
 http.listen(3000, () => {
-	console.log('listening on port: 3000');
+	console.log('Server started');
+	console.log('Navigate to http://localhost:3000');
 });

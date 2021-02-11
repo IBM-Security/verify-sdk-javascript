@@ -39,13 +39,13 @@ function StorageHandler(storageType) {
 }
 const setStorageMethod = (storageType) => {
     switch (storageType) {
-        case 'localStorage':
+        case localStorage:
             if (!supportsLocalStorage()) {
                 console.log("Browser doesn't support localStorage");
                 break;
             }
             return localStorage;
-        case 'sessionStorage':
+        case sessionStorage:
             if (!supportsSessionStorage()) {
                 console.log("Browser doesn't support sessionStorage");
                 break;

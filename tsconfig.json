@@ -1,36 +1,41 @@
 {
   "compilerOptions": {
-	"allowSyntheticDefaultImports": true,
-	"allowJs": true,                       /* Allow JavaScript files to be compiled. */
-	"outDir": "./dist/",                    /* Redirect output structure to the directory. */
-	"removeComments": true,                /* Do not emit comments to output. */
-	"rootDir": "lib",                    /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
-	"target": "ES2015",                       /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */
-	"downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
-	"strict": true,                        /* Enable all strict type-checking options. */
-	"noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. */
-	"strictNullChecks": true,              /* Enable strict null checks. */
-	"noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
-	"alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
-	"noUnusedLocals": true,                /* Report errors on unused locals. */
-	"noUnusedParameters": true,            /* Report errors on unused parameters. */
-	"noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
-	"sourceMap": true,
-	"inlineSourceMap": false,               /* Emit a single file with source maps instead of having a separate file. */
-	"lib": ["ES2017", "dom"],
-	"moduleResolution": "node",
-	"esModuleInterop": true,
-	"module": "commonjs"
-	},
-	"exclude": [
-		"./dist",
-		"./node_modules",
-		"./samples",
-		"./test/*",
-		"./mock-server"
-	],
-	"include": [
-    "**/*.js",
-    "**/*.ts",
-  ]
+		"declaration": true,
+		"typeRoots": [
+			"./lib/interfaces",
+			"./node_modules/@types"
+		],
+		"allowSyntheticDefaultImports": true,
+		"allowJs": true,                       /* Allow JavaScript files to be compiled. */
+		"outDir": "./dist/",                    /* Redirect output structure to the directory. */
+		"removeComments": true,                /* Do not emit comments to output. */
+		"rootDir": "lib",                    /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+		"target": "ES2015",                       /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */
+		"downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
+		"strict": true,                        /* Enable all strict type-checking options. */
+		"noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. */
+		"strictNullChecks": true,              /* Enable strict null checks. */
+		"noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
+		"alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
+		"noUnusedLocals": true,                /* Report errors on unused locals. */
+		"noUnusedParameters": true,            /* Report errors on unused parameters. */
+		"noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
+		"sourceMap": true,
+		"inlineSourceMap": false,               /* Emit a single file with source maps instead of having a separate file. */
+		"lib": ["ES2017", "dom"],
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"module": "commonjs"
+		},
+		"exclude": [
+			"./dist",
+			"./node_modules",
+			"./samples",
+			"./test/*",
+			"./mock-server"
+		],
+		"include": [
+			"**/*.js",
+			"**/*.ts",
+		]
 }

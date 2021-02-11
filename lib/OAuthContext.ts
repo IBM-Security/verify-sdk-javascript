@@ -389,7 +389,7 @@ class ImplicitFlow extends FlowAbstract {
 		super(config);
 		this.isValidConfig();
 		this.session = false;
-		this.storageHandler = StorageHandler(config.storageType as string) as any;
+		this.storageHandler = StorageHandler(config.storageType as Storage) as any;
 	}
 
 	/**
