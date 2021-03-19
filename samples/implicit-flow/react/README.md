@@ -1,34 +1,33 @@
 # React Sample
 
-This sample shows how to use the SDK to
-* Authenticate a user through IBM Security Verify
-* View user information
-
+This sample shows how to use the IBM Security Verify SDK for JavaScript to:
+- Authenticate a user via IBM Security Verify platform.
+- Successfully make an API request to `userinfo` endpoint to return the authenticated users details.
 <br>
 
 ![screenshot](screenshot.png)
 
-To run the example
+## :rocket: Demo the sample app:
+**If you've downloaded a sample application via the developer portal you skip step one.** :relieved:
 
-- Update the Config object in `config.js` with the appropriate configuration settings.
-- npm install
-- npm start
-- navigate to `http://localhost:3000` in your browser
-- click `Login` on the top right corner to authenticate a user through IBM Security Verify
+1. Update the Config object in `config.js` with the appropriate configuration settings.
+2. npm install
+3. npm start
+4. navigate to `http://localhost:3000` in your browser
+ click `Login` on the top right corner to authenticate a user through IBM Security Verify
 ￼
 This sample application uses￼ ￼[Implicit Flow](http://developer.ice.ibmcloud.com/verify/javascript/oauth/implicit-flow) to authenticate a user.
 
 The IBM Verify Javascript SDK also supports the ability to manage IBM Verify registration profiles. You can read more about how this is implemented [here](http://developer.ice.ibmcloud.com/verify/javascript/ibm-verify-sdk-object-model/authenticator-context).
 
 
-**note: if you're considering using your own custom application outside of IBM Secruity Verify's developer portal you need to add an additional configuration property to your `config.js` file example below:**
+**note: if you're considering using your own custom application outside of IBM Secruity Verify's developer portal you need to add an additional configuration property to your `config.js` file.<br> Example below:**
 
-<code>
-	REDIRECT_URI_ROUTE: '/auth/callback'
-</code>
+The `REDIRECT_URI_ROUTE` value should be the path of your expected callback URL omitting the host or domain value.
 
-the `REDIRECT_URI_ROUTE` value should be the path of your expected callback URL omitting the host or domain value.
-
+```
+REDIRECT_URI_ROUTE: '/auth/callback'
+```
 
 ## License
 

@@ -1,19 +1,19 @@
 # Node sample application using Authorization grant type
 This sample shows how to use the SDK to
-* Authenticate a user via IBM Security Verify
-* Display the authenticated user information using `userinfo` endpoint
+- Authenticate a user via IBM Security Verify
+- Successfully make an API request to `userinfo` endpoint to return the authenticated users details.
 
 <br>
 
 ![screenshot](screenshot.png)
 
-To run the sample
-
-- Copy paste the contents of the `.env.example` file into a `.env` file
-- Update the environment variables in your `.env` file with the appropriate configuration settings.
-- npm install
-- npm run start
-- navigate to `http://localhost:3000`
+## :rocket: Demo the sample app:
+**If you've downloaded the sample app from the developer portal you can skip straight to step 3**
+1. Copy paste the contents of the `.env.example` file into a `.env` file
+2. Update the environment variables in your `.env` file with the appropriate configuration settings.
+3. npm install
+4. npm run start
+5. navigate to `http://localhost:3000`
 
 The IBM Verify Javascript SDK also supports the ability to manage IBM Verify registration profiles. You can read more about how this is implemented [here](http://developer.ice.ibmcloud.com/verify/javascript/ibm-verify-sdk-object-model/authenticator-context)
 

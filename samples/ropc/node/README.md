@@ -1,15 +1,16 @@
 # ROPC
 
-This sample shows how to use the SDK to authenticate a user via IBM Security Verify using the the ROPC grant.
+This sample shows how to use the IBM Security Verify SDK for JavaScript to:
+ - Authenticate a user via IBM Security Verify using the the ROPC grant type.
+ - Successfully make an API request to `userinfo` endpoint to return the authenticated users details.
 
 <br>
 
 ![screenshot](screenshot.png)
 
-## To run the example
-
-In your project folder:
-- Create a `.env` file with the following variables in place (remove secret if Public Client):
+## :rocket: Demo the sample app:
+**If you've downloaded a sample application via the developer portal you can skip step one.**
+1. Create a `.env` file with the following variables in place (remove secret if Public Client)
 ```
 TENANT_URL=https://your-tenant-name.ice.ibmcloud.com
 CLIENT_ID=a1b2c3d4-abcd-1234-0000-yourid
@@ -18,10 +19,9 @@ FLOW_TYPE=ropc
 SCOPE=openid
 ```
 
-From your CLI (Command Line Interface), at the root of your project:
-- `npm install`
-- `npm run start`
-- Enter user credentials when prompted
+2. `npm install`
+3. `npm run start`
+4. In your CLI follow the prompts to authenticate.
 
 Following successful authentication, authenticated user information will be returned.
 

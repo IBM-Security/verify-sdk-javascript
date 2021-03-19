@@ -1,23 +1,23 @@
 # Vanilla JS Sample
 
-This sample shows how to use the SDK to
-* Authenticate a user through IBM Security Verify
-* View user information
+This sample shows how to use the IBM Security Verify SDK for JavaScript to:
+- Authenticate a user via IBM Security Verify platform.
+- Successfully make an API request to `userinfo` endpoint to return the authenticated users details.
 
 <br>
 
 ![screenshot](screenshot.png)
 
-To run the example
+## :rocket: Demo the sample app:
+**If you've downloaded a sample application via the developer portal you can proceed to step 4** :relieved:
+1. Update the Config object in `front-end/config.js` with the appropriate configuration settings.
+2. Update the Config object in `vanilla/config.js` with the appropriate configuration settings.
+3. Transpile `browserify front-end/dashboard.js > front-end/dashboard-transpile.js`
+4. npm install
+5. npm run start
+6. navigate to `http://localhost:3000` in your browser
 
-- Update the Config object in `front-end/config.js` with the appropriate configuration settings.
--  Update the Config object in `vanilla/config.js` with the appropriate configuration settings.
-- Transpile `browserify front-end/dashboard.js > front-end/dashboard-transpile.js`
-- npm install
-- npm run start
-- navigate to `http://localhost:3000` in your browser
-
-This sample application uses￼ ￼[Implicit Flow](http://developer.ice.ibmcloud.com/verify/javascript/oauth/implicit-flow) to authenticate a user.
+This sample application uses [Implicit Flow](http://developer.ice.ibmcloud.com/verify/javascript/oauth/implicit-flow) to authenticate a user.
 
 The IBM Verify Javascript SDK also supports the ability to manage IBM Verify registration profiles. You can read more about how this is implemented [here](http://developer.ice.ibmcloud.com/verify/javascript/ibm-verify-sdk-object-model/authenticator-context)
 
