@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Toggle from 'react-toggle';
-import Loader from 'react-loader';
 import {Table} from 'reactstrap';
-import '../toggle.css';
 
 class Methods extends Component {
 	constructor(props) {
@@ -14,16 +12,16 @@ class Methods extends Component {
 	}
 
 	toggleCheck(methodId, authId, event) {
-		this.setState({ 
+		this.setState({
       isChecked: event.target.checked }, () => {
 			this.props.updateAuthenMethod(methodId, this.state.isChecked, authId);
 		});
   }
-  
+
 	render() {
     let { methods } = this.props;
 		return (
-      <React.Fragment> 
+      <React.Fragment>
         {methods && methods.length > 0 &&
               <div>
                 <h3>Enrolled Methods</h3>

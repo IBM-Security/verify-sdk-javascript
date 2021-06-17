@@ -17,7 +17,7 @@ Copyright (c) 2019, 2021 - IBM Corp.
  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-let OAuthContext = require('ibm-verify-sdk');
+let {OAuthContext} = require('ibm-verify-sdk');
 let authClient = new OAuthContext(config);
 
 if (window.location.pathname === config.REDIRECT_URI_ROUTE) {
@@ -27,19 +27,59 @@ if (window.location.pathname === config.REDIRECT_URI_ROUTE) {
 
 if (window.location.pathname === '/') {
 	let url = authClient.login();
-	window.location.replace(url);
+	document.getElementById('login').href=url;
 }
 
 if (window.location.pathname === '/dashboard.html') {
-	$('#APIExplorer').prop('href', `${config.tenantUrl}/developer/explorer`);
 	let token = authClient.fetchToken();
+
+	const logoutButton = document.getElementById('logout');
+	logoutButton.addEventListener('click', function(event){
+		event.preventDefault();
+		authClient.logout();
+	})
+
+	const table = document.getElementsByClassName('table')[0];
+	const hiddenEls = document.querySelectorAll('.invisible');
+
 	authClient.userInfo(token)
 		.then((result) => {
-			document.getElementById('name').textContent = result.displayName;
-			document.getElementById('user-info').textContent = JSON.stringify(result, null, 4);
+			const userInfo = result;
+			document.getElementById('welcome').textContent = `Welcome ${userInfo.displayName}`;
+			const tbodyEl = document.getElementById('user-info');
+			table.classList.remove('hidden');
+			for(const el in userInfo) {
+				const row = document.createElement("tr");
+				for(var i = 0; i < 2; i++){
+					const cell = document.createElement('td');
+					if(i === 0){
+						if(el === 'ext'){
+							cell.textContent = 'tenantId'
+						} else {
+							cell.textContent = el;
+						}
+					} else {
+						if(el === 'ext'){
+							cell.textContent = userInfo.ext.tenantId
+						} else {
+							cell.textContent = userInfo[el];
+						}
+					}
+					row.appendChild(cell);
+				}
+				tbodyEl.appendChild(row);
+			}
+
+			for(var j = 0; j < hiddenEls.length; j++){
+				hiddenEls[j].classList.remove('invisible');
+			}
+
 		})
 		.catch((error) => {
 			return error;
+		})
+		.finally(() => {
+			document.getElementById('spinner-wrapper').remove();
 		});
 }
 

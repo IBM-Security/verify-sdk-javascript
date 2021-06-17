@@ -20,18 +20,26 @@ Copyright (c) 2019, 2021 - IBM Corp.
 require('dotenv').config({path: './.env'});
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser');
 const {OAuthContext} = require('ibm-verify-sdk');
+const session = require('express-session');
+const storage = require('node-persist');
 
 const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+	secret: 'my-secret',
+  resave: true,
+  saveUninitialized: true,
+}));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+storage.init();
+
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-
 
 let config = {
 	tenantUrl : process.env.TENANT_URL,
@@ -43,29 +51,62 @@ let config = {
 
 let deviceFlow = new OAuthContext(config);
 
-app.get('/', (req, res) => {
+
+const verifyToken = async(req, res, next) => {
+
+	await storage.getItem(req.sessionID)
+	.then((response) => {
+		if(response){
+			req.session.token = response;
+			next();
+		} else {
+			res.redirect('/');
+		}
+	})
+	.catch((error) => {
+		console.log('No token found', error)
+		res.redirect('/');
+	})
+
+}
+
+app.get('/', (req, res) => {
 	res.render('index');
 });
 
-app.get('/authenticated', (req, res) => {
-	res.render('authenticated', {
-		message: 'successfully authenticated'
-	});
+app.get('/authenticated', verifyToken, (req, res) => {
+		deviceFlow.userInfo(req.session.token)
+		.then((response) => {
+			res.render('authenticated', {message: 'successfully authenticated', userInfo: response.response});
+		}).catch((err) => {
+			res.send(err);
+		});
 });
 
 app.get('/authorize', (req, res) => {
-	deviceFlow.authorize()
-		.then((response) => {
-			res.render('authorize', {
-				userCode: response.user_code,
-				verificationUri: response.verification_uri,
-				qrCode: response.verification_uri_complete_qrcode
-			}, pollToken(response.device_code));
-		})
-		.catch(error => {
-			console.log(error);
-		});
+		deviceFlow.authorize()
+			.then((response) => {
+				res.render('authorize', {
+					userCode: response.user_code,
+					verificationUri: response.verification_uri,
+					qrCode: response.verification_uri_complete_qrcode
+				}, pollToken(response.device_code, req.sessionID));
+			})
+			.catch(error => {
+				console.log(error);
+			});
 });
+
+app.get('/logout', async(req, res) => {
+	deviceFlow.revokeToken(req.session.token, 'access_token')
+	.then(async() => {
+		await storage.removeItem(req.sessionID);
+		res.redirect(302, '/')
+	})
+	.catch((error) => {
+		console.log('Token revocation error: ', error)
+	})
+})
 
 io.on('connection', function(socket) {
 	console.log('node client connected');
@@ -75,16 +116,22 @@ io.on('connection', function(socket) {
 });
 
 
-function pollToken(device_code) {
+function pollToken(device_code, sessionID ) {
 	let deviceCode = device_code;
 	let timeoutInterval = 5000;
 	deviceFlow.pollTokenApi(deviceCode, timeoutInterval)
+	.then(async(response) => {
+		await storage.setItem(sessionID, {...response})
 		.then(() => {
 			io.emit('success', {auth: '/authenticated'});
 		})
-		.catch((err) => {
-			console.log('polling error: ', err);
-		});
+		.catch((error) => {
+			return error;
+		})
+	})
+	.catch((err) => {
+		console.log('polling error: ', err);
+	});
 }
 
 http.listen(3000, () => {

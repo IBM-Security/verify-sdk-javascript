@@ -10,12 +10,13 @@ This sample shows how to use the IBM Security Verify SDK for JavaScript to:
 ## :rocket: Demo the sample app:
 **If you've downloaded a sample application via the developer portal you skip step one.** :relieved:
 
-1. Update the Config object in `config.js` with the appropriate configuration settings.
-2. npm install
-3. npm start
-4. navigate to `http://localhost:3000` in your browser
- click `Login` on the top right corner to authenticate a user through IBM Security Verify
-￼
+- Update the Config object in `src/config.js` with the appropriate configuration settings.
+- yarn install
+- yarn start
+- navigate to `http://localhost:3000` in your browser
+- click the `Login` button to authenticate with a valid username and password
+ 
+
 This sample application uses￼ ￼[Implicit Flow](http://developer.ice.ibmcloud.com/verify/javascript/oauth/implicit-flow) to authenticate a user.
 
 The IBM Verify Javascript SDK also supports the ability to manage IBM Verify registration profiles. You can read more about how this is implemented [here](http://developer.ice.ibmcloud.com/verify/javascript/ibm-verify-sdk-object-model/authenticator-context).

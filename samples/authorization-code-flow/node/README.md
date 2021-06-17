@@ -15,8 +15,7 @@ This sample shows how to use the SDK to
 4. npm run start
 5. navigate to `http://localhost:3000`
 
-The IBM Verify Javascript SDK also supports the ability to manage IBM Verify registration profiles. You can read more about how this is implemented [here](http://developer.ice.ibmcloud.com/verify/javascript/ibm-verify-sdk-object-model/authenticator-context)
-
+For more details how this application works visit the [IBM Security Documentation Hub](https://docs.verify.ibm.com/verify/docs/authorization-code-example#introduction)
 ## License
 
 The MIT License (MIT)

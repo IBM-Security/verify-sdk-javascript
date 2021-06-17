@@ -240,7 +240,7 @@ class FlowAbstract {
 	}
 
 	/**
-	 * @function getToken Makes an api request to the Cloud Identity Authorization server
+	 * @function getToken Makes an api request to the ISV Authorization server
 	 * to retrieve access_token, refresh_token, grant_id... used for NodeJS applications that can
 	 * store secure credentials
 	 * @param {object} params Required data and url path to token EP to retrieve a OAuth 2.0 Bearer Token.
@@ -463,8 +463,12 @@ class ImplicitFlow extends FlowAbstract {
 	 * @params {string} path Optional path to redirect to, defaults to index page.
 	 */
 	async logout(path: string) {
-		const accessToken: IToken = this.fetchToken();
-		await this.revokeToken(accessToken, ETokens.AccessToken);
+		const accessToken: IToken = await this.fetchToken();
+
+		if (typeof accessToken === 'string'){
+			await this.revokeToken(accessToken, ETokens.AccessToken);
+		}
+
 		await this.storageHandler.clearStorage();
 		await window.location.replace(path || '/');
 	}
@@ -473,6 +477,7 @@ class ImplicitFlow extends FlowAbstract {
 	 * @function handleCallback Stores token into sessionStorage
 	 * @returns {Promise<void>} Promise rejection if error
 	 */
+
 	handleCallback() {
 		let urlObj: Object | string;
 		const errorCheck: RegExp = RegExp('#error');
@@ -660,7 +665,7 @@ class DeviceFlow extends FlowAbstract {
 		}
 
 		if (response) {
-			return Promise.resolve();
+			return Promise.resolve(response);
 		}
 		return Promise.reject(error.messageDescription);
 	}

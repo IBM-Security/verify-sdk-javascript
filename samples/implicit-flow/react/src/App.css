@@ -21,6 +21,31 @@
 .App-intro {
   font-size: large;
 }
+.spinner-wrapper {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: #0000003d;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.jumbotron {
+  padding: 4rem 2rem;
+  margin-bottom: 2rem;
+  background-color: var(--bs-light);
+  border-radius: .3rem;
+}
+
+.lead {
+  margin-bottom: 3rem;
+}
+
+#root {
+  justify-content: space-between;
+}
 
 @keyframes App-logo-spin {
   from {
