@@ -12,4 +12,5 @@
 **/.token
 **/out.txt
 .travis.yml
+**/.node-persist
 # dist/*
