@@ -1,0 +1,32 @@
+.hidden {
+	display:none;
+}
+
+pre{
+	background: #454d55;
+	color: #fff;
+	padding: 1em;
+	margin: .5em 0;
+	font-size: .75rem;
+}
+
+.jumbotron {
+	padding: 4rem 2rem;
+	margin-bottom: 2rem;
+	background-color: var(--bs-light);
+	border-radius: .3rem;
+}
+
+#spinner-wrapper{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: #ffffffe8;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#authenticator-table tr>td:hover{
+	cursor: pointer;
+}

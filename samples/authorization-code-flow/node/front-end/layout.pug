@@ -1,0 +1,29 @@
+html
+	head
+		title= title
+		link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous")
+		script(src='https://code.jquery.com/jquery-3.3.1.min.js')
+
+		style(type="text/css").
+			.jumbotron {
+				padding: 4rem 2rem;
+				margin-bottom: 2rem;
+				background-color: var(--bs-light);
+				border-radius: .3rem;
+			}
+
+
+	body.d-flex.flex-column.h-100
+		.jumbotron
+			.container
+				h1 Authorization code flow sample app.
+				p The sample is using #[a(href='https://www.npmjs.com/package/ibm-verify-sdk' title='IBM Verify Javascript SDK' target='_blank') IBM Verify Javascript SDK]
+
+		.main.flex-shrink-0.mb-5
+			block content
+
+		footer.mt-auto.py-3.bg-dark.text-white
+			.container
+				.row
+					.col
+						p.mb-0 Visit the IBM Security Verify #[a(href='https://docs.verify.ibm.com/verify/docs/authorization-code-example' title='IBM Security Verify authorization code example' target='_blank') Documentation Hub ] for more information about the Authorization code flow sample.

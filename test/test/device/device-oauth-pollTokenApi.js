@@ -19,19 +19,19 @@ describe("OAuthContext(Device) - pollTokenApi()", () => {
 
     it("valid device code should call getToken and return response", () => {
         return authClient.pollTokenApi(deviceCode).then(response => {
-						expect(response).to.not.exist;
+                        expect(response).to.exist;
         }).catch(error => {
             expect(error.messageId).to.equal('authorization_pending')
         })
     })
 
     it("no device code - should throw error 'No device code value provided.' Error", () => {
-			return authClient.pollTokenApi('', 5000)
-			.then((response) => {
-				expect(response).to.not.exist;
-			})
-			.catch((error) => {
-				expect(error.message).to.equal('No device code value provided.');
-			})
+            return authClient.pollTokenApi('', 5000)
+            .then((response) => {
+                expect(response).to.not.exist;
+            })
+            .catch((error) => {
+                expect(error.message).to.equal('No device code value provided.');
+            })
     });
 })

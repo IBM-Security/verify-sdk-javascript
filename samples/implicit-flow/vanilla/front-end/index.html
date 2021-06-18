@@ -21,37 +21,12 @@
         <p>This sample is using <a href="https://www.npmjs.com/package/ibm-verify-sdk" title="IBM Verify javascript SDK" target="_blank">IBM Verify javascript SDK</a></p>
       </div>
     </div>
-    <div id="spinner-wrapper">
-      <div id="spinner" class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
+    <div class="container main flex-shrink-0 mb-5">
+			<p>The sample app demonstrates how to authenticate with IBM Security Verify using the Implicit grant type.</p>
+			<p>You can authenticate using a registered IBM Security Verify's username and password.</p>
+			 <a id="login" href="" class="btn btn-primary">log in</a>
     </div>
-    <div class="container main flex-shrink-0 mb-5 invisible">
-      <h3 id='welcome'>Welcome</h3>
-      <p class="lead mb-5">You have successfully authenticated with IBM Security Verify.</p>
-      <p>Below is the information retrieved from the <code>userInfo</code> endpoint for the authenticated user.</p>
-    </div>
-    <div class="container invisible">
-      <div class="row">
-        <div class="col-md-8">
-          <table class="table table-bordered hidden">
-            <thead class="table-dark">
-              <tr>
-                <th>User claims</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody id="user-info">
-
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="row my-5">
-        <div class="col-md-6"><a class="btn btn-primary" id="logout" href="#">log out</a></div>
-      </div>
-    </div>
-    <footer class='mt-5 py-3 bg-dark text-white invisible'>
+    <footer class='mt-5 py-3 bg-dark text-white'>
       <div class="container">
         <div class="row">
           <div class="col">
@@ -65,8 +40,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
       crossorigin="anonymous"></script>
 
-	<script src="/config.js"> </script>
-  <script src="/dashboard-transpile.js"> </script>
+    <script src="/config.js"> </script>
+    <script src="/dashboard-transpile.js"> </script>
 
 		</script>
   </body>

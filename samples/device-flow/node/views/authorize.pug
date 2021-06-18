@@ -1,35 +1,20 @@
+extends layout.pug
 
-html
-	head
-		title= title
-		link(rel='stylesheet' href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin='anonymous')
-
-	body
-		.jumbotron
-			.container
-				h1 Device flow authorization grant sample
-				p This sample is using #[a(href='https://www.npmjs.com/package/ibm-verify-sdk' title='IBM Verify Javascript SDK' target='_blank') IBM Verify Javascript SDK]
-
+block content
 	.container
-		ol
-			li Copy the following code: <strong>#{userCode}</strong>
-			li Go to the following url #[a(href=verificationUri target='_blank') #{verificationUri}]
+		ol.list-group.list-group-numbered
+			li.list-group-item Copy the following code: <strong>#{userCode}</strong>
+			li.list-group-item Go to the following url #[a(href=verificationUri target='_blank') #{verificationUri}]
 
-if qrCode
-	.container
+	if qrCode
+		.container.mt-5
+			.row
+				.col-md-5
+					p
+						strong Or scan the QR code below
+					img(src=`data:image;base64, ${qrCode}`)
+
+	.container.mt-5
 		.row
-			.justify-content-md-center
-				p Or scan the QR code below
-				img(src=`data:image;base64, ${qrCode}`)
-
-	script(src="/socket.io/socket.io.js")
-
-	script.
-		var socket = io();
-		socket.on('connect', function() {
-			console.log('browser client connected')
-		});
-
-		socket.on('success', function(res) {
-			window.location.href = res.auth;
-		});
+			.col-md-6
+				p Upon successful completion the user has authenticated and the device has been authorized. You can switch back to this tab to verify the authenticated users info.

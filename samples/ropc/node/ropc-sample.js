@@ -26,7 +26,6 @@ const config = {
     tenantUrl: process.env.TENANT_URL,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    responseType: process.env.RESPONSE_TYPE,
     flowType: process.env.FLOW_TYPE,
     scope: process.env.SCOPE,
 };
@@ -44,8 +43,8 @@ async function login() {
 console.log('ibm-verify-sdk ROPC sample application\n\n');
 
 console.log('Authenticate against');
-console.log(`tenant   : ${config.tenantUrl}`);
-console.log(`client ID: ${config.clientId}\n\n`);
+console.log(`tenant    : ${config.tenantUrl}`);
+console.log(`client ID : ${config.clientId}\n\n`);
 
 const ROPC = new OAuthContext(config);
 

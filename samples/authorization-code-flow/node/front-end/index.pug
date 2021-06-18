@@ -1,0 +1,10 @@
+extends layout.pug
+
+block content
+	.container.main
+		p The sample app demonstrates how to authenticate with IBM Security Verify using the Authorization Code Flow.
+		p You can authenticate using a registered IBM Security Verify's username and password.
+		a(href='/login').btn.btn-primary log in
+
+	if isAnonymous
+		p you have succuessfully logged out.
