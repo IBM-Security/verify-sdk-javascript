@@ -2,14 +2,6 @@ import React, { Component } from 'react';
 import { Container, Row, Col, Button, Alert, Spinner } from 'reactstrap';
 import '../App.css'
 
-const keysToDisplay = [
-	'preferred_username',
-	'uniqueSecurityName',
-	'realmName',
-	'userType',
-	'tenantId',
-]
-
 export default class Dashboard extends Component {
 
 	token = {};
@@ -108,11 +100,11 @@ export default class Dashboard extends Component {
 												<tbody>
 													{userInfo !== undefined && (
 														<>
-															{keysToDisplay.map((keyItem) => {
-																if(keyItem === 'tenantId') {
+															{Object.keys(userInfo).map((keyItem) => {
+																if(keyItem === 'ext') {
 																	return (
 																		<tr key={`key-${keyItem}`}>
-																			<td>{keyItem}</td>
+																			<td>{`tenantId`}</td>
 																			<td>{userInfo.ext.tenantId}</td>
 																		</tr>
 																	)

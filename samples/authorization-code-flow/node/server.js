@@ -32,23 +32,27 @@ const authClient = new OAuthContext(config);
 
 // Home route
 app.get('/', (req,res) => {
-  if (req.session.token) {
+	if (req.session.token) {
     res.redirect("/dashboard");
   } else {
     res.render('index')
   }
 });
 app.get('/login', (req, res) => {
-	authClient.authenticate().then(url => {
-			res.redirect(url);
+	authClient.authenticate().then((url) => {
+		console.log(`("======== Authentication redirect to: \n ${url}`);
+		res.redirect(url);
 	}).catch(error => {
-			res.send(error);
+		console.log(`There was an error with the authentication process:`, error);
+		res.send(error);
 	})
 })
 
 app.get(process.env.REDIRECT_URI_ROUTE, (req, res) => {
 	authClient.getToken(req.url).then(token => {
 		token.expiry = new Date().getTime() + (token.expires_in * 1000);
+		console.log("======== Token details:");
+		console.log(token);
 		req.session.token = token;
 		res.redirect('/dashboard');
 	}).catch(error => {
@@ -59,6 +63,7 @@ app.get(process.env.REDIRECT_URI_ROUTE, (req, res) => {
 
 app.get('/dashboard', (req, res) => {
 	if(req.session.token){
+		console.log('======== Requesting userInfo claims using valid token');
 		authClient.userInfo(req.session.token)
 			.then((response) => {
 				res.render('dashboard', {userInfo :response.response});
@@ -66,20 +71,30 @@ app.get('/dashboard', (req, res) => {
 				res.json(err);
 			});
 	} else {
-		console.log('no token')
+		console.log('======== Current session had no token available.')
 		res.redirect('/login')
 	}
 })
 
 // delete token from storage when logging out
 app.get('/logout', (req, res) => {
+	if(!req.session.token){
+		console.log('======== No token stored in session')
+		res.redirect('/');
+		return;
+	}
+	console.log('======== Attempting to revoke access_token')
 	authClient.revokeToken(req.session.token, 'access_token')
 	 .then(() => {
-			delete req.session.token;;
+		 console.log('======== Successfully revoked access token');
+		 delete req.session.token;
+		 console.log('======== Deleteing token session');
+		 console.log('======== Logout session successful');
 			res.redirect('/');
 	 })
 	 .catch((err) => {
-		 res.send(JSON.parse(JSON.stringify(err)));
+		console.log('======== Error revoking token: ', err)
+		 res.redirect('/');
 	 })
 });
 
