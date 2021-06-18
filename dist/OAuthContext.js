@@ -293,8 +293,10 @@ class ImplicitFlow extends FlowAbstract {
     }
     logout(path) {
         return __awaiter(this, void 0, void 0, function* () {
-            const accessToken = this.fetchToken();
-            yield this.revokeToken(accessToken, enums_1.ETokens.AccessToken);
+            const accessToken = yield this.fetchToken();
+            if (typeof accessToken === 'string') {
+                yield this.revokeToken(accessToken, enums_1.ETokens.AccessToken);
+            }
             yield this.storageHandler.clearStorage();
             yield window.location.replace(path || '/');
         });
@@ -423,7 +425,7 @@ class DeviceFlow extends FlowAbstract {
                 yield utils_1.default.sleep(duration);
             }
             if (response) {
-                return Promise.resolve();
+                return Promise.resolve(response);
             }
             return Promise.reject(error.messageDescription);
         });
