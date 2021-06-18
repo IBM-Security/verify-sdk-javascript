@@ -85,7 +85,7 @@ class App extends Component {
 					<footer className='mt-5 py-3 bg-dark text-white'>
 						<div className="container">
 							<div className="row">
-								<div className="col-md-5">
+								<div className="col">
 									<p className='mb-0'>
 										{`Visit the IBM Security Verify Documentation Hub for more information about the implicit flow and the`} <a href='https://www.npmjs.com/package/ibm-verify-sdk' rel='noreferrer' title='IBM Verify Javascript SDK' target='_blank'>{`IBM Verify Javascript SDK`}</a>
 									</p>
