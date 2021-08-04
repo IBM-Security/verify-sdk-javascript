@@ -5648,10 +5648,10 @@ human-signals@^1.1.1:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-1.1.1.tgz#c5b1cd14f50aeae09ab6c59fe63ba3395fe4dfa3"
   integrity sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==
 
-ibm-verify-sdk@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/ibm-verify-sdk/-/ibm-verify-sdk-2.0.5.tgz#8c2f134b921f2520fc489b816bbaacacc2030937"
-  integrity sha512-buEOYo/pnE2LlzAi2KBVffkIwq0pZmK+0u5Pn7T/YFSFclJbItoNQgQNpLxFVtTFBTy4e4sd25BFL6jqunPiUw==
+ibm-verify-sdk@^2.0.6:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/ibm-verify-sdk/-/ibm-verify-sdk-2.0.7.tgz#c7da5a6560fff7d623a14f76d607b9bc29ecfa4d"
+  integrity sha512-nRqIX86J04g1J5KkypCI6g+nAFex2/+0uFmv0j3n7x3VxSIUdaUF4KcXkbSPQvrT8bHfZSFj09v0UMlGeUSpNg==
   dependencies:
     query-string "^6.13.7"
     xmlhttprequest "1.8.0"
@@ -10461,9 +10461,9 @@ tapable@^1.0.0, tapable@^1.1.3:
   integrity sha512-4WK/bYZmj8xLr+HUCODHGF1ZFzsYffasLUgEiMBY4fgtltdO6B4WJtlSbPaDTLpYTcGVwM2qLnFTICEcNxs3kA==
 
 tar@^6.0.2:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.0.tgz#d1724e9bcc04b977b18d5c573b333a2207229a83"
-  integrity sha512-DUCttfhsnLCjwoDoFcI+B2iJgYa93vBnDUATYEeRx6sntCTdN01VnqsIuTlALXla/LWooNg0yEGeB+Y8WdFxGA==
+  version "6.1.6"
+  resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.6.tgz#c23d797b0a1efe5d479b1490805c5443f3560c5d"
+  integrity sha512-oaWyu5dQbHaYcyZCTfyPpC+VmI62/OM2RTUYavTk1MDr1cwW5Boi3baeYQKiZbY2uSQJGr+iMOzb/JFxLrft+g==
   dependencies:
     chownr "^2.0.0"
     fs-minipass "^2.0.0"
