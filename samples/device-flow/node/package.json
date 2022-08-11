@@ -24,7 +24,7 @@
 		"dotenv": "^8.2.0",
 		"express": "^4.16.4",
 		"express-session": "^1.17.2",
-		"ibm-verify-sdk": "^2.0.6",
+		"ibm-verify-sdk": "^2.0.7",
 		"node-persist": "^3.0.5",
 		"pug": "^3.0.2",
 		"socket.io": "^2.4.1"
