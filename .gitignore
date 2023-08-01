@@ -14,3 +14,4 @@
 .travis.yml
 **/.node-persist
 # dist/*
+.npmrc
