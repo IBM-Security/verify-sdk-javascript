@@ -360,7 +360,7 @@ class FlowAbstract {
 				return Promise.resolve(response);
 			}
 			return Promise.resolve(payload);
-		} catch (error) {
+		} catch (error: any) {
 			if (error.status === 401 && utils.isNode()) {
 				// validate 'token' has refresh_token
 				if (!token.refresh_token) {
@@ -635,6 +635,7 @@ class DeviceFlow extends FlowAbstract {
 	 * @returns {Promise<object>} Resolved or Rejected promise.
 	 */
 	async pollTokenApi(deviceCode: string, duration: number = this.POLLING_TIME) {
+
 		if (duration < this.POLLING_TIME) {
 			return Promise.reject(new DeveloperError('The device made an attempt within [5] seconds. This request will not be processed.'));
 		}
@@ -658,7 +659,7 @@ class DeviceFlow extends FlowAbstract {
 			try {
 				response = await this.getToken({ data, path });
 				break;
-			} catch (e) {
+			} catch (e: any) {
 				error = e;
 			}
 			await utils.sleep(duration);

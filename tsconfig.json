@@ -23,9 +23,9 @@
 		"sourceMap": true,
 		"inlineSourceMap": false,               /* Emit a single file with source maps instead of having a separate file. */
 		"lib": ["ES2017", "dom"],
-		"moduleResolution": "node",
+		"moduleResolution": "Node",
 		"esModuleInterop": true,
-		"module": "commonjs"
+		"module": "CommonJS"
 		},
 		"exclude": [
 			"./dist",

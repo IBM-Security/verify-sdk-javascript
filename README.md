@@ -3,13 +3,12 @@
 ![npm](https://img.shields.io/npm/v/ibm-verify-sdk.svg?style=flat-square)
 ![NPM](https://img.shields.io/npm/l/ibm-verify-sdk.svg?colorB=blue&style=flat-square)
 
-* [Getting Started](#getting-started)
-* [Configuration Settings](#configuration-settings)
-* [OAuthContext](#oauthcontext)
-* [OAuth API Samples](#oauth-samples)
-* [AuthenticatorContext](#authenticatorcontext)
-* [AuthenticatorContext API Samples](#authenticatorcontext-api-aamples)
-* [License](#license)
+- [IBM Security Verify SDK for JavaScript](#ibm-security-verify-sdk-for-javascript)
+	- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+	- [Configuration Settings](#configuration-settings)
+	- [OAuthContext](#oauthcontext)
+- [License](#license)
 
 The purpose of the Javascript client library is to enable a developer to create web based applications that enhance the user experience with IBM Security Verify.
 IBM Security Verify SDK for JavaScript currently supports the following grant types:
@@ -60,7 +59,7 @@ The OAuthContext object represents the interactions between the relying party an
 # License
 The MIT License (MIT)
 
-Copyright (c) 2019, 2021 - IBM Corp.
+Copyright (c) 2019, 2023 - IBM Corp.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
